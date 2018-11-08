@@ -1,0 +1,18 @@
+notifications:
+  email: false
+
+language: php
+
+php:
+  - '7.2'
+
+install:
+  - composer install
+
+script:
+  - make
+  - mkdir -p build/logs
+  - vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml
+
+after_success:
+  - travis_retry php vendor/bin/php-coveralls -v
