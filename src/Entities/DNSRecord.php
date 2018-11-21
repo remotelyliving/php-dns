@@ -106,7 +106,7 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
     {
         return $this->hostname->equals($record->getHostname())
             && $this->recordType->equals($record->getType())
-            && (string)$this->IPAddress === (string)$record->getIPAddress(); // could be null
+            && (string) $this->IPAddress === (string) $record->getIPAddress(); // could be null
     }
 
     public function serialize(): string

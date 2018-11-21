@@ -2,10 +2,12 @@
 require_once './vendor/autoload.php';
 
 use RemotelyLiving\PHPDNS\Entities\Hostname;
+use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
 
 class_alias(Hostname::class, 'Hostname');
+class_alias(DNSRecord::class, 'DNSRecord');
 class_alias(DNSRecordType::class, 'DNSRecordType');
 class_alias(DNSRecordCollection::class, 'DNSRecordCollection');
 
