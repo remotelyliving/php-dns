@@ -90,7 +90,7 @@ class DNSRecordCollection extends EntityAbstract implements \ArrayAccess, \Itera
             throw new \InvalidArgumentException('Invalid value');
         }
 
-        $this->records->offsetSet($offset, $value);
+        $this->records->offsetSet($offset, /** @scrutinizer ignore-type */ $value);
     }
 
     public function offsetUnset($offset): void

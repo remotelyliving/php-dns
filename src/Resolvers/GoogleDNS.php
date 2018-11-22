@@ -54,7 +54,6 @@ class GoogleDNS extends ResolverAbstract
 
     public function hasRecord(DNSRecord $record): bool
     {
-        $hasRecord = false;
         $attempts = 0;
 
         do {

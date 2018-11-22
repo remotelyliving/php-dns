@@ -71,6 +71,7 @@ class Cached extends ResolverAbstract
 
         /** @var \RemotelyLiving\PHPDNS\Entities\DNSRecord $record */
         foreach ($recordCollection as $record) {
+            /** @scrutinizer ignore-call */
             $ttls[] = $record->getTTL();
         }
 

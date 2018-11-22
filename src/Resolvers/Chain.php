@@ -71,8 +71,6 @@ class Chain extends ResolverAbstract implements Randomizable
 
     protected function doQuery(Hostname $hostname, DNSRecordType $recordType): DNSRecordCollection
     {
-        $e = null;
-
         foreach ($this->resolvers as $resolver) {
             try {
                 $records = $resolver->getRecords($hostname, $recordType);

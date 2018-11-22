@@ -2,6 +2,7 @@
 [![Total Downloads](https://poser.pugx.org/remotelyliving/php-dns/downloads)](https://packagist.org/packages/remotelyliving/php-dns)
 [![Coverage Status](https://coveralls.io/repos/github/remotelyliving/php-dns/badge.svg?branch=master)](https://coveralls.io/github/remotelyliving/php-dns?branch=master) 
 [![License](https://poser.pugx.org/remotelyliving/php-dns/license)](https://packagist.org/packages/remotelyliving/php-dns)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/remotelyliving/php-dns/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/remotelyliving/php-dns/?branch=master)
 
 # PHP-DNS: A DNS Abstraction in PHP
 
