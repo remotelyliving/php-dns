@@ -1,6 +1,8 @@
 <?php
 namespace RemotelyLiving\PHPDNS\Entities;
 
+use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
+
 class Hostname extends EntityAbstract
 {
     /**
@@ -13,7 +15,7 @@ class Hostname extends EntityAbstract
         $hostname = self::punyCode(mb_strtolower(trim($hostname)));
 
         if ((bool)filter_var($hostname, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME) === false) {
-            throw new \InvalidArgumentException("{$hostname} is not a valid hostname");
+            throw new InvalidArgumentException("{$hostname} is not a valid hostname");
         }
 
         $this->hostname = $hostname;

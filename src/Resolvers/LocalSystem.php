@@ -41,7 +41,7 @@ class LocalSystem extends ResolverAbstract implements ReverseDNSQuery
         $collection = new DNSRecordCollection();
 
         foreach ($results as $result) {
-            $collection[] = $this->mapper->mapRecord($result)->toDNSRecord();
+            $collection[] = $this->mapper->mapFields($result)->toDNSRecord();
         }
 
         return $collection;

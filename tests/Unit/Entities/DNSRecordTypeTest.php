@@ -21,7 +21,7 @@ class DNSRecordTypeTest extends BaseTestAbstract
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
+     * @expectedException \RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException
      */
     public function onlyAllowsValidTypes()
     {

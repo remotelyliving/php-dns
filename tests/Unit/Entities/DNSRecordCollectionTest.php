@@ -136,7 +136,7 @@ class DNSRecordCollectionTest extends BaseTestAbstract
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException
      */
     public function testOnlyAllowsDNSRecordsToBeSet()
     {
@@ -150,5 +150,24 @@ class DNSRecordCollectionTest extends BaseTestAbstract
     {
         $this->assertInstanceOf(Arrayable::class, $this->dnsRecordCollection);
         $this->assertEquals([$this->dnsRecord1, $this->dnsRecord2], $this->dnsRecordCollection->toArray());
+    }
+
+    /**
+     * @test
+     */
+    public function hasFilterMethods()
+    {
+        $expectedDupes = new DNSRecordCollection($this->dnsRecord2);
+        $expectedUniques = new DNSRecordCollection($this->dnsRecord1, $this->dnsRecord2);
+        $expectedOnlyOneResult = new DNSRecordCollection($this->dnsRecord1);
+
+        $hasDupes = new DNSRecordCollection($this->dnsRecord1, $this->dnsRecord2, $this->dnsRecord2);
+        $hasOneResult = new DNSRecordCollection($this->dnsRecord1);
+
+        $this->assertEquals($expectedDupes, $hasDupes->withUniqueValuesExcluded());
+        $this->assertEquals($expectedUniques, $hasDupes->withUniqueValues());
+
+        $this->assertEquals($expectedOnlyOneResult, $hasOneResult->withUniqueValues());
+        $this->assertEquals(new DNSRecordCollection(), $hasOneResult->withUniqueValuesExcluded());
     }
 }

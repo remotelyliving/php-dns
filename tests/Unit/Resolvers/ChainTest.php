@@ -159,7 +159,7 @@ class ChainTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function doesQueryOnResolversUntilAnswerIsFound()
+    public function doesQueryOnResolversUntilAnswerIsFoundAsDefaultBehavior()
     {
         $expectedCollection = new DNSRecordCollection(DNSRecord::createFromPrimitives('TXT', 'twitter.com', 123));
         $hostname = Hostname::createFromString('twitter.com');
@@ -174,5 +174,70 @@ class ChainTest extends BaseTestAbstract
             ->willReturn($expectedCollection);
 
         $this->assertEquals($expectedCollection, $this->chainResolver->getRecords($hostname, $type));
+        $this->assertEquals(
+            $expectedCollection,
+            $this->chainResolver->withFirstResults()->getRecords($hostname, $type)
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function doesQueryOnResolversUntilAllAnswersAreFound()
+    {
+        $mxRecord = DNSRecord::createFromPrimitives('TXT', 'twitter.com', 123);
+        $aRecord = DNSRecord::createFromPrimitives('A', 'twitter.com', 321, '192.168.1.1');
+
+        $expectedCollection1 = new DNSRecordCollection($mxRecord);
+        $expectedCollection2 = new DNSRecordCollection($aRecord);
+
+        $hostname = Hostname::createFromString('twitter.com');
+        $type = DNSRecordType::createANY();
+
+        $this->resolver1->method('getRecords')
+            ->with($hostname, $type)
+            ->willReturn($expectedCollection1);
+
+        $this->resolver2->method('getRecords')
+            ->with($hostname, $type)
+            ->willReturn($expectedCollection2);
+
+        $this->assertEquals(
+            new DNSRecordCollection($mxRecord, $aRecord),
+            $this->chainResolver->withAllResults()->getRecords($hostname, $type)
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function doesQueryOnResolversAndOnlyConsensusRecordsAreFound()
+    {
+        $mxRecord = DNSRecord::createFromPrimitives('TXT', 'twitter.com', 123);
+        $aRecord = DNSRecord::createFromPrimitives(
+            'A',
+            'twitter.com',
+            321,
+            '192.168.1.1'
+        );
+
+        $expectedCollection1 = new DNSRecordCollection($mxRecord, $aRecord);
+        $expectedCollection2 = new DNSRecordCollection($aRecord);
+
+        $hostname = Hostname::createFromString('twitter.com');
+        $type = DNSRecordType::createANY();
+
+        $this->resolver1->method('getRecords')
+            ->with($hostname, $type)
+            ->willReturn($expectedCollection1);
+
+        $this->resolver2->method('getRecords')
+            ->with($hostname, $type)
+            ->willReturn($expectedCollection2);
+
+        $this->assertEquals(
+            new DNSRecordCollection($aRecord),
+            $this->chainResolver->withConsensusResults()->getRecords($hostname, $type)
+        );
     }
 }

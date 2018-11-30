@@ -9,16 +9,16 @@ abstract class MapperAbstract implements MapperInterface
     /**
      * @var array
      */
-    protected $record = [];
+    protected $fields = [];
 
-    public function __construct(array $record = [])
+    public function __construct(array $fields = [])
     {
-        $this->record = $record;
+        $this->fields = $fields;
     }
 
-    public function mapRecord(array $record): self
+    public function mapFields(array $fields): self
     {
-        return new static($record);
+        return new static($fields);
     }
 
     abstract public function toDNSRecord(): DNSRecord;

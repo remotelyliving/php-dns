@@ -37,7 +37,7 @@ class LocalSystemTest extends BaseTestAbstract
      */
     public function mapsAGoogleDNSRecordVariants()
     {
-        $mappedRecord = $this->mapper->mapRecord([
+        $mappedRecord = $this->mapper->mapFields([
             'type' => 'A',
             'ttl' => 365,
             'ip' => '127.0.0.1',
@@ -56,7 +56,7 @@ class LocalSystemTest extends BaseTestAbstract
     public function mapsAllKindsOfLocalSystemDNSRecordVariants()
     {
         foreach (self::LOCAL_DNS_FORMAT as $record) {
-            $mappedRecord = $this->mapper->mapRecord($record)->toDNSRecord();
+            $mappedRecord = $this->mapper->mapFields($record)->toDNSRecord();
             $this->assertInstanceOf(DNSRecord::class, $mappedRecord);
         }
     }

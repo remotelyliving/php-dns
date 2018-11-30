@@ -1,6 +1,8 @@
 <?php
 namespace RemotelyLiving\PHPDNS\Entities;
 
+use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
+
 class DNSRecordType extends EntityAbstract
 {
     public const TYPE_A = 'A';
@@ -60,7 +62,7 @@ class DNSRecordType extends EntityAbstract
     public function __construct(string $type)
     {
         if (!in_array($type, self::VALID_TYPES, true)) {
-            throw new \InvalidArgumentException("{$type} is not a valid DNS query type");
+            throw new InvalidArgumentException("{$type} is not a valid DNS query type");
         }
 
         $this->type = $type;

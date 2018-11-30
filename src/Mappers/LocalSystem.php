@@ -27,18 +27,18 @@ class LocalSystem extends MapperAbstract
     {
         $IPAddress = null;
 
-        if (isset($this->record['ipv6'])) {
-            $IPAddress = $this->record['ipv6'];
+        if (isset($this->fields['ipv6'])) {
+            $IPAddress = $this->fields['ipv6'];
         }
 
-        if (isset($this->record['ip'])) {
-            $IPAddress = $this->record['ip'];
+        if (isset($this->fields['ip'])) {
+            $IPAddress = $this->fields['ip'];
         }
 
         return DNSRecord::createFromPrimitives(
-            $this->record['type'],
-            $this->record['host'],
-            $this->record['ttl'],
+            $this->fields['type'],
+            $this->fields['host'],
+            $this->fields['ttl'],
             $IPAddress
         );
     }

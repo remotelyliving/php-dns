@@ -9,14 +9,14 @@ class GoogleDNS extends MapperAbstract
 {
     public function toDNSRecord(): DNSRecord
     {
-        $IPAddress = (isset($this->record['data']) && IPAddress::isValid($this->record['data']))
-            ? $this->record['data']
+        $IPAddress = (isset($this->fields['data']) && IPAddress::isValid($this->fields['data']))
+            ? $this->fields['data']
             : null;
 
         return DNSRecord::createFromPrimitives(
-            DNSRecordType::createFromInt((int) $this->record['type']),
-            substr($this->record['name'], 0, -1),
-            $this->record['TTL'],
+            DNSRecordType::createFromInt((int) $this->fields['type']),
+            substr($this->fields['name'], 0, -1),
+            $this->fields['TTL'],
             $IPAddress
         );
     }

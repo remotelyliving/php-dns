@@ -3,6 +3,7 @@ namespace RemotelyLiving\PHPDNS\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\Interfaces\Arrayable;
 use RemotelyLiving\PHPDNS\Entities\Interfaces\Serializable;
+use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
 
 class DNSRecordCollection extends EntityAbstract implements \ArrayAccess, \Iterator, \Countable, Arrayable, Serializable
 {
@@ -87,7 +88,7 @@ class DNSRecordCollection extends EntityAbstract implements \ArrayAccess, \Itera
     public function offsetSet($offset, $value): void
     {
         if (!$value instanceof DNSRecord) {
-            throw new \InvalidArgumentException('Invalid value');
+            throw new InvalidArgumentException('Invalid value');
         }
 
         $this->records->offsetSet($offset, /** @scrutinizer ignore-type */ $value);
@@ -116,5 +117,35 @@ class DNSRecordCollection extends EntityAbstract implements \ArrayAccess, \Itera
     public function unserialize($records): void
     {
         $this->records = new \ArrayIterator(\unserialize($records));
+    }
+
+    public function withUniqueValuesExcluded(): self
+    {
+        return $this->filterValues(function (DNSRecord $candidateRecord, DNSRecordCollection $remaining): bool {
+            return $remaining->has($candidateRecord);
+        });
+    }
+
+    public function withUniqueValues(): self
+    {
+        return $this->filterValues(function (DNSRecord $candidateRecord, DNSRecordCollection $remaining): bool {
+            return !$remaining->has($candidateRecord);
+        });
+    }
+
+    private function filterValues(callable $eval): self
+    {
+        $filtered = new self();
+        $records = $this->records->getArrayCopy();
+
+        /** @var \RemotelyLiving\PHPDNS\Entities\DNSRecord $record */
+        while ($record = array_shift($records)) {
+            $remaining = new self(...$records);
+            if ($eval($record, $remaining)) {
+                $filtered[] = $record;
+            }
+        }
+
+        return $filtered;
     }
 }

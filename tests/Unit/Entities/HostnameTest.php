@@ -42,7 +42,7 @@ class HostnameTest extends BaseTestAbstract
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
+     * @expectedException \RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException
      */
     public function doesNotAllowInvalidHostNames()
     {

@@ -47,7 +47,7 @@ $moreRecords = $resolver->getRecords($hostname, $recordType);
 $resolver->hasRecordType($type) // true / false
 $resolver->hasRecord($record) // true / false
 
-This becomes very powerful when used with the Chain Resolver
+// This becomes very powerful when used with the Chain Resolver
 
 ```
 
@@ -65,7 +65,7 @@ $chainResolver = new Chain($cloudFlareResolver, $googleDNSResolver, $localDNSRes
 
 And that will call the GoogleDNS Resolver first, if no answer is found it will continue on to the LocalSystem Resolver
 
-You can randomly select which Resolver in the chain it tries first too via `Resolvers\Interfaces\Randomizeable::randomly(): Resolver`
+You can randomly select which Resolver in the chain it tries first too via `Resolvers\Interfaces\Chain::randomly(): Chain`
 Example:
 
 ```php
@@ -73,6 +73,22 @@ $foundRecord = $chainResolver->randomly()->getARecords(new Hostname('facebook.co
 ```
 
 The above code calls through the resolvers randomly until it finds any non empty answer or has exhausted order the chain.
+
+There are a few different methods to decide how you want to query through the resolvers. There are a few different strategies. 
+Check them out here:
+
+[src/Resolvers/Interfaces](https://github.com/remotelyliving/php-dns/tree/master/src/Resolvers/Interfaces/Chain.php)
+
+```php
+// returns only common results between resolvers
+$chainResolver->withConsensusResults()->getARecords(new Hostname('facebook.com')); 
+
+// returns the first non empty result set
+$chainResolver->withFirstResults()->getARecords(new Hostname('facebook.com')); 
+
+// returns all collective responses with duplicates filtered out
+$chainResolver->withFirstResults()->getARecords(new Hostname('facebook.com')); 
+```
 
 **Cached Resolver**
 

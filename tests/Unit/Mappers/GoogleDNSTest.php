@@ -36,7 +36,7 @@ class GoogleDNSTest extends BaseTestAbstract
      */
     public function mapsAGoogleDNSRecordVariants()
     {
-        $mappedRecord = $this->mapper->mapRecord([
+        $mappedRecord = $this->mapper->mapFields([
             'type' => 1,
             'TTL' => 365,
             'data' => '127.0.0.1',
@@ -55,7 +55,7 @@ class GoogleDNSTest extends BaseTestAbstract
     public function mapsAllKindsOfGoogleDNSRecordVariants()
     {
         foreach (self::GOOGLE_DNS_FORMAT as $record) {
-            $mappedRecord = $this->mapper->mapRecord($record)->toDNSRecord();
+            $mappedRecord = $this->mapper->mapFields($record)->toDNSRecord();
             $this->assertInstanceOf(DNSRecord::class, $mappedRecord);
         }
     }

@@ -1,6 +1,8 @@
 <?php
 namespace RemotelyLiving\PHPDNS\Entities;
 
+use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
+
 class IPAddress extends EntityAbstract
 {
     /**
@@ -13,7 +15,7 @@ class IPAddress extends EntityAbstract
         $IPAddress = trim($IPAddress);
 
         if (self::isValid($IPAddress) === false) {
-            throw new \InvalidArgumentException("{$IPAddress} is not a valid IP address");
+            throw new InvalidArgumentException("{$IPAddress} is not a valid IP address");
         }
 
         $this->IPAddress = $IPAddress;
