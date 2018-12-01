@@ -28,9 +28,9 @@ class LocalSystem extends ResolverAbstract implements ReverseDNSQuery
         $this->mapper = $mapper ?? new LocalMapper();
     }
 
-    public function getHostnameByAddress(IPAddress $IPAddress): Hostname
+    public function getHostnameByAddress(string $IPAddress): Hostname
     {
-        $result = $this->systemDNS->getHostnameByAddress($IPAddress);
+        $result = $this->systemDNS->getHostnameByAddress(new IPAddress($IPAddress));
 
         return Hostname::createFromString($result);
     }

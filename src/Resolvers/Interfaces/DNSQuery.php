@@ -11,37 +11,37 @@ interface DNSQuery
     /**
      * @throws \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
      */
-    public function getARecords(Hostname $hostname): DNSRecordCollection;
+    public function getARecords(string $hostname): DNSRecordCollection;
 
     /**
      * @throws \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
      */
-    public function getAAAARecords(Hostname $hostname): DNSRecordCollection;
+    public function getAAAARecords(string $hostname): DNSRecordCollection;
 
     /**
      * @throws \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
      */
-    public function getCNAMERecords(Hostname $hostname): DNSRecordCollection;
+    public function getCNAMERecords(string $hostname): DNSRecordCollection;
 
     /**
      * @throws \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
      */
-    public function getTXTRecords(Hostname $hostname): DNSRecordCollection;
+    public function getTXTRecords(string $hostname): DNSRecordCollection;
 
     /**
      * @throws \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
      */
-    public function getMXRecords(Hostname $hostname): DNSRecordCollection;
+    public function getMXRecords(string $hostname): DNSRecordCollection;
 
     /**
      * @throws \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
      */
-    public function getRecords(Hostname $hostname, DNSRecordType $recordType = null): DNSRecordCollection;
+    public function getRecords(string $hostname, string $recordType = null): DNSRecordCollection;
 
     /**
      * @throws \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
      */
-    public function recordTypeExists(Hostname $hostname, DNSRecordType $recordType): bool;
+    public function recordTypeExists(string $hostname, string $recordType): bool;
 
     /**
      * @throws \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure

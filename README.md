@@ -34,13 +34,24 @@ These resolvers at the least implement the `Resolvers\Interfaces\DNSQuery` inter
 
 ```php
 $resolver = new Resolvers\GoogleDNS();
+// validates hostname
 $hostname = Hostname::createFromString('google.com');
+
+// OR 
+
+$hostname = 'google.com';
 
 // can query via convenience methods
 $records = $resolver->getARecords($hostname); // returns a collection of DNSRecords
 
-// can also query by any type
+// can also query by any type. Types are a proper object that validate you have the right type
 $recordType = DNSRecordType::createAAAA();
+
+// OR
+
+// loose and fast, but be warned validation errors will still get thrown if you pass in garbage
+$recordType = 'AAAA';
+
 $moreRecords = $resolver->getRecords($hostname, $recordType);
 
 // can query to see if any resolvers find a record or type.
@@ -84,7 +95,7 @@ Check them out here:
 $chainResolver->withConsensusResults()->getARecords(new Hostname('facebook.com')); 
 
 // returns the first non empty result set
-$chainResolver->withFirstResults()->getARecords(new Hostname('facebook.com')); 
+$chainResolver->withFirstResults()->getARecords('facebook.com'); 
 
 // returns all collective responses with duplicates filtered out
 $chainResolver->withFirstResults()->getARecords(new Hostname('facebook.com')); 

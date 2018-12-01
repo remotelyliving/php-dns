@@ -30,32 +30,32 @@ abstract class ResolverAbstract implements ObservableResolver
         return $this->name;
     }
 
-    public function getARecords(Hostname $hostname): DNSRecordCollection
+    public function getARecords(string $hostname): DNSRecordCollection
     {
         return $this->getRecords($hostname, DNSRecordType::createA());
     }
 
-    public function getAAAARecords(Hostname $hostname): DNSRecordCollection
+    public function getAAAARecords(string $hostname): DNSRecordCollection
     {
         return $this->getRecords($hostname, DNSRecordType::createAAAA());
     }
 
-    public function getCNAMERecords(Hostname $hostname): DNSRecordCollection
+    public function getCNAMERecords(string $hostname): DNSRecordCollection
     {
         return $this->getRecords($hostname, DNSRecordType::createCNAME());
     }
 
-    public function getTXTRecords(Hostname $hostname): DNSRecordCollection
+    public function getTXTRecords(string $hostname): DNSRecordCollection
     {
         return $this->getRecords($hostname, DNSRecordType::createTXT());
     }
 
-    public function getMXRecords(Hostname $hostname): DNSRecordCollection
+    public function getMXRecords(string $hostname): DNSRecordCollection
     {
         return $this->getRecords($hostname, DNSRecordType::createMX());
     }
 
-    public function recordTypeExists(Hostname $hostname, DNSRecordType $recordType): bool
+    public function recordTypeExists(string $hostname, string $recordType): bool
     {
         return !$this->getRecords($hostname, $recordType)->isEmpty();
     }
@@ -66,15 +66,16 @@ abstract class ResolverAbstract implements ObservableResolver
             ->has($record);
     }
 
-    public function getRecords(Hostname $hostname, DNSRecordType $recordType = null): DNSRecordCollection
+    public function getRecords(string $hostname, string $recordType = null): DNSRecordCollection
     {
-        $any = DNSRecordType::createANY();
-        $recordType = $recordType ?? $any;
+        $recordType = DNSRecordType::createFromString($recordType ?? 'ANY');
+        $hostname = Hostname::createFromString($hostname);
+
         $profile = $this->createProfile("{$this->getName()}:{$hostname}:{$recordType}");
         $profile->startTransaction();
 
         try {
-            $result = ($recordType->equals($any))
+            $result = ($recordType->equals(DNSRecordType::createANY()))
                 ? $this->doQuery($hostname, $recordType)
                 : $this->doQuery($hostname, $recordType)->filteredByType($recordType);
         } catch (QueryFailure $e) {
