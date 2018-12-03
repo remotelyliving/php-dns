@@ -33,7 +33,11 @@ class ResolversTest extends BaseTestAbstract
             $this->assertInstanceOf(DNSRecordCollection::class, $collection);
 
             if (!$collection->isEmpty()) {
-                $this->assertTrue($resolver->hasRecord($collection->pickFirst()));
+                do {
+                    $hasRecord = $resolver->hasRecord($collection->pickFirst());
+                } while ($hasRecord === false);
+
+                $this->assertTrue($hasRecord);
             }
         }
     }

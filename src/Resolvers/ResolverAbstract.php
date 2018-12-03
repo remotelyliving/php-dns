@@ -9,13 +9,15 @@ use RemotelyLiving\PHPDNS\Observability\Events\DNSQueried;
 use RemotelyLiving\PHPDNS\Observability\Events\DNSQueryFailed;
 use RemotelyLiving\PHPDNS\Observability\Events\DNSQueryProfiled;
 use RemotelyLiving\PHPDNS\Observability\Traits\Dispatcher;
+use RemotelyLiving\PHPDNS\Observability\Traits\Logger;
 use RemotelyLiving\PHPDNS\Observability\Traits\Profileable;
 use RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure;
 use RemotelyLiving\PHPDNS\Resolvers\Interfaces\ObservableResolver;
 
 abstract class ResolverAbstract implements ObservableResolver
 {
-    use Dispatcher,
+    use Logger,
+        Dispatcher,
         Profileable;
 
     private $name = null;
@@ -79,16 +81,25 @@ abstract class ResolverAbstract implements ObservableResolver
                 ? $this->doQuery($hostname, $recordType)
                 : $this->doQuery($hostname, $recordType)->filteredByType($recordType);
         } catch (QueryFailure $e) {
-            $this->dispatch(new DNSQueryFailed($this, $hostname, $recordType, $e));
+            $dnsQueryFailureEvent = new DNSQueryFailed($this, $hostname, $recordType, $e);
+            $this->dispatch($dnsQueryFailureEvent);
+            $this->getLogger()->error(
+                'DNS query failed',
+                ['event' => json_encode($dnsQueryFailureEvent), 'exception' => $e]
+            );
+
             throw $e;
         } finally {
             $profile->endTransaction();
             $profile->samplePeakMemoryUsage();
-            $this->dispatch(new DNSQueryProfiled($profile));
+            $dnsQueryProfiledEvent = new DNSQueryProfiled($profile);
+            $this->dispatch($dnsQueryProfiledEvent);
+            $this->getLogger()->info('DNS query profiled', ['event' => json_encode($dnsQueryProfiledEvent)]);
         }
 
-        $this->dispatch(new DNSQueried($this, $hostname, $recordType, $result));
-
+        $dnsQueriedEvent = new DNSQueried($this, $hostname, $recordType, $result);
+        $this->dispatch($dnsQueriedEvent);
+        $this->getLogger()->info('DNS queried', ['event' => json_encode($dnsQueriedEvent)]);
         return $result;
     }
 
