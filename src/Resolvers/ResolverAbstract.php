@@ -9,13 +9,15 @@ use RemotelyLiving\PHPDNS\Observability\Events\DNSQueried;
 use RemotelyLiving\PHPDNS\Observability\Events\DNSQueryFailed;
 use RemotelyLiving\PHPDNS\Observability\Events\DNSQueryProfiled;
 use RemotelyLiving\PHPDNS\Observability\Traits\Dispatcher;
+use RemotelyLiving\PHPDNS\Observability\Traits\Logger;
 use RemotelyLiving\PHPDNS\Observability\Traits\Profileable;
 use RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure;
 use RemotelyLiving\PHPDNS\Resolvers\Interfaces\ObservableResolver;
 
 abstract class ResolverAbstract implements ObservableResolver
 {
-    use Dispatcher,
+    use Logger,
+        Dispatcher,
         Profileable;
 
     private $name = null;
@@ -30,32 +32,32 @@ abstract class ResolverAbstract implements ObservableResolver
         return $this->name;
     }
 
-    public function getARecords(Hostname $hostname): DNSRecordCollection
+    public function getARecords(string $hostname): DNSRecordCollection
     {
         return $this->getRecords($hostname, DNSRecordType::createA());
     }
 
-    public function getAAAARecords(Hostname $hostname): DNSRecordCollection
+    public function getAAAARecords(string $hostname): DNSRecordCollection
     {
         return $this->getRecords($hostname, DNSRecordType::createAAAA());
     }
 
-    public function getCNAMERecords(Hostname $hostname): DNSRecordCollection
+    public function getCNAMERecords(string $hostname): DNSRecordCollection
     {
         return $this->getRecords($hostname, DNSRecordType::createCNAME());
     }
 
-    public function getTXTRecords(Hostname $hostname): DNSRecordCollection
+    public function getTXTRecords(string $hostname): DNSRecordCollection
     {
         return $this->getRecords($hostname, DNSRecordType::createTXT());
     }
 
-    public function getMXRecords(Hostname $hostname): DNSRecordCollection
+    public function getMXRecords(string $hostname): DNSRecordCollection
     {
         return $this->getRecords($hostname, DNSRecordType::createMX());
     }
 
-    public function recordTypeExists(Hostname $hostname, DNSRecordType $recordType): bool
+    public function recordTypeExists(string $hostname, string $recordType): bool
     {
         return !$this->getRecords($hostname, $recordType)->isEmpty();
     }
@@ -66,28 +68,38 @@ abstract class ResolverAbstract implements ObservableResolver
             ->has($record);
     }
 
-    public function getRecords(Hostname $hostname, DNSRecordType $recordType = null): DNSRecordCollection
+    public function getRecords(string $hostname, string $recordType = null): DNSRecordCollection
     {
-        $any = DNSRecordType::createANY();
-        $recordType = $recordType ?? $any;
+        $recordType = DNSRecordType::createFromString($recordType ?? 'ANY');
+        $hostname = Hostname::createFromString($hostname);
+
         $profile = $this->createProfile("{$this->getName()}:{$hostname}:{$recordType}");
         $profile->startTransaction();
 
         try {
-            $result = ($recordType->equals($any))
+            $result = ($recordType->equals(DNSRecordType::createANY()))
                 ? $this->doQuery($hostname, $recordType)
                 : $this->doQuery($hostname, $recordType)->filteredByType($recordType);
         } catch (QueryFailure $e) {
-            $this->dispatch(new DNSQueryFailed($this, $hostname, $recordType, $e));
+            $dnsQueryFailureEvent = new DNSQueryFailed($this, $hostname, $recordType, $e);
+            $this->dispatch($dnsQueryFailureEvent);
+            $this->getLogger()->error(
+                'DNS query failed',
+                ['event' => json_encode($dnsQueryFailureEvent), 'exception' => $e]
+            );
+
             throw $e;
         } finally {
             $profile->endTransaction();
             $profile->samplePeakMemoryUsage();
-            $this->dispatch(new DNSQueryProfiled($profile));
+            $dnsQueryProfiledEvent = new DNSQueryProfiled($profile);
+            $this->dispatch($dnsQueryProfiledEvent);
+            $this->getLogger()->info('DNS query profiled', ['event' => json_encode($dnsQueryProfiledEvent)]);
         }
 
-        $this->dispatch(new DNSQueried($this, $hostname, $recordType, $result));
-
+        $dnsQueriedEvent = new DNSQueried($this, $hostname, $recordType, $result);
+        $this->dispatch($dnsQueriedEvent);
+        $this->getLogger()->info('DNS queried', ['event' => json_encode($dnsQueriedEvent)]);
         return $result;
     }
 

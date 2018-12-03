@@ -1,6 +1,7 @@
 <?php
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Resolvers;
 
+use Psr\Log\LoggerInterface;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Observability\Events\DNSQueried;
 use RemotelyLiving\PHPDNS\Observability\Events\DNSQueryFailed;
@@ -19,6 +20,11 @@ class ResolverAbstractTest extends BaseTestAbstract
     private $resolver;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @var \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure|null
      */
     private $error = null;
@@ -32,6 +38,7 @@ class ResolverAbstractTest extends BaseTestAbstract
     {
         parent::setUp();
 
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->resolver = new TestResolver($this->collection, $this->error);
     }
 
@@ -64,6 +71,49 @@ class ResolverAbstractTest extends BaseTestAbstract
 
         $this->assertInstanceOf(DNSQueryProfiled::class, $perProfiled);
         $this->assertInstanceOf(DNSQueried::class, $dnsQueried);
+    }
+
+    /**
+     * @test
+     */
+    public function logsSuccessfulEvents()
+    {
+        $this->resolver->setLogger($this->logger);
+
+        $this->logger->expects($this->exactly(2))
+            ->method('info')
+            ->willReturnCallback(function (string $message, array $context) {
+                $this->assertStringStartsWith('DNS', $message);
+                $this->assertArrayHasKey('event', $context);
+            });
+
+        $this->resolver->getRecords('facebook.com');
+    }
+
+    /**
+     * @test
+     * @expectedException \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
+     */
+    public function logsFailures()
+    {
+        $this->resolver = new TestResolver(null, new QueryFailure());
+        $this->resolver->setLogger($this->logger);
+
+        $this->logger->expects($this->once())
+            ->method('info')
+            ->willReturnCallback(function (string $message, array $context) {
+                $this->assertStringStartsWith('DNS', $message);
+                $this->assertArrayHasKey('event', $context);
+            });
+
+        $this->logger->expects($this->once())
+            ->method('error')
+            ->willReturnCallback(function (string $message, array $context) {
+                $this->assertStringStartsWith('DNS', $message);
+                $this->assertArrayHasKey('event', $context);
+            });
+
+        $this->resolver->getRecords('facebook.com');
     }
 
     /**

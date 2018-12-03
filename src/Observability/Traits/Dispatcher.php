@@ -8,6 +8,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 trait Dispatcher
 {
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface|null
+     */
     private $dispatcher = null;
 
     public function setDispatcher(EventDispatcherInterface $dispatcher): void
