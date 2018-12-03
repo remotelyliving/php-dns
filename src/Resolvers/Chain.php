@@ -1,6 +1,8 @@
 <?php
 namespace RemotelyLiving\PHPDNS\Resolvers;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
@@ -87,6 +89,15 @@ class Chain extends ResolverAbstract implements Interfaces\Chain
         foreach ($this->resolvers as $resolver) {
             if ($resolver instanceof Observable) {
                 $resolver->addListener($eventName, $listener, $priority);
+            }
+        }
+    }
+
+    public function setLogger(LoggerInterface $logger): void
+    {
+        foreach ($this->resolvers as $resolver) {
+            if ($resolver instanceof LoggerAwareInterface) {
+                $resolver->setLogger($logger);
             }
         }
     }

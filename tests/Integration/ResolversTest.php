@@ -1,6 +1,8 @@
 <?php
 namespace RemotelyLiving\PHPDNS\Tests\Integration;
 
+use Psr\Log\NullLogger;
+use Psr\Log\Test\TestLogger;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
@@ -28,6 +30,8 @@ class ResolversTest extends BaseTestAbstract
      */
     public function getsRecords(ResolverAbstract $resolver)
     {
+        $resolver->setLogger(new NullLogger());
+
         foreach (DNSRecordType::VALID_TYPES as $type) {
             $collection = $resolver->getRecords($this->hostname, DNSRecordType::createFromString($type));
             $this->assertInstanceOf(DNSRecordCollection::class, $collection);
