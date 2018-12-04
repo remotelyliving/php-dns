@@ -33,6 +33,7 @@ These resolvers at the least implement the `Resolvers\Interfaces\DNSQuery` inter
 - LocalSystem (uses the local PHP dns query function)
 
 ```php
+
 $resolver = new Resolvers\GoogleDNS();
 // validates hostname
 $hostname = Hostname::createFromString('google.com');
@@ -49,14 +50,13 @@ $recordType = DNSRecordType::createAAAA();
 
 // OR
 
-// loose and fast, but be warned validation errors will still get thrown if you pass in garbage
-$recordType = 'AAAA';
+$recordType = DNSRecordType::TYPE_AAAA;
 
 $moreRecords = $resolver->getRecords($hostname, $recordType);
 
 // can query to see if any resolvers find a record or type.
-$resolver->hasRecordType($type) // true / false
-$resolver->hasRecord($record) // true / false
+$resolver->hasRecordType($hostname, $type) // true | false
+$resolver->hasRecord($record) // true | false
 
 // This becomes very powerful when used with the Chain Resolver
 
@@ -66,7 +66,7 @@ $resolver->hasRecord($record) // true / false
 
 The Chain Resolver can be used to read through DNS Resolvers until an answer is found.
 Whichever you pass in first is the first Resolver it tries in sequence of passing them in.
-It implements the same `DNSQuery` interface as the other resolvers.
+It implements the same `DNSQuery` interface as the other resolvers but with an additional feature set found in the `Chain` interface.
 
 So something like 
 
@@ -98,7 +98,7 @@ $chainResolver->withConsensusResults()->getARecords(new Hostname('facebook.com')
 $chainResolver->withFirstResults()->getARecords('facebook.com'); 
 
 // returns all collective responses with duplicates filtered out
-$chainResolver->withFirstResults()->getARecords(new Hostname('facebook.com')); 
+$chainResolver->withAllResults()->getARecords(new Hostname('facebook.com')); 
 ```
 
 **Cached Resolver**
@@ -133,6 +133,11 @@ With a good idea of what a subscriber can do with them here: [src/Observability/
 You could decide where you want to stream the events whether its to a log or somewhere else. The events are all safe to `json_encode()` without extra parsing.
 
 If you want to see how easy it is to wire all this up, check out [the repl bootstrap](https://github.com/remotelyliving/php-dns/tree/master/bootstrap/repl.php)
+
+### Logging
+
+All provided resolvers implement `Psr\Log\LoggerAwareInterface` and have a default `NullLogger` set at runtime. 
+If you want a differen format, I would recommend implementing a logger subscriber.
 
 ### Tinkering
 
