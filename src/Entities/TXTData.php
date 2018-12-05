@@ -37,6 +37,7 @@ class TXTData extends DataAbstract
 
     public function unserialize($serialized): void
     {
-        $this->value = $serialized['value'];
+        $unserialized = \unserialize($serialized);
+        $this->value = $unserialized['value'];
     }
 }

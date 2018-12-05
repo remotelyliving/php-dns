@@ -117,6 +117,8 @@ $cachedResolver = new Resolvers\Cached($cache, $resolverOfChoice, $TTL);
 
 Take a look in the `src/Entities` to see what's available for you to query by and receive.
 
+For records with extra type data, like SOA, TXT, MX, and NS there is a data attribute on `Entities\DNSRecord` that will be set with the proper type
+
 **Reverse Lookup**
 
 This is offered via a separate `ReverseDNSQuery` interface as it is not common or available for every type of DNS Resolver.

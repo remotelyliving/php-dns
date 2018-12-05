@@ -23,7 +23,7 @@ abstract class DataAbstract implements Arrayable, Serializable
         if ($recordType->isA(DNSRecordType::TYPE_MX)) {
             $exploded = explode(' ', $data);
 
-            return new MXData($exploded[1], (int)$exploded[0]);
+            return new MXData(new Hostname($exploded[1]), (int)$exploded[0]);
         }
 
         if ($recordType->isA(DNSRecordType::TYPE_SOA)) {
@@ -41,7 +41,7 @@ abstract class DataAbstract implements Arrayable, Serializable
         }
 
         if ($recordType->isA(DNSRecordType::TYPE_NS)) {
-            return new NSData($data);
+            return new NSData(new Hostname($data));
         }
 
         throw new InvalidArgumentException("{$data} could not be created with type {$recordType}");

@@ -4,7 +4,7 @@ namespace RemotelyLiving\PHPDNS\Entities;
 class MXData extends DataAbstract
 {
     /**
-     * @var string
+     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
      */
     private $target;
 
@@ -13,7 +13,7 @@ class MXData extends DataAbstract
      */
     private $priority;
 
-    public function __construct(string $target, int $priority = 0)
+    public function __construct(Hostname $target, int $priority = 0)
     {
         $this->target = $target;
         $this->priority = $priority;
@@ -24,7 +24,7 @@ class MXData extends DataAbstract
         return "{$this->priority} {$this->target}";
     }
 
-    public function getTarget(): string
+    public function getTarget(): Hostname
     {
         return $this->target;
     }
@@ -37,7 +37,7 @@ class MXData extends DataAbstract
     public function toArray(): array
     {
         return [
-            'target' => $this->target,
+            'target' => (string)$this->target,
             'priority' => $this->priority,
         ];
     }
@@ -49,7 +49,8 @@ class MXData extends DataAbstract
 
     public function unserialize($serialized): void
     {
-        $this->target = $serialized['target'];
-        $this->priority = $serialized['priority'];
+        $unserialized = \unserialize($serialized);
+        $this->target = new Hostname($unserialized['target']);
+        $this->priority = $unserialized['priority'];
     }
 }

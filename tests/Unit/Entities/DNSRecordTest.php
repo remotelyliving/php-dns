@@ -62,7 +62,7 @@ class DNSRecordTest extends BaseTestAbstract
     {
         $this->assertInstanceOf(Arrayable::class, $this->DNSARecord);
         $this->assertEquals([
-            'hostname' => 'google.com',
+            'hostname' => 'google.com.',
             'type' => 'A',
             'TTL' => 123,
             'class' => 'AS',
@@ -70,11 +70,11 @@ class DNSRecordTest extends BaseTestAbstract
         ], $this->DNSARecord->toArray());
 
         $this->assertEquals([
-            'hostname' => 'google.com',
+            'hostname' => 'google.com.',
             'type' => 'TXT',
             'TTL' => 123,
             'class' => 'AS',
-            'txt' => 'txtval'
+            'data' => 'txtval'
         ], $this->DNSTXTRecord->toArray());
     }
 

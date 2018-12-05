@@ -14,10 +14,10 @@ class GoogleDNSTest extends BaseTestAbstract
 
     const GOOGLE_DNS_FORMAT = [
         [
-            'type' => 1, 'TTL' => 343, 'data' => 'beepboop', 'name' => 'yelp.com.',
+            'type' => 1, 'TTL' => 343, 'data' => '127.0.0.1', 'name' => 'yelp.com.',
         ],
         [
-            'type' => 5, 'TTL' => 343, 'data' => '127.0.0.1', 'name' => 'google.com.',
+            'type' => 5, 'TTL' => 343, 'name' => 'google.com.',
         ],
         [
             'type' => 38, 'TTL' => 343, 'name' => 'google.com.',
@@ -43,8 +43,21 @@ class GoogleDNSTest extends BaseTestAbstract
             'name' => 'facebook.com.',
         ])->toDNSRecord();
 
+
         $this->assertEquals(
             DNSRecord::createFromPrimitives('A', 'facebook.com', 365, '127.0.0.1'),
+            $mappedRecord
+        );
+
+        $mappedRecord = $this->mapper->mapFields([
+            'type' => 16,
+            'TTL' => 365,
+            'name' => 'facebook.com.',
+            'data' => '"txtval"',
+        ])->toDNSRecord();
+
+        $this->assertEquals(
+            DNSRecord::createFromPrimitives('TXT', 'facebook.com', 365, null, 'IN', 'txtval'),
             $mappedRecord
         );
     }

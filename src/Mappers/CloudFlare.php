@@ -15,7 +15,7 @@ class CloudFlare extends MapperAbstract
             : null;
 
         $value = (isset($this->fields['data']) && !$IPAddress)
-            ? (string)$this->fields['data']
+            ? str_ireplace('"', '', (string)$this->fields['data'])
             : null;
 
         return DNSRecord::createFromPrimitives(

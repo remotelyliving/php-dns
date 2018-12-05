@@ -84,7 +84,7 @@ class CloudFlareTest extends BaseTestAbstract
     {
         $this->httpClient->expects($this->once())
             ->method('request')
-            ->with('GET', "/dns-query?name=facebook.com&type=AAAA")
+            ->with('GET', "/dns-query?name=facebook.com.&type=AAAA")
             ->willThrowException($e);
 
         $this->cloudFlare->getAAAARecords(Hostname::createFromString('facebook.com'));

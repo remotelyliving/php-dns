@@ -139,12 +139,13 @@ class SOAData extends DataAbstract
 
     public function unserialize($serialized): void
     {
-        $this->mname = new Hostname($serialized['mname']);
-        $this->rname = new Hostname($serialized['rname']);
-        $this->serial = $serialized['serial'];
-        $this->refresh = $serialized['refresh'];
-        $this->retry = $serialized['retry'];
-        $this->expire = $serialized['expire'];
-        $this->minTTL = $serialized['minimumTTL'];
+        $unserialized = \unserialize($serialized);
+        $this->mname = new Hostname($unserialized['mname']);
+        $this->rname = new Hostname($unserialized['rname']);
+        $this->serial = $unserialized['serial'];
+        $this->refresh = $unserialized['refresh'];
+        $this->retry = $unserialized['retry'];
+        $this->expire = $unserialized['expire'];
+        $this->minTTL = $unserialized['minimumTTL'];
     }
 }
