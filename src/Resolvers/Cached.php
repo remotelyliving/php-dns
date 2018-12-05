@@ -39,6 +39,11 @@ class Cached extends ResolverAbstract
         $this->ttlSeconds = $ttlSeconds;
     }
 
+    public function flush(): void
+    {
+        $this->cache->clear();
+    }
+
     protected function doQuery(Hostname $hostname, DNSRecordType $recordType): DNSRecordCollection
     {
         $cachedResult = $this->cache->getItem($this->buildCacheKey($hostname, $recordType));

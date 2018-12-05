@@ -29,7 +29,7 @@ class Chain extends ResolverAbstract implements Interfaces\Chain
      */
     private $callThroughStrategy = self::STRATEGY_FIRST_TO_FIND;
 
-    public function __construct(array $resolvers = [])
+    public function __construct(Resolver...$resolvers)
     {
         foreach ($resolvers as $resolver) {
             $this->pushResolver($resolver);
@@ -45,7 +45,7 @@ class Chain extends ResolverAbstract implements Interfaces\Chain
 
     public function withAllResults(): Interfaces\Chain
     {
-        $all = new self($this->resolvers);
+        $all = new self(...$this->resolvers);
         $all->callThroughStrategy = self::STRATEGY_ALL_RESULTS;
 
         return $all;
@@ -53,7 +53,7 @@ class Chain extends ResolverAbstract implements Interfaces\Chain
 
     public function withFirstResults(): Interfaces\Chain
     {
-        $first = new self($this->resolvers);
+        $first = new self(...$this->resolvers);
         $first->callThroughStrategy = self::STRATEGY_FIRST_TO_FIND;
 
         return $first;
@@ -61,7 +61,7 @@ class Chain extends ResolverAbstract implements Interfaces\Chain
 
     public function withConsensusResults(): Interfaces\Chain
     {
-        $consensus = new self($this->resolvers);
+        $consensus = new self(...$this->resolvers);
         $consensus->callThroughStrategy = self::STRATEGY_CONSENSUS;
 
         return $consensus;

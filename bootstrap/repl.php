@@ -24,6 +24,6 @@ $googleDNSResolver->addSubscriber($IOSubscriber);
 $cloudFlareResolver = new \RemotelyLiving\PHPDNS\Resolvers\CloudFlare();
 $cloudFlareResolver->addSubscriber($IOSubscriber);
 
-$chainResolver = new \RemotelyLiving\PHPDNS\Resolvers\Chain([$cloudFlareResolver, $googleDNSResolver, $localSystemResolver]);
+$chainResolver = new \RemotelyLiving\PHPDNS\Resolvers\Chain($cloudFlareResolver, $googleDNSResolver, $localSystemResolver);
 $cachedResolver = new \RemotelyLiving\PHPDNS\Resolvers\Cached(new \Symfony\Component\Cache\Adapter\FilesystemAdapter(), $chainResolver);
 $cachedResolver->addSubscriber($IOSubscriber);

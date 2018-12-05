@@ -39,7 +39,7 @@ abstract class BaseTestAbstract extends TestCase
 
     protected function createChainResolver(Resolver...$resolvers): Chain
     {
-        return new Chain($resolvers);
+        return new Chain(...$resolvers);
     }
 
     protected function createCachePool(): CacheItemPoolInterface

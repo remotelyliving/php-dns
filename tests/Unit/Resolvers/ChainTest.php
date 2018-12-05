@@ -35,7 +35,7 @@ class ChainTest extends BaseTestAbstract
         $this->resolver1 = $this->createMock(ObservableResolver::class);
         $this->resolver2 = $this->createMock(ObservableResolver::class);
 
-        $this->chainResolver = new Chain([$this->resolver1, $this->resolver2]);
+        $this->chainResolver = new Chain($this->resolver1, $this->resolver2);
         $this->assertInstanceOf(ResolverAbstract::class, $this->chainResolver);
     }
 
