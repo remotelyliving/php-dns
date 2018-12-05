@@ -23,8 +23,8 @@ class HostnameTest extends BaseTestAbstract
      */
     public function hasBasicGettersAndIsStringy()
     {
-        $this->assertSame('facebook.com', (string)$this->hostname);
-        $this->assertSame('facebook.com', $this->hostname->getHostName());
+        $this->assertSame('facebook.com.', (string)$this->hostname);
+        $this->assertSame('facebook.com.', $this->hostname->getHostName());
     }
 
     /**
@@ -54,10 +54,10 @@ class HostnameTest extends BaseTestAbstract
      */
     public function handlesIDNOperations()
     {
-        $utf8IDN = 'ańodelgatos.com';
+        $utf8IDN = 'ańodelgatos.com.';
         $IDN = Hostname::createFromString($utf8IDN);
 
-        $expectedAscii = 'xn--aodelgatos-w0b.com';
+        $expectedAscii = 'xn--aodelgatos-w0b.com.';
         $this->assertTrue($IDN->isPunycoded());
         $this->assertSame($expectedAscii, $IDN->getHostName());
         $this->assertSame($utf8IDN, $IDN->toUTF8());

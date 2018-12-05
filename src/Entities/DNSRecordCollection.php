@@ -123,7 +123,7 @@ class DNSRecordCollection extends EntityAbstract implements \ArrayAccess, \Itera
     {
         return $this->filterValues(function (DNSRecord $candidateRecord, DNSRecordCollection $remaining): bool {
             return $remaining->has($candidateRecord);
-        });
+        })->withUniqueValues();
     }
 
     public function withUniqueValues(): self
@@ -140,8 +140,7 @@ class DNSRecordCollection extends EntityAbstract implements \ArrayAccess, \Itera
 
         /** @var \RemotelyLiving\PHPDNS\Entities\DNSRecord $record */
         while ($record = array_shift($records)) {
-            $remaining = new self(...$records);
-            if ($eval($record, $remaining)) {
+            if ($eval($record, new self(...$records))) {
                 $filtered[] = $record;
             }
         }

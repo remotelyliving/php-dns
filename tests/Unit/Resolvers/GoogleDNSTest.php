@@ -83,7 +83,7 @@ class GoogleDNSTest extends BaseTestAbstract
     {
         $this->httpClient->expects($this->once())
             ->method('request')
-            ->with('GET', "/resolve?name=facebook.com&type=AAAA")
+            ->with('GET', "/resolve?name=facebook.com.&type=AAAA")
             ->willThrowException($e);
 
         $this->googleDNS->getAAAARecords(Hostname::createFromString('facebook.com'));

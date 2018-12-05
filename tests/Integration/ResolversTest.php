@@ -2,11 +2,14 @@
 namespace RemotelyLiving\PHPDNS\Tests\Integration;
 
 use Psr\Log\NullLogger;
-use Psr\Log\Test\TestLogger;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Entities\IPAddress;
+use RemotelyLiving\PHPDNS\Entities\MXData;
+use RemotelyLiving\PHPDNS\Entities\NSData;
+use RemotelyLiving\PHPDNS\Entities\SOAData;
+use RemotelyLiving\PHPDNS\Entities\TXTData;
 use RemotelyLiving\PHPDNS\Resolvers\Interfaces\ReverseDNSQuery;
 use RemotelyLiving\PHPDNS\Resolvers\ResolverAbstract;
 
@@ -42,6 +45,32 @@ class ResolversTest extends BaseTestAbstract
                 } while ($hasRecord === false);
 
                 $this->assertTrue($hasRecord);
+
+                if ($collection[0]->getType()->equals(DNSRecordType::createTXT())) {
+                    $this->assertInstanceOf(TXTData::class, $collection[0]->getData());
+                }
+
+                if ($collection[0]->getType()->equals(DNSRecordType::createNS())) {
+                    $this->assertInstanceOf(NSData::class, $collection[0]->getData());
+                }
+
+                if ($collection[0]->getType()->equals(DNSRecordType::createMX())) {
+                    $this->assertInstanceOf(MXData::class, $collection[0]->getData());
+                }
+
+                if ($collection[0]->getType()->equals(DNSRecordType::createSOA())) {
+                    $this->assertInstanceOf(SOAData::class, $collection[0]->getData());
+                }
+
+                if ($collection[0]->getType()->equals(DNSRecordType::createA())) {
+                    $this->assertInstanceOf(IPAddress::class, $collection[0]->getIPAddress());
+                    $this->assertTrue($collection[0]->getIPAddress()->isIPv4());
+                }
+
+                if ($collection[0]->getType()->equals(DNSRecordType::createAAAA())) {
+                    $this->assertInstanceOf(IPAddress::class, $collection[0]->getIPAddress());
+                    $this->assertTrue($collection[0]->getIPAddress()->isIPv6());
+                }
             }
         }
     }

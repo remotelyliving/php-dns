@@ -26,6 +26,7 @@ class LocalSystem extends MapperAbstract
     public function toDNSRecord(): DNSRecord
     {
         $IPAddress = null;
+        $data = null;
 
         if (isset($this->fields['ipv6'])) {
             $IPAddress = $this->fields['ipv6'];
@@ -35,11 +36,39 @@ class LocalSystem extends MapperAbstract
             $IPAddress = $this->fields['ip'];
         }
 
+        if (isset($this->fields['txt'])) {
+            $data = $this->fields['txt'];
+        }
+
+        if (isset($this->fields['target'])) {
+            $data = $this->fields['target'];
+        }
+
+        if (isset($this->fields['target']) && isset($this->fields['pri'])) {
+            $data = "{$this->fields['pri']} {$this->fields['target']}";
+        }
+
+        if (isset($this->fields['mname'])) {
+            $template = '%s %s %s %s %s %s %s';
+            $data = sprintf(
+                $template,
+                $this->fields['mname'],
+                $this->fields['rname'],
+                $this->fields['serial'],
+                $this->fields['refresh'],
+                $this->fields['retry'],
+                $this->fields['expire'],
+                $this->fields['minimum-ttl']
+            );
+        }
+
         return DNSRecord::createFromPrimitives(
             $this->fields['type'],
             $this->fields['host'],
             $this->fields['ttl'],
-            $IPAddress
+            $IPAddress,
+            $this->fields['class'],
+            $data
         );
     }
 

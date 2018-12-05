@@ -161,7 +161,7 @@ class DNSRecordCollectionTest extends BaseTestAbstract
         $expectedUniques = new DNSRecordCollection($this->dnsRecord1, $this->dnsRecord2);
         $expectedOnlyOneResult = new DNSRecordCollection($this->dnsRecord1);
 
-        $hasDupes = new DNSRecordCollection($this->dnsRecord1, $this->dnsRecord2, $this->dnsRecord2);
+        $hasDupes = new DNSRecordCollection($this->dnsRecord1, $this->dnsRecord2, $this->dnsRecord2, $this->dnsRecord2);
         $hasOneResult = new DNSRecordCollection($this->dnsRecord1);
 
         $this->assertEquals($expectedDupes, $hasDupes->withUniqueValuesExcluded());
