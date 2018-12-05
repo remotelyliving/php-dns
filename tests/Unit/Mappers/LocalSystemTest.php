@@ -15,13 +15,24 @@ class LocalSystemTest extends BaseTestAbstract
 
     const LOCAL_DNS_FORMAT = [
         [
-            'type' => 'A', 'ttl' => 343, 'ipv6' => 'FE80:CD00:0000:0000:0000:0000:211E:729C', 'host' => 'yelp.com',
+            'type' => 'AAAA',
+            'ttl' => 343,
+            'ipv6' => 'FE80:CD00:0000:0000:0000:0000:211E:729C',
+            'host' => 'yelp.com',
+            'class' => 'IN',
         ],
         [
-            'type' => 'AAAA', 'ttl' => 343, 'ip' => '127.0.0.1', 'host' => 'google.com',
+            'type' => 'A',
+            'ttl' => 343,
+            'ip' => '127.0.0.1',
+            'host' => 'google.com',
+            'class' => 'IN',
         ],
         [
-            'type' => 'CNAME', 'ttl' => 343, 'host' => 'google.com',
+            'type' => 'CNAME',
+            'ttl' => 343,
+            'host' => 'google.com',
+            'class' => 'IN'
         ],
     ];
 

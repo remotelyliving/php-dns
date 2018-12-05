@@ -9,15 +9,22 @@ class CloudFlare extends MapperAbstract
 {
     public function toDNSRecord(): DNSRecord
     {
+        $type = DNSRecordType::createFromInt((int) $this->fields['type']);
         $IPAddress = (isset($this->fields['data']) && IPAddress::isValid($this->fields['data']))
             ? $this->fields['data']
             : null;
 
+        $value = (isset($this->fields['data']) && !$IPAddress)
+            ? (string)$this->fields['data']
+            : null;
+
         return DNSRecord::createFromPrimitives(
-            DNSRecordType::createFromInt((int) $this->fields['type']),
-            substr($this->fields['name'], 0, -1),
+            $type,
+            $this->fields['name'],
             $this->fields['TTL'],
-            $IPAddress
+            $IPAddress,
+            'IN',
+            $value
         );
     }
 }

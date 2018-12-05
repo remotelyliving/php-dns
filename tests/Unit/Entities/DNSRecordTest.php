@@ -13,18 +13,32 @@ class DNSRecordTest extends BaseTestAbstract
     /**
      * @var \RemotelyLiving\PHPDNS\Entities\DNSRecord
      */
-    private $DNSRecord;
+    private $DNSARecord;
+
+    /**
+     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecord
+     */
+    private $DNSTXTRecord;
 
     protected function setUp()
     {
         parent::setUp();
 
-        $this->DNSRecord = DNSRecord::createFromPrimitives(
+        $this->DNSARecord = DNSRecord::createFromPrimitives(
             'A',
             'google.com',
             123,
             '127.0.0.1',
             'AS'
+        );
+
+        $this->DNSTXTRecord = DNSRecord::createFromPrimitives(
+            'TXT',
+            'google.com',
+            123,
+            null,
+            'AS',
+            'txtval'
         );
     }
 
@@ -33,11 +47,12 @@ class DNSRecordTest extends BaseTestAbstract
      */
     public function hasBasicGetters()
     {
-        $this->assertSame(123, $this->DNSRecord->getTTL());
-        $this->assertTrue(IPAddress::createFromString('127.0.0.1')->equals($this->DNSRecord->getIPAddress()));
-        $this->assertTrue(Hostname::createFromString('google.com')->equals($this->DNSRecord->getHostname()));
-        $this->assertTrue(DNSRecordType::createA()->equals($this->DNSRecord->getType()));
-        $this->assertSame('AS', $this->DNSRecord->getClass());
+        $this->assertSame(123, $this->DNSARecord->getTTL());
+        $this->assertTrue(IPAddress::createFromString('127.0.0.1')->equals($this->DNSARecord->getIPAddress()));
+        $this->assertTrue(Hostname::createFromString('google.com')->equals($this->DNSARecord->getHostname()));
+        $this->assertTrue(DNSRecordType::createA()->equals($this->DNSARecord->getType()));
+        $this->assertSame('AS', $this->DNSARecord->getClass());
+        $this->assertNull($this->DNSARecord->getData());
     }
 
     /**
@@ -45,14 +60,22 @@ class DNSRecordTest extends BaseTestAbstract
      */
     public function isArrayable()
     {
-        $this->assertInstanceOf(Arrayable::class, $this->DNSRecord);
+        $this->assertInstanceOf(Arrayable::class, $this->DNSARecord);
         $this->assertEquals([
             'hostname' => 'google.com',
             'type' => 'A',
             'TTL' => 123,
             'class' => 'AS',
             'IPAddress' => '127.0.0.1',
-        ], $this->DNSRecord->toArray());
+        ], $this->DNSARecord->toArray());
+
+        $this->assertEquals([
+            'hostname' => 'google.com',
+            'type' => 'TXT',
+            'TTL' => 123,
+            'class' => 'AS',
+            'txt' => 'txtval'
+        ], $this->DNSTXTRecord->toArray());
     }
 
     /**
@@ -60,7 +83,9 @@ class DNSRecordTest extends BaseTestAbstract
      */
     public function isSerializable()
     {
-        $this->assertSerializable($this->DNSRecord);
+        $this->assertSerializable($this->DNSARecord);
+
+        $this->assertEquals(unserialize(serialize($this->DNSARecord)), $this->DNSARecord);
     }
 
     /**
@@ -84,7 +109,27 @@ class DNSRecordTest extends BaseTestAbstract
             'AS'
         );
 
-        $this->assertTrue($this->DNSRecord->equals($record3));
-        $this->assertFalse($this->DNSRecord->equals($record2));
+        $record3 = DNSRecord::createFromPrimitives(
+            'A',
+            'google.com',
+            321,
+            '127.0.0.1',
+            'AS'
+        );
+
+        $record4 = DNSRecord::createFromPrimitives(
+            'TXT',
+            'google.com',
+            321,
+            null,
+            'AS',
+            'txtval'
+        );
+
+        $this->assertTrue($this->DNSARecord->equals($record3));
+        $this->assertFalse($this->DNSARecord->equals($record2));
+
+        $this->assertTrue($this->DNSTXTRecord->equals($record4));
+        $this->assertFalse($this->DNSTXTRecord->equals($record3));
     }
 }

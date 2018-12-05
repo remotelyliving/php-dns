@@ -12,7 +12,7 @@ class Hostname extends EntityAbstract
 
     public function __construct(string $hostname)
     {
-        $hostname = self::punyCode(mb_strtolower(trim($hostname)));
+        $hostname = $this->normalizeHostName($hostname);
 
         if ((bool)filter_var($hostname, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME) === false) {
             throw new InvalidArgumentException("{$hostname} is not a valid hostname");
@@ -54,5 +54,16 @@ class Hostname extends EntityAbstract
     private static function punyCode(string $hostname): string
     {
         return (string)idn_to_ascii($hostname, IDNA_ERROR_PUNYCODE, INTL_IDNA_VARIANT_UTS46);
+    }
+
+    private function normalizeHostName(string $hostname): string
+    {
+        $hostname = self::punyCode(mb_strtolower(trim($hostname)));
+
+        if (substr($hostname, -1) !== '.') {
+            return "{$hostname}.";
+        }
+
+        return $hostname;
     }
 }

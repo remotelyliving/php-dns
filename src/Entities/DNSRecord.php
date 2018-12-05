@@ -31,18 +31,25 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
      */
     private $class;
 
+    /**
+     * @var \RemotelyLiving\PHPDNS\Entities\DataAbstract|null
+     */
+    private $data;
+
     public function __construct(
         DNSRecordType $recordType,
         Hostname $hostname,
         int $ttl,
         IPAddress $IPAddress = null,
-        string $class = 'IN'
+        string $class = 'IN',
+        DataAbstract $data = null
     ) {
         $this->recordType = $recordType;
         $this->hostname = $hostname;
         $this->TTL = $ttl;
         $this->IPAddress = $IPAddress;
         $this->class = $class;
+        $this->data = $data;
     }
 
     public static function createFromPrimitives(
@@ -50,14 +57,22 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
         string $hostname,
         int $ttl,
         string $IPAddress = null,
-        string $class = 'IN'
+        string $class = 'IN',
+        string $data = null
     ) : DNSRecord {
+        $type = DNSRecordType::createFromString($recordType);
+        $hostname = Hostname::createFromString($hostname);
+        $data = ($data !== null)
+            ? DataAbstract::createFromTypeAndString($type, $data)
+            : null;
+
         return new static(
-            DNSRecordType::createFromString($recordType),
-            Hostname::createFromString($hostname),
+            $type,
+            $hostname,
             $ttl,
             $IPAddress ? IPAddress::createFromString($IPAddress) : null,
-            $class
+            $class,
+            $data
         );
     }
 
@@ -86,6 +101,11 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
         return $this->class;
     }
 
+    public function getData(): ?DataAbstract
+    {
+        return $this->data;
+    }
+
     public function toArray(): array
     {
         $formatted = [
@@ -99,6 +119,10 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
             $formatted['IPAddress'] = (string)$this->IPAddress;
         }
 
+        if ($this->data) {
+            $formatted['data'] = (string)$this->data;
+        }
+
         return $formatted;
     }
 
@@ -106,7 +130,8 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
     {
         return $this->hostname->equals($record->getHostname())
             && $this->recordType->equals($record->getType())
-            && (string) $this->IPAddress === (string) $record->getIPAddress(); // could be null
+            && (string)$this->data === (string)$record->getData() // could be null
+            && (string)$this->IPAddress === (string)$record->getIPAddress(); // could be null
     }
 
     public function serialize(): string
@@ -124,5 +149,8 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
         $this->TTL = (int) $unserialized['TTL'];
         $this->IPAddress = $rawIPAddres ? IPAddress::createFromString($rawIPAddres) : null;
         $this->class = $unserialized['class'];
+        $this->data = (isset($unserialized['data']))
+         ? DataAbstract::createFromTypeAndString($this->recordType, $unserialized['data'])
+         : null;
     }
 }
