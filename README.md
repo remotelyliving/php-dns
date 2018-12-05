@@ -33,9 +33,7 @@ These resolvers at the least implement the `Resolvers\Interfaces\DNSQuery` inter
 - LocalSystem (uses the local PHP dns query function)
 
 ```php
-
 $resolver = new Resolvers\GoogleDNS();
-// validates hostname
 $hostname = Hostname::createFromString('google.com');
 
 // OR 
@@ -43,9 +41,9 @@ $hostname = Hostname::createFromString('google.com');
 $hostname = 'google.com';
 
 // can query via convenience methods
-$records = $resolver->getARecords($hostname); // returns a collection of DNSRecords
+$records = $resolver->getARecords($hostname); // returns a collection of DNS A Records
 
-// can also query by any type. Types are a proper object that validate you have the right type
+// can also query by any RecordType. Record Types are a proper object that validate you have the right type.
 $recordType = DNSRecordType::createAAAA();
 
 // OR
@@ -154,24 +152,24 @@ christians-mbp:php-dns chthomas$ make repl
 Psy Shell v0.9.9 (PHP 7.2.8 — cli) by Justin Hileman
 >>> ls
 Variables: $cachedResolver, $chainResolver, $cloudFlareResolver, $googleDNSResolver, $IOSubscriber, $localSystemResolver, $stdErr, $stdOut
->>> $records = $chainResolver->getARecords(new Hostname('facebook.com'))
+>>> $records = $chainResolver->getARecords('facebook.com')
 {
     "dns.query.profiled": {
-        "elapsedSeconds": 0.14085698127746582,
-        "transactionName": "CloudFlare:facebook.com:A",
-        "peakMemoryUsage": 9508312
+        "elapsedSeconds": 0.21915197372436523,
+        "transactionName": "CloudFlare:facebook.com.:A",
+        "peakMemoryUsage": 9517288
     }
 }
 {
     "dns.queried": {
         "resolver": "CloudFlare",
-        "hostname": "facebook.com",
+        "hostname": "facebook.com.",
         "type": "A",
         "records": [
             {
-                "hostname": "facebook.com",
+                "hostname": "facebook.com.",
                 "type": "A",
-                "TTL": 175,
+                "TTL": 224,
                 "class": "IN",
                 "IPAddress": "31.13.71.36"
             }
@@ -179,34 +177,90 @@ Variables: $cachedResolver, $chainResolver, $cloudFlareResolver, $googleDNSResol
         "empty": false
     }
 }
-=> RemotelyLiving\PHPDNS\Entities\DNSRecordCollection {#2375}
->>> $records->pickFirst()
-=> RemotelyLiving\PHPDNS\Entities\DNSRecord {#2392}
->>> $googleDNSResolver->hasRecord($records->pickFirst())
+=> RemotelyLiving\PHPDNS\Entities\DNSRecordCollection {#2370}
+>>> $records->pickFirst()->toArray()
+=> [
+     "hostname" => "facebook.com.",
+     "type" => "A",
+     "TTL" => 224,
+     "class" => "IN",
+     "IPAddress" => "31.13.71.36",
+   ]
+>>> $records = $chainResolver->withConsensusResults()->getRecords('facebook.com', 'TXT')
 {
     "dns.query.profiled": {
-        "elapsedSeconds": 0.16751790046691895,
-        "transactionName": "GoogleDNS:facebook.com:A",
-        "peakMemoryUsage": 9508312
+        "elapsedSeconds": 0.023031949996948242,
+        "transactionName": "CloudFlare:facebook.com.:TXT",
+        "peakMemoryUsage": 9615080
+    }
+}
+{
+    "dns.queried": {
+        "resolver": "CloudFlare",
+        "hostname": "facebook.com.",
+        "type": "TXT",
+        "records": [
+            {
+                "hostname": "facebook.com.",
+                "type": "TXT",
+                "TTL": 9136,
+                "class": "IN",
+                "data": "v=spf1 redirect=_spf.facebook.com"
+            }
+        ],
+        "empty": false
+    }
+}
+{
+    "dns.query.profiled": {
+        "elapsedSeconds": 0.23299598693847656,
+        "transactionName": "GoogleDNS:facebook.com.:TXT",
+        "peakMemoryUsage": 9615080
     }
 }
 {
     "dns.queried": {
         "resolver": "GoogleDNS",
-        "hostname": "facebook.com",
-        "type": "A",
+        "hostname": "facebook.com.",
+        "type": "TXT",
         "records": [
             {
-                "hostname": "facebook.com",
-                "type": "A",
-                "TTL": 234,
+                "hostname": "facebook.com.",
+                "type": "TXT",
+                "TTL": 21121,
                 "class": "IN",
-                "IPAddress": "31.13.71.36"
+                "data": "v=spf1 redirect=_spf.facebook.com"
             }
         ],
         "empty": false
     }
 }
-=> true
+{
+    "dns.query.profiled": {
+        "elapsedSeconds": 0.0018258094787597656,
+        "transactionName": "LocalSystem:facebook.com.:TXT",
+        "peakMemoryUsage": 9615080
+    }
+}
+{
+    "dns.queried": {
+        "resolver": "LocalSystem",
+        "hostname": "facebook.com.",
+        "type": "TXT",
+        "records": [
+            {
+                "hostname": "facebook.com.",
+                "type": "TXT",
+                "TTL": 25982,
+                "class": "IN",
+                "data": "v=spf1 redirect=_spf.facebook.com"
+            }
+        ],
+        "empty": false
+    }
+}
+=> RemotelyLiving\PHPDNS\Entities\DNSRecordCollection {#2413}
+>>> $records->pickFirst()->getData()->getValue()
+=> "v=spf1 redirect=_spf.facebook.com"
 >>> 
 ```
