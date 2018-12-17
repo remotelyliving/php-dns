@@ -86,6 +86,7 @@ class DNSRecordTest extends BaseTestAbstract
         $this->assertSerializable($this->DNSARecord);
 
         $this->assertEquals(unserialize(serialize($this->DNSARecord)), $this->DNSARecord);
+        $this->assertEquals(unserialize(serialize($this->DNSTXTRecord)), $this->DNSTXTRecord);
     }
 
     /**

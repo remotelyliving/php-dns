@@ -41,6 +41,11 @@ class Hostname extends EntityAbstract
         return $this->hostname;
     }
 
+    public function getHostnameWithoutTrailingDot(): string
+    {
+        return substr($this->hostname, 0, -1);
+    }
+
     public function isPunycoded(): bool
     {
         return $this->toUTF8() !== $this->hostname;

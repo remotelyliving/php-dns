@@ -25,6 +25,7 @@ class HostnameTest extends BaseTestAbstract
     {
         $this->assertSame('facebook.com.', (string)$this->hostname);
         $this->assertSame('facebook.com.', $this->hostname->getHostName());
+        $this->assertSame('facebook.com', $this->hostname->getHostnameWithoutTrailingDot());
     }
 
     /**

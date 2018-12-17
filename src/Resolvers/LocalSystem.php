@@ -37,7 +37,11 @@ class LocalSystem extends ResolverAbstract implements ReverseDNSQuery
 
     protected function doQuery(Hostname $hostname, DNSRecordType $type): DNSRecordCollection
     {
-        $results = $this->systemDNS->getRecord($hostname, $this->mapper->getTypeCodeFromType($type));
+        $results = $this->systemDNS->getRecord(
+            $hostname->getHostnameWithoutTrailingDot(), // dns_get_record doesn't like trailing dot as much!
+            $this->mapper->getTypeCodeFromType($type)
+        );
+
         $collection = new DNSRecordCollection();
 
         foreach ($results as $result) {

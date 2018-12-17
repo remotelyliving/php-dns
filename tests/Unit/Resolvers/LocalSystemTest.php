@@ -47,7 +47,7 @@ class LocalSystemTest extends BaseTestAbstract
 
         $this->dnsClient->expects($this->exactly(2))
             ->method('getRecord')
-            ->with('facebook.com.', 1)
+            ->with('facebook.com', 1)
             ->willReturnOnConsecutiveCalls(
                 self::getEmptyResponse(),
                 self::buildResponse('A')
@@ -80,7 +80,7 @@ class LocalSystemTest extends BaseTestAbstract
     {
         $this->dnsClient->expects($this->once())
             ->method('getRecord')
-            ->with((string) $hostname, $this->localSystemMapper->getTypeCodeFromType($type))
+            ->with($hostname->getHostnameWithoutTrailingDot(), $this->localSystemMapper->getTypeCodeFromType($type))
             ->willReturn($response);
 
         $actual = $this->localSystem->{$method}($hostname, $type);
