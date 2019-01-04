@@ -132,7 +132,7 @@ class DNSRecordCollectionTest extends BaseTestAbstract
             $this->dnsRecordCollection->offsetGet(0)
         );
 
-        $this->assertSame(0, $this->dnsRecordCollection->key());
+        $this->assertFalse((bool)$this->dnsRecordCollection->key());
     }
 
     /**

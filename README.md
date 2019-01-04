@@ -34,10 +34,6 @@ These resolvers at the least implement the `Resolvers\Interfaces\DNSQuery` inter
 
 ```php
 $resolver = new Resolvers\GoogleDNS();
-$hostname = Hostname::createFromString('google.com');
-
-// OR 
-
 $hostname = 'google.com';
 
 // can query via convenience methods
@@ -78,7 +74,7 @@ You can randomly select which Resolver in the chain it tries first too via `Reso
 Example:
 
 ```php
-$foundRecord = $chainResolver->randomly()->getARecords(new Hostname('facebook.com'))->pickFirst();
+$foundRecord = $chainResolver->randomly()->getARecords('facebook.com')->pickFirst();
 ```
 
 The above code calls through the resolvers randomly until it finds any non empty answer or has exhausted order the chain.
@@ -90,13 +86,13 @@ Check them out here:
 
 ```php
 // returns only common results between resolvers
-$chainResolver->withConsensusResults()->getARecords(new Hostname('facebook.com')); 
+$chainResolver->withConsensusResults()->getARecords('facebook.com'); 
 
 // returns the first non empty result set
 $chainResolver->withFirstResults()->getARecords('facebook.com'); 
 
 // returns all collective responses with duplicates filtered out
-$chainResolver->withAllResults()->getARecords(new Hostname('facebook.com')); 
+$chainResolver->withAllResults()->getARecords('facebook.com'); 
 ```
 
 **Cached Resolver**
@@ -115,7 +111,7 @@ $cachedResolver = new Resolvers\Cached($cache, $resolverOfChoice, $TTL);
 
 Take a look in the `src/Entities` to see what's available for you to query by and receive.
 
-For records with extra type data, like SOA, TXT, MX, and NS there is a data attribute on `Entities\DNSRecord` that will be set with the proper type
+For records with extra type data, like SOA, TXT, MX, CNAME, and NS there is a data attribute on `Entities\DNSRecord` that will be set with the proper type
 
 **Reverse Lookup**
 
