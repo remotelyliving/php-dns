@@ -77,6 +77,55 @@ class ResolversTest extends BaseTestAbstract
 
     /**
      * @test
+     * @dataProvider resolverProvider
+     */
+    public function getsWWWRecords(ResolverAbstract $resolver)
+    {
+        $resolver->setLogger(new NullLogger());
+        $wwwHostname = new Hostname('www.' . $this->hostname);
+
+        foreach (DNSRecordType::VALID_TYPES as $type) {
+            $collection = $resolver->getRecords($wwwHostname, DNSRecordType::createFromString($type));
+            $this->assertInstanceOf(DNSRecordCollection::class, $collection);
+
+            if (!$collection->isEmpty()) {
+                do {
+                    $hasRecord = $resolver->hasRecord($collection->pickFirst());
+                } while ($hasRecord === false);
+
+                $this->assertTrue($hasRecord);
+
+                if ($collection[0]->getType()->equals(DNSRecordType::createTXT())) {
+                    $this->assertInstanceOf(TXTData::class, $collection[0]->getData());
+                }
+
+                if ($collection[0]->getType()->equals(DNSRecordType::createNS())) {
+                    $this->assertInstanceOf(NSData::class, $collection[0]->getData());
+                }
+
+                if ($collection[0]->getType()->equals(DNSRecordType::createMX())) {
+                    $this->assertInstanceOf(MXData::class, $collection[0]->getData());
+                }
+
+                if ($collection[0]->getType()->equals(DNSRecordType::createSOA())) {
+                    $this->assertInstanceOf(SOAData::class, $collection[0]->getData());
+                }
+
+                if ($collection[0]->getType()->equals(DNSRecordType::createA())) {
+                    $this->assertInstanceOf(IPAddress::class, $collection[0]->getIPAddress());
+                    $this->assertTrue($collection[0]->getIPAddress()->isIPv4());
+                }
+
+                if ($collection[0]->getType()->equals(DNSRecordType::createAAAA())) {
+                    $this->assertInstanceOf(IPAddress::class, $collection[0]->getIPAddress());
+                    $this->assertTrue($collection[0]->getIPAddress()->isIPv6());
+                }
+            }
+        }
+    }
+
+    /**
+     * @test
      */
     public function getsHostnameFromIpAddress()
     {

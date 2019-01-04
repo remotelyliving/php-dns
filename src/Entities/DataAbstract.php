@@ -44,6 +44,10 @@ abstract class DataAbstract implements Arrayable, Serializable
             return new NSData(new Hostname($data));
         }
 
+        if ($recordType->isA(DNSRecordType::TYPE_CNAME)) {
+            return new CNAMEData(new Hostname($data));
+        }
+
         throw new InvalidArgumentException("{$data} could not be created with type {$recordType}");
     }
 }

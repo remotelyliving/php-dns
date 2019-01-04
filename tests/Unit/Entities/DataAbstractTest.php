@@ -101,6 +101,11 @@ class DataAbstractTest extends BaseTestAbstract
         $this->assertSame(800, $soaData->getRetry());
         $this->assertSame(1800, $soaData->getExpire());
         $this->assertSame(60, $soaData->getMinTTL());
+
+        /** @var \RemotelyLiving\PHPDNS\Entities\CNAMEData $cnameData */
+        $cnameString = 'herp.website';
+        $cnameData = $this->dataAbstract1::createFromTypeAndString(DNSRecordType::createCNAME(), $cnameString);
+        $this->assertSame('herp.website.', (string)$cnameData->getHostname());
     }
 
     /**
