@@ -26,7 +26,6 @@ class LocalSystem extends MapperAbstract
     public function toDNSRecord(): DNSRecord
     {
         $IPAddress = null;
-        $data = null;
 
         if (isset($this->fields['ipv6'])) {
             $IPAddress = $this->fields['ipv6'];
@@ -36,44 +35,53 @@ class LocalSystem extends MapperAbstract
             $IPAddress = $this->fields['ip'];
         }
 
-        if (isset($this->fields['txt'])) {
-            $data = $this->fields['txt'];
-        }
-
-        if (isset($this->fields['target'])) {
-            $data = $this->fields['target'];
-        }
-
-        if (isset($this->fields['target']) && isset($this->fields['pri'])) {
-            $data = "{$this->fields['pri']} {$this->fields['target']}";
-        }
-
-        if (isset($this->fields['mname'])) {
-            $template = '%s %s %s %s %s %s %s';
-            $data = sprintf(
-                $template,
-                $this->fields['mname'],
-                $this->fields['rname'],
-                $this->fields['serial'],
-                $this->fields['refresh'],
-                $this->fields['retry'],
-                $this->fields['expire'],
-                $this->fields['minimum-ttl']
-            );
-        }
-
         return DNSRecord::createFromPrimitives(
             $this->fields['type'],
             $this->fields['host'],
             $this->fields['ttl'],
             $IPAddress,
             $this->fields['class'],
-            $data
+            $this->formatData($this->fields)
         );
     }
 
     public function getTypeCodeFromType(DNSRecordType $type): int
     {
         return array_flip(self::PHP_CODE_TYPE_MAP)[(string)$type] ?? \DNS_ANY;
+    }
+
+    private function formatData(array $fields): ?string
+    {
+        if (isset($this->fields['flags'], $fields['tag'], $fields['value'])) {
+            return "{$fields['flags']} {$fields['tag']} \"{$fields['value']}\"";
+        }
+
+        if (isset($fields['mname'])) {
+            $template = '%s %s %s %s %s %s %s';
+            return sprintf(
+                $template,
+                $fields['mname'],
+                $fields['rname'],
+                $fields['serial'],
+                $fields['refresh'],
+                $fields['retry'],
+                $fields['expire'],
+                $fields['minimum-ttl']
+            );
+        }
+
+        if (isset($fields['target'], $fields['pri'])) {
+            return "{$fields['pri']} {$fields['target']}";
+        }
+
+        if (isset($fields['target'])) {
+            return $fields['target'];
+        }
+
+        if (isset($fields['txt'])) {
+            return $fields['txt'];
+        }
+
+        return null;
     }
 }

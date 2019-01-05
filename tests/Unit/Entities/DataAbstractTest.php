@@ -106,6 +106,13 @@ class DataAbstractTest extends BaseTestAbstract
         $cnameString = 'herp.website';
         $cnameData = $this->dataAbstract1::createFromTypeAndString(DNSRecordType::createCNAME(), $cnameString);
         $this->assertSame('herp.website.', (string)$cnameData->getHostname());
+
+        /** @var \RemotelyLiving\PHPDNS\Entities\CAAData $caaData */
+        $caaString = '0 issue "comodoca.com"';
+        $caaData = $this->dataAbstract1::createFromTypeAndString(DNSRecordType::createCAA(), $caaString);
+        $this->assertSame('"comodoca.com"', $caaData->getValue());
+        $this->assertSame(0, $caaData->getFlags());
+        $this->assertSame('issue', $caaData->getTag());
     }
 
     /**

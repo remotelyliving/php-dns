@@ -99,6 +99,7 @@ class SOADataTest extends BaseTestAbstract
     public function isSerializable()
     {
         $this->assertSerializable($this->SOAData);
+        $this->assertEquals($this->SOAData, \unserialize(\serialize($this->SOAData)));
     }
 
     /**

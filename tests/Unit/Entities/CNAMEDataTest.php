@@ -59,6 +59,7 @@ class CNAMEDataTest extends BaseTestAbstract
     public function isStringable()
     {
         $this->assertStringableAndEquals('google.com.', $this->CNAMEData);
+        $this->assertEquals($this->CNAMEData, \unserialize(\serialize($this->CNAMEData)));
     }
 
     /**

@@ -20,26 +20,6 @@ abstract class DataAbstract implements Arrayable, Serializable
             return new TXTData($data);
         }
 
-        if ($recordType->isA(DNSRecordType::TYPE_MX)) {
-            $exploded = explode(' ', $data);
-
-            return new MXData(new Hostname($exploded[1]), (int)$exploded[0]);
-        }
-
-        if ($recordType->isA(DNSRecordType::TYPE_SOA)) {
-            $exploded = explode(' ', $data);
-
-            return new SOAData(
-                new Hostname($exploded[0]),
-                new Hostname($exploded[1]),
-                (int)$exploded[2] ?? 0,
-                (int)$exploded[3] ?? 0,
-                (int)$exploded[4] ?? 0,
-                (int)$exploded[5] ?? 0,
-                (int)$exploded[6] ?? 0
-            );
-        }
-
         if ($recordType->isA(DNSRecordType::TYPE_NS)) {
             return new NSData(new Hostname($data));
         }
@@ -48,6 +28,35 @@ abstract class DataAbstract implements Arrayable, Serializable
             return new CNAMEData(new Hostname($data));
         }
 
+        $parsed = self::parseDataToArray($data);
+
+        if ($recordType->isA(DNSRecordType::TYPE_MX)) {
+            return new MXData(new Hostname($parsed[1]), (int)$parsed[0]);
+        }
+
+        if ($recordType->isA(DNSRecordType::TYPE_SOA)) {
+            return new SOAData(
+                new Hostname($parsed[0]),
+                new Hostname($parsed[1]),
+                (int)$parsed[2] ?? 0,
+                (int)$parsed[3] ?? 0,
+                (int)$parsed[4] ?? 0,
+                (int)$parsed[5] ?? 0,
+                (int)$parsed[6] ?? 0
+            );
+        }
+
+
+
+        if ($recordType->isA(DNSRecordType::TYPE_CAA)) {
+            return new CAAData($parsed[0], $parsed[1], $parsed[2]);
+        }
+
         throw new InvalidArgumentException("{$data} could not be created with type {$recordType}");
+    }
+
+    private static function parseDataToArray(string $data): array
+    {
+        return explode(' ', $data);
     }
 }

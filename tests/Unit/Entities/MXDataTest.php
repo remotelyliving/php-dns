@@ -56,6 +56,7 @@ class MXDataTest extends BaseTestAbstract
     public function isSerializable()
     {
         $this->assertSerializable($this->MXData);
+        $this->assertEquals($this->MXData, \unserialize(\serialize($this->MXData)));
     }
 
     /**

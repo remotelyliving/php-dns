@@ -48,6 +48,7 @@ class NSDataTest extends BaseTestAbstract
     public function isSerializable()
     {
         $this->assertSerializable($this->NSData);
+        $this->assertEquals($this->NSData, \unserialize(\serialize($this->NSData)));
     }
 
     /**

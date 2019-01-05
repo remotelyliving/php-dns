@@ -46,6 +46,7 @@ class TXTDataTest extends BaseTestAbstract
     public function isSerializable()
     {
         $this->assertSerializable($this->TXTData);
+        $this->assertEquals($this->TXTData, \unserialize(\serialize($this->TXTData)));
     }
 
     /**

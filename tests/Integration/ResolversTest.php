@@ -2,6 +2,8 @@
 namespace RemotelyLiving\PHPDNS\Tests\Integration;
 
 use Psr\Log\NullLogger;
+use RemotelyLiving\PHPDNS\Entities\CAAData;
+use RemotelyLiving\PHPDNS\Entities\CNAMEData;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
@@ -24,7 +26,16 @@ class ResolversTest extends BaseTestAbstract
     {
         parent::setUp();
 
-        $this->hostname = Hostname::createFromString('facebook.com');
+        $hostnames = [
+            'google.com',
+            'www.google.com',
+            'facebook.com',
+            'www.facebook.com',
+            'wordpress.com',
+            'www.wordpress.com'
+        ];
+
+        $this->hostname = Hostname::createFromString($hostnames[array_rand($hostnames)]);
     }
 
     /**
@@ -62,6 +73,14 @@ class ResolversTest extends BaseTestAbstract
                     $this->assertInstanceOf(SOAData::class, $collection[0]->getData());
                 }
 
+                if ($collection[0]->getType()->equals(DNSRecordType::createCAA())) {
+                    $this->assertInstanceOf(CAAData::class, $collection[0]->getData());
+                }
+
+                if ($collection[0]->getType()->equals(DNSRecordType::createCNAME())) {
+                    $this->assertInstanceOf(CNAMEData::class, $collection[0]->getData());
+                }
+
                 if ($collection[0]->getType()->equals(DNSRecordType::createA())) {
                     $this->assertInstanceOf(IPAddress::class, $collection[0]->getIPAddress());
                     $this->assertTrue($collection[0]->getIPAddress()->isIPv4());
@@ -84,7 +103,7 @@ class ResolversTest extends BaseTestAbstract
         $resolver->setLogger(new NullLogger());
         $wwwHostname = new Hostname('www.' . $this->hostname);
 
-        foreach (DNSRecordType::VALID_TYPES as $type) {
+        foreach (['CAA'] as $type) {
             $collection = $resolver->getRecords($wwwHostname, DNSRecordType::createFromString($type));
             $this->assertInstanceOf(DNSRecordCollection::class, $collection);
 
@@ -119,6 +138,14 @@ class ResolversTest extends BaseTestAbstract
                 if ($collection[0]->getType()->equals(DNSRecordType::createAAAA())) {
                     $this->assertInstanceOf(IPAddress::class, $collection[0]->getIPAddress());
                     $this->assertTrue($collection[0]->getIPAddress()->isIPv6());
+                }
+
+                if ($collection[0]->getType()->equals(DNSRecordType::createCAA())) {
+                    $this->assertInstanceOf(CAAData::class, $collection[0]->getData());
+                }
+
+                if ($collection[0]->getType()->equals(DNSRecordType::createCNAME())) {
+                    $this->assertInstanceOf(CNAMEData::class, $collection[0]->getData());
                 }
             }
         }

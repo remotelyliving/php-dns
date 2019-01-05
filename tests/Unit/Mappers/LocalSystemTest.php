@@ -69,6 +69,22 @@ class LocalSystemTest extends BaseTestAbstract
             'txt' => 'txtval',
             'class' => 'IN',
         ],
+        [
+            'type' => 'CNAME',
+            'class' => 'IN',
+            'host' => 'www.google.com',
+            'ttl' => 234,
+            'target' => 'google.com',
+        ],
+        [
+            'type' => 'CAA',
+            'host' => 'thing.com',
+            'class' => 'IN',
+            'value' => 'google.com',
+            'ttl' => 234,
+            'tag' => 'issue',
+            'flags' => 0
+        ],
     ];
 
     protected function setUp()
