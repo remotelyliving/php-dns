@@ -4,6 +4,7 @@ namespace RemotelyLiving\PHPDNS\Tests\Unit\Resolvers;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Response;
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
@@ -95,6 +96,7 @@ class CloudFlareTest extends BaseTestAbstract
         return [
             [$this->createMock(ConnectException::class)],
             [$this->createMock(ClientException::class)],
+            [$this->createMock(ServerException::class)],
         ];
     }
 

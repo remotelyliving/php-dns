@@ -3,8 +3,7 @@ namespace RemotelyLiving\PHPDNS\Resolvers;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
@@ -58,7 +57,7 @@ class CloudFlare extends ResolverAbstract
     {
         try {
             $response = $this->http->request('GET', '/dns-query?' . http_build_query($query));
-        } catch (ClientException | ConnectException $e) {
+        } catch (RequestException $e) {
             throw new QueryFailure("Unable to query CloudFlare API", 0, $e);
         }
 
