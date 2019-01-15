@@ -51,9 +51,9 @@ class GoogleDNSTest extends BaseTestAbstract
             ->method('request')
             ->with('GET', "/resolve?name={$hostname}&type={$type}")
             ->willReturnOnConsecutiveCalls(
-                new Response('', [], $nonMatchResponse),
-                new Response('', [], $nonMatchResponse),
-                new Response('', [], $goodResponse)
+                new Response(200, [], $nonMatchResponse),
+                new Response(200, [], $nonMatchResponse),
+                new Response(200, [], $goodResponse)
             );
 
         $this->assertTrue($this->googleDNS->hasRecord($record));
@@ -68,7 +68,7 @@ class GoogleDNSTest extends BaseTestAbstract
         $this->httpClient->expects($this->once())
             ->method('request')
             ->with('GET', "/resolve?name={$hostname}&type={$type}")
-            ->willReturn(new Response('', [], $response));
+            ->willReturn(new Response(200, [], $response));
 
         $actual = $this->googleDNS->{$method}($hostname, $type);
 

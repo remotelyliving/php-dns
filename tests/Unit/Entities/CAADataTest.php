@@ -40,7 +40,7 @@ class CAADataTest extends BaseTestAbstract
     public function isArrayable()
     {
         $this->assertArrayableAndEquals(
-            ['flags' => $this->flags, 'tag' => $this->tag, 'value' => $this->value],
+            ['flags' => $this->flags, 'tag' => $this->tag, 'value' => ';'],
             $this->CAAData
         );
     }
@@ -69,6 +69,9 @@ class CAADataTest extends BaseTestAbstract
     {
         $this->assertSame($this->flags, $this->CAAData->getFlags());
         $this->assertSame($this->tag, $this->CAAData->getTag());
-        $this->assertSame($this->value, $this->CAAData->getValue());
+        $this->assertSame(';', $this->CAAData->getValue());
+
+        $nullDefault = new CAAData(0, 'issue');
+        $this->assertNull($nullDefault->getValue());
     }
 }

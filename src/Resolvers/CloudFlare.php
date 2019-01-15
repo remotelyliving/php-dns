@@ -4,6 +4,9 @@ namespace RemotelyLiving\PHPDNS\Resolvers;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\PromiseInterface;
+use function GuzzleHttp\Promise\unwrap;
+use GuzzleHttp\Psr7\Response;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
@@ -43,26 +46,61 @@ class CloudFlare extends ResolverAbstract
 
     protected function doQuery(Hostname $hostname, DNSRecordType $type): DNSRecordCollection
     {
-        $results = $this->doApiQuery(['name' => (string)$hostname, 'type' => (string)$type]);
+        try {
+            return (!$type->isA(DNSRecordType::TYPE_ANY))
+                ? $this->doApiQuery(['name' => (string)$hostname, 'type' => (string)$type])
+                : $this->doAnyApiQuery($hostname);
+        } catch (RequestException $e) {
+            throw new QueryFailure("Unable to query CloudFlare API", 0, $e);
+        }
+    }
+
+    /**
+     * Cloudflare does not support ANY queries, so we must ask for all record types individually
+     */
+    private function doAnyApiQuery(Hostname $hostname) : DNSRecordCollection
+    {
+        $collection = new DNSRecordCollection();
+        $promises = [];
+
+        foreach (DNSRecordType::VALID_TYPES as $type) {
+            if ($type === DNSRecordType::TYPE_ANY) {
+                continue;
+            }
+
+            $promises[] = $this->doAsyncApiQuery(['name' => (string)$hostname, 'type' => $type])
+                ->then(function (Response $response) use (&$collection) {
+                    $decoded = json_decode((string)$response->getBody(), true);
+                    foreach ($this->parseResult($decoded) as $fields) {
+                        $collection[] = $this->mapper->mapFields($fields)->toDNSRecord();
+                    }
+                });
+        }
+
+        unwrap($promises);
+
+        return $collection;
+    }
+
+    private function doAsyncApiQuery(array $query) : PromiseInterface
+    {
+        return $this->http->requestAsync('GET', '/dns-query?' . http_build_query($query));
+    }
+
+    private function doApiQuery(array $query = []) : DNSRecordCollection
+    {
+        $decoded = json_decode((string)$this->doAsyncApiQuery($query)->wait()->getBody(), true);
         $collection = new DNSRecordCollection();
 
-        foreach ($results as $result) {
-            $collection[] = $this->mapper->mapFields($result)->toDNSRecord();
+        foreach ($this->parseResult($decoded) as $fields) {
+            $collection[] = $this->mapper->mapFields($fields)->toDNSRecord();
         }
 
         return $collection;
     }
 
-    private function doApiQuery(array $query = []): array
+    private function parseResult(array $result) : array
     {
-        try {
-            $response = $this->http->request('GET', '/dns-query?' . http_build_query($query));
-        } catch (RequestException $e) {
-            throw new QueryFailure("Unable to query CloudFlare API", 0, $e);
-        }
-
-        $result = json_decode((string)$response->getBody(), true);
-
         if (isset($result['Answer'])) {
             return $result['Answer'];
         }

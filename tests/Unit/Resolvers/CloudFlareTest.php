@@ -2,9 +2,15 @@
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Resolvers;
 
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Promise\FulfilledPromise;
+use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Promise\RejectedPromise;
+use GuzzleHttp\Promise\RejectionException;
 use GuzzleHttp\Psr7\Response;
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
@@ -49,11 +55,11 @@ class CloudFlareTest extends BaseTestAbstract
         $goodResponse = self::buildResponseBasedOnType($type->toInt());
 
         $this->httpClient->expects($this->exactly(2))
-            ->method('request')
+            ->method('requestAsync')
             ->with('GET', "/dns-query?name={$hostname}&type={$type}")
             ->willReturnOnConsecutiveCalls(
-                new Response('', [], $nonMatchResponse),
-                new Response('', [], $goodResponse)
+                new FulfilledPromise(new Response(200, [], $nonMatchResponse)),
+                new FulfilledPromise(new Response(200, [], $goodResponse))
             );
 
         $this->assertFalse($this->cloudFlare->hasRecord($record));
@@ -67,9 +73,9 @@ class CloudFlareTest extends BaseTestAbstract
     public function getsRecords(string $method, Hostname $hostname, DNSRecordType $type, string $response, $expected)
     {
         $this->httpClient->expects($this->once())
-            ->method('request')
+            ->method('requestAsync')
             ->with('GET', "/dns-query?name={$hostname}&type={$type}")
-            ->willReturn(new Response('', [], $response));
+            ->willReturn(new FulfilledPromise(new Response(200, [], $response)));
 
         $actual = $this->cloudFlare->{$method}($hostname, $type);
 
@@ -78,17 +84,77 @@ class CloudFlareTest extends BaseTestAbstract
 
     /**
      * @test
+     */
+    public function getsANYRecords()
+    {
+        $expected = new DNSRecordCollection(...[
+            DNSRecord::createFromPrimitives('A', 'google.com', 1300, '192.168.1.1', 'IN'),
+            DNSRecord::createFromPrimitives('MX', 'google.com', 1200, null, 'IN', '1 aspmx.l.google.com.')
+        ]);
+
+        $ARecordResponse = '{"Status": 0,"TC": false,"RD": true, "RA": true, "AD": false,"CD": false,"Question":[{"name": "google.com.", "type": 1}],"Answer":[{"name": "google.com.", "type": 1, "TTL": 1300, "data": "192.168.1.1"}]}';
+        $MXRecordResponse = '{"Status": 0,"TC": false,"RD": true, "RA": true, "AD": false,"CD": false,"Question":[{"name": "google.com.", "type": 15}],"Answer":[{"name": "google.com.", "type": 15, "TTL": 1200, "data": "1 aspmx.l.google.com."}]}';
+        $emptyResponse = $this->getEmptyResponse();
+
+        $this->httpClient
+            ->method('requestAsync')
+            ->willReturnMap([
+                ['GET', '/dns-query?name=google.com.&type=A', [], new FulfilledPromise(new Response(200, [], $ARecordResponse))],
+                ['GET', '/dns-query?name=google.com.&type=MX', [], new FulfilledPromise(new Response(200, [], $MXRecordResponse))],
+                ['GET', '/dns-query?name=google.com.&type=CNAME', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=HINFO', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=CAA', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=NS', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=PTR', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=SOA', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=TXT', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=AAAA', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=SRV', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=NAPTR', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=A6', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
+            ]);
+
+        $actual = $this->cloudFlare->getRecords('google.com');
+
+        $this->assertEquals($expected, $actual);
+    }
+
+
+    /**
+     * @test
      * @dataProvider httpExceptionProvider
      * @expectedException \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
      */
-    public function getsRecordsAndThrowsQueryExceptionOnFailures(\Throwable $e)
+    public function rethrowsAllHTTPExceptionsAsQueryFailures(RequestException $e)
     {
-        $this->httpClient->expects($this->once())
-            ->method('request')
-            ->with('GET', "/dns-query?name=facebook.com.&type=AAAA")
-            ->willThrowException($e);
+        $promise = new Promise(function () use (&$promise, $e) {
+            $promise->reject($e);
+        });
 
-        $this->cloudFlare->getAAAARecords(Hostname::createFromString('facebook.com'));
+        $this->httpClient->expects($this->once())
+            ->method('requestAsync')
+            ->with('GET', '/dns-query?name=foo.&type=A')
+            ->willReturn($promise);
+
+        $this->cloudFlare->getARecords('foo');
+    }
+
+    /**
+     * @test
+     * @dataProvider httpExceptionProvider
+     * @expectedException \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
+     */
+    public function rethrowsAllHTTPExceptionsAsQueryFailuresForANYQuery(RequestException $e)
+    {
+        $promise = new Promise(function () use (&$promise, $e) {
+            $promise->reject($e);
+        });
+
+        $this->httpClient->expects($this->any())
+            ->method('requestAsync')
+            ->willReturn($promise);
+
+        $this->cloudFlare->getRecords('foo');
     }
 
     public function httpExceptionProvider(): array

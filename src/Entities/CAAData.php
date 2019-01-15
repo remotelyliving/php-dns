@@ -22,12 +22,14 @@ class CAAData extends DataAbstract
     {
         $this->flags = $flags;
         $this->tag = $tag;
-        $this->value = $value;
+        $this->value = ($value)
+            ? trim(str_ireplace('"', '', $value))
+            : null;
     }
 
     public function __toString(): string
     {
-        return "{$this->flags} {$this->tag} {$this->value}";
+        return "{$this->flags} {$this->tag} \"{$this->value}\"";
     }
 
     public function getFlags(): int
