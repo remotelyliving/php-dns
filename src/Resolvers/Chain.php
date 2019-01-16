@@ -7,8 +7,8 @@ use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
+use RemotelyLiving\PHPDNS\Exceptions\Exception;
 use RemotelyLiving\PHPDNS\Observability\Interfaces\Observable;
-use RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure;
 use RemotelyLiving\PHPDNS\Resolvers\Interfaces;
 use RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -120,7 +120,7 @@ class Chain extends ResolverAbstract implements Interfaces\Chain
         foreach ($this->resolvers as $resolver) {
             try {
                 $records = $resolver->getRecords($hostname, $recordType);
-            } catch (QueryFailure $e) {
+            } catch (Exception $e) {
                 continue;
             }
 
