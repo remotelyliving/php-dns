@@ -112,6 +112,7 @@ class CloudFlareTest extends BaseTestAbstract
                 ['GET', '/dns-query?name=google.com.&type=SRV', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
                 ['GET', '/dns-query?name=google.com.&type=NAPTR', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
                 ['GET', '/dns-query?name=google.com.&type=A6', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=A6', [], new FulfilledPromise(new Response(200, [], null))],
             ]);
 
         $actual = $this->cloudFlare->getRecords('google.com');

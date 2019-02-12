@@ -118,6 +118,7 @@ class GoogleDNSTest extends BaseTestAbstract
             ['getMXRecords', $hostname, DNSRecordType::createMX(), self::getAuthoritativeResponse(), $emptyCollection],
             ['recordTypeExists', $hostname, DNSRecordType::createMX(), self::buildResponseBasedOnType(DNSRecordType::createMX()->toInt()), true],
             ['recordTypeExists', $hostname, DNSRecordType::createMX(), self::getEmptyResponse(), false],
+            ['getARecords', $hostname, DNSRecordType::createA(), '', $emptyCollection],
         ];
     }
 

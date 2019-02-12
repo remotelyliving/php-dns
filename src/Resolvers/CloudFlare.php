@@ -70,7 +70,7 @@ class CloudFlare extends ResolverAbstract
 
             $promises[] = $this->doAsyncApiQuery(['name' => (string)$hostname, 'type' => $type])
                 ->then(function (Response $response) use (&$collection) {
-                    $decoded = json_decode((string)$response->getBody(), true);
+                    $decoded = (array) json_decode((string)$response->getBody(), true);
                     foreach ($this->parseResult($decoded) as $fields) {
                         $collection[] = $this->mapper->mapFields($fields)->toDNSRecord();
                     }

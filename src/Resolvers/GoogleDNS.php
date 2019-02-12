@@ -85,7 +85,7 @@ class GoogleDNS extends ResolverAbstract
             throw new QueryFailure("Unable to query CloudFlare API", 0, $e);
         }
 
-        $result = json_decode((string)$response->getBody(), true);
+        $result = (array) json_decode((string)$response->getBody(), true);
 
         if (isset($result['Answer'])) {
             return $result['Answer'];
