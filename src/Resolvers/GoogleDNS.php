@@ -68,13 +68,8 @@ class GoogleDNS extends ResolverAbstract
     protected function doQuery(Hostname $hostname, DNSRecordType $type): DNSRecordCollection
     {
         $results = $this->doApiQuery(['name' => (string)$hostname, 'type' => (string)$type]);
-        $collection = new DNSRecordCollection();
 
-        foreach ($results as $result) {
-            $collection[] = $this->mapper->mapFields($result)->toDNSRecord();
-        }
-
-        return $collection;
+        return $this->mapResults($this->mapper, $results);
     }
 
     private function doApiQuery(array $query = []): array

@@ -60,26 +60,25 @@ class CloudFlare extends ResolverAbstract
      */
     private function doAnyApiQuery(Hostname $hostname) : DNSRecordCollection
     {
-        $collection = new DNSRecordCollection();
         $promises = [];
-
+        $results = [];
         foreach (DNSRecordType::VALID_TYPES as $type) {
             if ($type === DNSRecordType::TYPE_ANY) {
                 continue;
             }
 
             $promises[] = $this->doAsyncApiQuery(['name' => (string)$hostname, 'type' => $type])
-                ->then(function (Response $response) use (&$collection) {
-                    $decoded = (array) json_decode((string)$response->getBody(), true);
-                    foreach ($this->parseResult($decoded) as $fields) {
-                        $collection[] = $this->mapper->mapFields($fields)->toDNSRecord();
-                    }
+                ->then(function (Response $response) use (&$results) {
+                    $results = array_merge(
+                        $results,
+                        $this->parseResult((array) json_decode((string)$response->getBody(), true))
+                    );
                 });
         }
 
         unwrap($promises);
 
-        return $collection;
+        return $this->mapResults($this->mapper, $results);
     }
 
     private function doAsyncApiQuery(array $query) : PromiseInterface
@@ -89,14 +88,9 @@ class CloudFlare extends ResolverAbstract
 
     private function doApiQuery(array $query = []) : DNSRecordCollection
     {
-        $decoded = json_decode((string)$this->doAsyncApiQuery($query)->wait()->getBody(), true);
-        $collection = new DNSRecordCollection();
+        $decoded = (array) json_decode((string)$this->doAsyncApiQuery($query)->wait()->getBody(), true);
 
-        foreach ($this->parseResult($decoded) as $fields) {
-            $collection[] = $this->mapper->mapFields($fields)->toDNSRecord();
-        }
-
-        return $collection;
+        return $this->mapResults($this->mapper, $this->parseResult($decoded));
     }
 
     private function parseResult(array $result) : array

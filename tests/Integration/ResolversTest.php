@@ -182,6 +182,7 @@ class ResolversTest extends BaseTestAbstract
         $cache->clear();
 
         $resolver = $this->createCachedResolver($cache);
+        $resolver->flush();
 
         $recordsNotCached = $resolver->getARecords(Hostname::createFromString('facebook.com'));
         $recordsCached = $resolver->getARecords(Hostname::createFromString('facebook.com'));

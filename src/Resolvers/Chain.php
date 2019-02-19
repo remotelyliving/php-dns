@@ -121,6 +121,10 @@ class Chain extends ResolverAbstract implements Interfaces\Chain
             try {
                 $records = $resolver->getRecords($hostname, $recordType);
             } catch (Exception $e) {
+                $this->getLogger()->error(
+                    'Something went wrong in the chain of resolvers',
+                    ['exception' => \json_encode($e), 'resolver' => $resolver->getName()]
+                );
                 continue;
             }
 

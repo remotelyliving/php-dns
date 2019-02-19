@@ -16,7 +16,7 @@ abstract class MapperAbstract implements MapperInterface
         $this->fields = $fields;
     }
 
-    public function mapFields(array $fields): self
+    public function mapFields(array $fields): MapperInterface
     {
         return new static($fields);
     }

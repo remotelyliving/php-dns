@@ -2,7 +2,11 @@
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Resolvers;
 
 use Psr\Log\LoggerInterface;
+use RemotelyLiving\PHPDNS\Entities\DNSRecord;
+use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
+use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
+use RemotelyLiving\PHPDNS\Mappers\MapperInterface;
 use RemotelyLiving\PHPDNS\Observability\Events\DNSQueried;
 use RemotelyLiving\PHPDNS\Observability\Events\DNSQueryFailed;
 use RemotelyLiving\PHPDNS\Observability\Events\DNSQueryProfiled;
@@ -49,6 +53,45 @@ class ResolverAbstractTest extends BaseTestAbstract
     {
         $this->assertInstanceOf(ResolverAbstract::class, $this->resolver);
         $this->assertInstanceOf(ObservableResolver::class, $this->resolver);
+    }
+
+    /**
+     * @test
+     */
+    public function mapsResultsReturnsCollection()
+    {
+        $dnsRecord = DNSRecord::createFromPrimitives('A', 'boop.com', 123);
+        $expected = new DNSRecordCollection($dnsRecord);
+        $results =[['type' => 'A', 'ip' => '192.168.1.1', 'class' => 'IN']];
+        $mapper = $this->createMock(MapperInterface::class);
+        $mapper->method('mapFields')
+            ->with($results[0])
+            ->willReturn($mapper);
+
+        $mapper->method('toDNSRecord')
+            ->willReturn($dnsRecord);
+
+        $this->assertEquals($expected, $this->resolver->mapResults($mapper, $results));
+
+    }
+
+    /**
+     * @test
+     */
+    public function mapsResultsAndDiscardsInvalidData()
+    {
+        $expected = new DNSRecordCollection();
+        $results =[['type' => 'BAZ', 'ip' => '192.168.1.1', 'class' => 'IN']];
+        $mapper = $this->createMock(MapperInterface::class);
+        $mapper->method('mapFields')
+            ->with($results[0])
+            ->willReturn($mapper);
+
+        $mapper->method('toDNSRecord')
+            ->willThrowException(new InvalidArgumentException());
+
+        $this->assertEquals($expected, $this->resolver->mapResults($mapper, $results));
+
     }
 
     /**

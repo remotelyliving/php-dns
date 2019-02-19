@@ -17,6 +17,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 abstract class BaseTestAbstract extends TestCase
 {
+    public static function setUpBeforeClass()
+    {
+        gc_collect_cycles();
+    }
+
     protected function createGoogleDNSResolver(): GoogleDNS
     {
         return new GoogleDNS();

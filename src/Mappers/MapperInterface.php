@@ -5,7 +5,7 @@ use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 
 interface MapperInterface
 {
-    public function mapFields(array $record): MapperAbstract;
+    public function mapFields(array $record): MapperInterface;
 
     public function toDNSRecord(): DNSRecord;
 }

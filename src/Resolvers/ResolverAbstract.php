@@ -5,6 +5,8 @@ use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
+use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
+use RemotelyLiving\PHPDNS\Mappers\MapperInterface;
 use RemotelyLiving\PHPDNS\Observability\Events\DNSQueried;
 use RemotelyLiving\PHPDNS\Observability\Events\DNSQueryFailed;
 use RemotelyLiving\PHPDNS\Observability\Events\DNSQueryProfiled;
@@ -101,6 +103,20 @@ abstract class ResolverAbstract implements ObservableResolver
         $this->dispatch($dnsQueriedEvent);
         $this->getLogger()->info('DNS queried', ['event' => json_encode($dnsQueriedEvent)]);
         return $result;
+    }
+
+    public function mapResults(MapperInterface $mapper, array $results) : DNSRecordCollection
+    {
+        $collection = new DNSRecordCollection();
+        array_map(function (array $fields) use (&$collection, $mapper) {
+            try {
+                $collection[] = $mapper->mapFields($fields)->toDNSRecord();
+            } catch (InvalidArgumentException $e) {
+                $this->getLogger()->warning('Invalid fields passed to mapper', $fields);
+            }
+        }, $results);
+
+        return $collection;
     }
 
     abstract protected function doQuery(Hostname $hostname, DNSRecordType $recordType): DNSRecordCollection;
