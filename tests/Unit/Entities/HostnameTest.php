@@ -47,7 +47,9 @@ class HostnameTest extends BaseTestAbstract
      */
     public function doesNotAllowInvalidHostNames()
     {
-        Hostname::createFromString('thing_.dfkljfs');
+        $hostname = implode('', array_fill(0, 64, 'A'));
+
+        Hostname::createFromString($hostname);
     }
 
     /**
@@ -62,5 +64,24 @@ class HostnameTest extends BaseTestAbstract
         $this->assertTrue($IDN->isPunycoded());
         $this->assertSame($expectedAscii, $IDN->getHostName());
         $this->assertSame($utf8IDN, $IDN->toUTF8());
+    }
+
+    /**
+     * @test
+     * @dataProvider validHostnamesProvider
+     */
+    public function createsHostnamesFromString(string $hostname) : void
+    {
+        $this->assertInstanceOf(Hostname::class, Hostname::createFromString($hostname));
+    }
+
+    public function validHostnamesProvider() : array
+    {
+        return [
+            ['google.com'],
+            ['subdomain.google.com'],
+            ['mandrill._domainkey.domain.com'],
+            ['google.com.'],
+        ];
     }
 }

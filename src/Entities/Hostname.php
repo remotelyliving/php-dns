@@ -14,7 +14,7 @@ class Hostname extends EntityAbstract
     {
         $hostname = $this->normalizeHostName($hostname);
 
-        if ((bool)filter_var($hostname, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME) === false) {
+        if (filter_var($hostname, FILTER_VALIDATE_DOMAIN) !== $hostname) {
             throw new InvalidArgumentException("{$hostname} is not a valid hostname");
         }
 
