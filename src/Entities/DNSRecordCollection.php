@@ -85,6 +85,9 @@ class DNSRecordCollection extends EntityAbstract implements \ArrayAccess, \Itera
         return $this->records->offsetGet($offset);
     }
 
+    /**
+     * @throws \RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException
+     */
     public function offsetSet($offset, $value): void
     {
         if (!$value instanceof DNSRecord) {

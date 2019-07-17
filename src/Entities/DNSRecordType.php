@@ -59,10 +59,13 @@ class DNSRecordType extends EntityAbstract
      */
     private $type;
 
+    /**
+     * @throws \RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException
+     */
     public function __construct(string $type)
     {
         if (!in_array($type, self::VALID_TYPES, true)) {
-            throw new InvalidArgumentException("{$type} is not a valid DNS query type");
+            throw new InvalidArgumentException("{$type} is not an existing DNS record type");
         }
 
         $this->type = $type;
@@ -73,8 +76,15 @@ class DNSRecordType extends EntityAbstract
         return $this->type;
     }
 
+    /**
+     * @throws \RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException
+     */
     public static function createFromInt(int $code) : DNSRecordType
     {
+        if (!isset(self::CODE_TYPE_MAP[$code])) {
+            throw new InvalidArgumentException("{$code} is not able to be mapped to an existing DNS record type");
+        }
+
         return new static(self::CODE_TYPE_MAP[$code]);
     }
 

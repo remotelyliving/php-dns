@@ -70,6 +70,9 @@ abstract class ResolverAbstract implements ObservableResolver
             ->has($record);
     }
 
+    /**
+     * @throws \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
+     */
     public function getRecords(string $hostname, string $recordType = null): DNSRecordCollection
     {
         $recordType = DNSRecordType::createFromString($recordType ?? 'ANY');
@@ -119,5 +122,8 @@ abstract class ResolverAbstract implements ObservableResolver
         return $collection;
     }
 
+    /**
+     * @throws \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
+     */
     abstract protected function doQuery(Hostname $hostname, DNSRecordType $recordType): DNSRecordCollection;
 }

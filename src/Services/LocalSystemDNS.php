@@ -7,6 +7,9 @@ use \RemotelyLiving\PHPDNS\Services\Interfaces\LocalSystemDNS as LocalSystemDNSI
 
 final class LocalSystemDNS implements LocalSystemDNSInterface
 {
+    /**
+     * @throws \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
+     */
     public function getRecord(string $hostname, int $type): array
     {
         $results = @dns_get_record($hostname, $type);
@@ -21,6 +24,9 @@ final class LocalSystemDNS implements LocalSystemDNSInterface
         return $results;
     }
 
+    /**
+     * @throws \RemotelyLiving\PHPDNS\Resolvers\Exceptions\ReverseLookupFailure
+     */
     public function getHostnameByAddress(string $IPAddress): string
     {
         $hostname = @gethostbyaddr($IPAddress);
