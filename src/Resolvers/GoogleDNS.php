@@ -72,12 +72,15 @@ class GoogleDNS extends ResolverAbstract
         return $this->mapResults($this->mapper, $results);
     }
 
+    /**
+     * @throws \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
+     */
     private function doApiQuery(array $query = []): array
     {
         try {
             $response = $this->http->request('GET', '/resolve?' . http_build_query($query));
         } catch (RequestException $e) {
-            throw new QueryFailure("Unable to query CloudFlare API", 0, $e);
+            throw new QueryFailure("Unable to query GoogleDNS API", 0, $e);
         }
 
         $result = (array) json_decode((string)$response->getBody(), true);

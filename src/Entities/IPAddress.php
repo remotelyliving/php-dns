@@ -10,6 +10,9 @@ class IPAddress extends EntityAbstract
      */
     private $IPAddress;
 
+    /**
+     * @throws \RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException
+     */
     public function __construct(string $IPAddress)
     {
         $IPAddress = trim($IPAddress);

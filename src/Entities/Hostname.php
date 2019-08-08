@@ -10,6 +10,9 @@ class Hostname extends EntityAbstract
      */
     private $hostname;
 
+    /**
+     * @throws \RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException
+     */
     public function __construct(string $hostname)
     {
         $hostname = $this->normalizeHostName($hostname);

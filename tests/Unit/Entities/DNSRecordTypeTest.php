@@ -9,7 +9,7 @@ class DNSRecordTypeTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasConvenientFactoryMethods()
+    public function hasConvenientNamedFactoryMethods()
     {
         foreach (DNSRecordType::VALID_TYPES as $type) {
             $function = DNSRecordType::class . "::create{$type}";
@@ -23,9 +23,18 @@ class DNSRecordTypeTest extends BaseTestAbstract
      * @test
      * @expectedException \RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException
      */
-    public function onlyAllowsValidTypes()
+    public function onlyAllowsValidTypesFromStrings()
     {
         DNSRecordType::createFromString('SDFSF');
+    }
+
+    /**
+     * @test
+     * @expectedException \RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException
+     */
+    public function onlyAllowsValidTypesFromIntCodes()
+    {
+        DNSRecordType::createFromInt(-100);
     }
 
     /**
