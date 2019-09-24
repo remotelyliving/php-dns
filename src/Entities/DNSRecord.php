@@ -59,7 +59,7 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
         string $IPAddress = null,
         string $class = 'IN',
         string $data = null
-    ) : DNSRecord {
+    ): DNSRecord {
         $type = DNSRecordType::createFromString($recordType);
         $hostname = Hostname::createFromString($hostname);
         $data = ($data !== null)
@@ -70,7 +70,7 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
             $type,
             $hostname,
             $ttl,
-            $IPAddress ? IPAddress::createFromString($IPAddress) : null,
+            $IPAddress ? IPAddress::createFromString($IPAddress): null,
             $class,
             $data
         );
@@ -150,7 +150,7 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
         $this->recordType = DNSRecordType::createFromString($unserialized['type']);
         $this->hostname = Hostname::createFromString($unserialized['hostname']);
         $this->TTL = (int) $unserialized['TTL'];
-        $this->IPAddress = $rawIPAddres ? IPAddress::createFromString($rawIPAddres) : null;
+        $this->IPAddress = $rawIPAddres ? IPAddress::createFromString($rawIPAddres): null;
         $this->class = $unserialized['class'];
         $this->data = (isset($unserialized['data']))
          ? DataAbstract::createFromTypeAndString($this->recordType, $unserialized['data'])

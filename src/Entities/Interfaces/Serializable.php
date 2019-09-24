@@ -7,5 +7,5 @@ interface Serializable extends \Serializable, \JsonSerializable
 
     public function unserialize($serialized): void;
 
-    public function jsonSerialize() : array;
+    public function jsonSerialize(): array;
 }

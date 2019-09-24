@@ -53,7 +53,7 @@ class Cached extends ResolverAbstract
         }
 
         $dnsRecords = $this->resolver->getRecords((string)$hostname, (string)$recordType);
-        $ttlSeconds = $this->ttlSeconds ?? $this->extractAverageTTL($dnsRecords);
+        $ttlSeconds = $this->ttlSeconds ?? $this->extractLowestTTL($dnsRecords);
         $cachedResult->expiresAfter($ttlSeconds);
         $cachedResult->set($dnsRecords);
         $this->cache->save($cachedResult);
@@ -66,7 +66,7 @@ class Cached extends ResolverAbstract
         return md5(sprintf(self::CACHE_KEY_TEMPLATE, $this->namespace, (string)$hostname, (string)$recordType));
     }
 
-    private function extractAverageTTL(DNSRecordCollection $recordCollection): int
+    private function extractLowestTTL(DNSRecordCollection $recordCollection): int
     {
         $ttls = [];
 
@@ -80,6 +80,6 @@ class Cached extends ResolverAbstract
             $ttls[] = $record->getTTL();
         }
 
-        return intval(array_sum($ttls) / $recordCollection->count());
+        return min($ttls);
     }
 }

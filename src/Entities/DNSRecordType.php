@@ -73,12 +73,12 @@ class DNSRecordType extends EntityAbstract
         return $this->type;
     }
 
-    public static function createFromInt(int $code) : DNSRecordType
+    public static function createFromInt(int $code): DNSRecordType
     {
         return new static(self::CODE_TYPE_MAP[$code]);
     }
 
-    public static function createFromString(string $type) : DNSRecordType
+    public static function createFromString(string $type): DNSRecordType
     {
         return new static($type);
     }

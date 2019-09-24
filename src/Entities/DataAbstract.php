@@ -9,7 +9,7 @@ abstract class DataAbstract implements Arrayable, Serializable
 {
     abstract public function __toString(): string;
 
-    abstract public function toArray() : array;
+    abstract public function toArray(): array;
 
     public function equals(DataAbstract $dataAbstract): bool
     {

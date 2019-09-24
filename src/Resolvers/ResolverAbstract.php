@@ -108,7 +108,7 @@ abstract class ResolverAbstract implements ObservableResolver
         return $result;
     }
 
-    public function mapResults(MapperInterface $mapper, array $results) : DNSRecordCollection
+    public function mapResults(MapperInterface $mapper, array $results): DNSRecordCollection
     {
         $collection = new DNSRecordCollection();
         array_map(function (array $fields) use (&$collection, $mapper) {

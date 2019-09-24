@@ -58,7 +58,7 @@ class CloudFlare extends ResolverAbstract
     /**
      * Cloudflare does not support ANY queries, so we must ask for all record types individually
      */
-    private function doAnyApiQuery(Hostname $hostname) : DNSRecordCollection
+    private function doAnyApiQuery(Hostname $hostname): DNSRecordCollection
     {
         $promises = [];
         $results = [];
@@ -81,19 +81,19 @@ class CloudFlare extends ResolverAbstract
         return $this->mapResults($this->mapper, $results);
     }
 
-    private function doAsyncApiQuery(array $query) : PromiseInterface
+    private function doAsyncApiQuery(array $query): PromiseInterface
     {
         return $this->http->requestAsync('GET', '/dns-query?' . http_build_query($query));
     }
 
-    private function doApiQuery(array $query = []) : DNSRecordCollection
+    private function doApiQuery(array $query = []): DNSRecordCollection
     {
         $decoded = (array) json_decode((string)$this->doAsyncApiQuery($query)->wait()->getBody(), true);
 
         return $this->mapResults($this->mapper, $this->parseResult($decoded));
     }
 
-    private function parseResult(array $result) : array
+    private function parseResult(array $result): array
     {
         if (isset($result['Answer'])) {
             return $result['Answer'];
