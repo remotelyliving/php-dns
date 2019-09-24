@@ -16,6 +16,9 @@ abstract class DataAbstract implements Arrayable, Serializable
         return (string)$this === (string)$dataAbstract;
     }
 
+    /**
+     * @throws \RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException
+     */
     public static function createFromTypeAndString(DNSRecordType $recordType, string $data): self
     {
         if ($recordType->isA(DNSRecordType::TYPE_TXT)) {
