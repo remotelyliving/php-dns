@@ -60,22 +60,43 @@ class DNSRecordTest extends BaseTestAbstract
      */
     public function isArrayable()
     {
-        $this->assertInstanceOf(Arrayable::class, $this->DNSARecord);
-        $this->assertEquals([
+        $this->assertArrayableAndEquals([
             'hostname' => 'google.com.',
             'type' => 'A',
             'TTL' => 123,
             'class' => 'AS',
             'IPAddress' => '127.0.0.1',
-        ], $this->DNSARecord->toArray());
+        ], $this->DNSARecord);
 
-        $this->assertEquals([
+        $this->assertArrayableAndEquals([
             'hostname' => 'google.com.',
             'type' => 'TXT',
             'TTL' => 123,
             'class' => 'AS',
             'data' => 'txtval'
-        ], $this->DNSTXTRecord->toArray());
+        ], $this->DNSTXTRecord);
+    }
+
+    /**
+     * @test
+     */
+    public function isJsonSerializable()
+    {
+        $this->assertJsonSerializeableAndEquals([
+            'hostname' => 'google.com.',
+            'type' => 'A',
+            'TTL' => 123,
+            'class' => 'AS',
+            'IPAddress' => '127.0.0.1',
+        ], $this->DNSARecord);
+
+        $this->assertJsonSerializeableAndEquals([
+            'hostname' => 'google.com.',
+            'type' => 'TXT',
+            'TTL' => 123,
+            'class' => 'AS',
+            'data' => 'txtval'
+        ], $this->DNSTXTRecord);
     }
 
     /**

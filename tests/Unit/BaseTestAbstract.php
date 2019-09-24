@@ -17,6 +17,11 @@ abstract class BaseTestAbstract extends TestCase
         $this->assertEquals($expected, $arrayable->toArray());
     }
 
+    protected function assertJsonSerializeableAndEquals(array $expected, \JsonSerializable $jsonSerializeable)
+    {
+        $this->assertEquals($expected, $jsonSerializeable->jsonSerialize());
+    }
+
     protected function assertStringableAndEquals(string $expected, string $stringable)
     {
         $this->assertSame($expected, $stringable);

@@ -56,7 +56,7 @@ class GoogleDNS extends ResolverAbstract
         $attempts = 0;
 
         do {
-            $hasRecord = $this->getRecords($record->getHostname(), $record->getType())
+            $hasRecord = $this->getRecords((string)$record->getHostname(), (string)$record->getType())
                 ->has($record);
 
             ++$attempts;

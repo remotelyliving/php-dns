@@ -22,7 +22,7 @@ class Chain extends ResolverAbstract implements Interfaces\Chain
     /**
      * @var \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver[]
      */
-    private $resolvers;
+    private $resolvers = [];
 
     /**
      * @var int
@@ -119,7 +119,7 @@ class Chain extends ResolverAbstract implements Interfaces\Chain
 
         foreach ($this->resolvers as $resolver) {
             try {
-                $records = $resolver->getRecords($hostname, $recordType);
+                $records = $resolver->getRecords((string)$hostname, (string)$recordType);
             } catch (Exception $e) {
                 $this->getLogger()->error(
                     'Something went wrong in the chain of resolvers',

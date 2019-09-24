@@ -139,9 +139,12 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
         return \serialize($this->toArray());
     }
 
-    public function unserialize($record): void
+    /**
+     * @param string $serialized
+     */
+    public function unserialize($serialized): void
     {
-        $unserialized = \unserialize($record);
+        $unserialized = \unserialize($serialized);
 
         $rawIPAddres = $unserialized['IPAddress'] ?? null;
         $this->recordType = DNSRecordType::createFromString($unserialized['type']);
@@ -152,5 +155,10 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
         $this->data = (isset($unserialized['data']))
          ? DataAbstract::createFromTypeAndString($this->recordType, $unserialized['data'])
          : null;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

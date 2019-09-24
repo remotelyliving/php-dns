@@ -28,7 +28,7 @@ class Hostname extends EntityAbstract
 
     public function equals(Hostname $hostname): bool
     {
-        return $this->hostname === (string) $hostname;
+        return $this->hostname === (string)$hostname;
     }
 
     public static function createFromString(string $hostname): Hostname

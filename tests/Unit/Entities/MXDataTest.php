@@ -53,6 +53,17 @@ class MXDataTest extends BaseTestAbstract
     /**
      * @test
      */
+    public function isJsonSerializeable()
+    {
+        $this->assertJsonSerializeableAndEquals(
+            ['target' => (string)$this->target, 'priority' => $this->priority],
+            $this->MXData
+        );
+    }
+
+    /**
+     * @test
+     */
     public function isSerializable()
     {
         $this->assertSerializable($this->MXData);

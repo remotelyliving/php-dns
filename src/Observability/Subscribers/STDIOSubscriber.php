@@ -34,17 +34,17 @@ class STDIOSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onDNSQueryFailed(ObservableEventAbstract $event)
+    public function onDNSQueryFailed(ObservableEventAbstract $event): void
     {
         $this->STDERR->fwrite(\json_encode($event, JSON_PRETTY_PRINT) . PHP_EOL);
     }
 
-    public function onDNSQueried(ObservableEventAbstract $event)
+    public function onDNSQueried(ObservableEventAbstract $event): void
     {
         $this->STDOUT->fwrite(\json_encode($event, JSON_PRETTY_PRINT) . PHP_EOL);
     }
 
-    public function onDNSQueryProfiled(ObservableEventAbstract $event)
+    public function onDNSQueryProfiled(ObservableEventAbstract $event): void
     {
         $this->STDOUT->fwrite(\json_encode($event, JSON_PRETTY_PRINT) . PHP_EOL);
     }

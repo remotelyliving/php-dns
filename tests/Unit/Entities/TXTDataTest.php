@@ -43,6 +43,14 @@ class TXTDataTest extends BaseTestAbstract
     /**
      * @test
      */
+    public function isJsonSerializeable()
+    {
+        $this->assertJsonSerializeableAndEquals(['value' => $this->value], $this->TXTData);
+    }
+
+    /**
+     * @test
+     */
     public function isSerializable()
     {
         $this->assertSerializable($this->TXTData);

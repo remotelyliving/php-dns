@@ -7,7 +7,9 @@ use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
 
 abstract class DataAbstract implements Arrayable, Serializable
 {
-    abstract public function __toString();
+    abstract public function __toString(): string;
+
+    abstract public function toArray() : array;
 
     public function equals(DataAbstract $dataAbstract): bool
     {
@@ -53,6 +55,11 @@ abstract class DataAbstract implements Arrayable, Serializable
         }
 
         throw new InvalidArgumentException("{$data} could not be created with type {$recordType}");
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 
     private static function parseDataToArray(string $data): array

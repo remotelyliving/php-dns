@@ -30,7 +30,7 @@ class LocalSystem extends ResolverAbstract implements ReverseDNSQuery
 
     public function getHostnameByAddress(string $IPAddress): Hostname
     {
-        $result = $this->systemDNS->getHostnameByAddress(new IPAddress($IPAddress));
+        $result = $this->systemDNS->getHostnameByAddress((string)(new IPAddress($IPAddress)));
 
         return Hostname::createFromString($result);
     }
