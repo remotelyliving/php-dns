@@ -96,6 +96,25 @@ class SOADataTest extends BaseTestAbstract
     /**
      * @test
      */
+    public function isJsonSerializeable()
+    {
+        $this->assertJsonSerializeableAndEquals(
+            [
+                'rname' => (string)$this->rname,
+                'mname' => (string)$this->mname,
+                'serial' => $this->serial,
+                'refresh' => $this->refresh,
+                'retry' => $this->retry,
+                'expire' => $this->expire,
+                'minimumTTL' => $this->minTTL,
+            ],
+            $this->SOAData
+        );
+    }
+
+    /**
+     * @test
+     */
     public function isSerializable()
     {
         $this->assertSerializable($this->SOAData);

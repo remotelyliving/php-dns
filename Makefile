@@ -20,7 +20,7 @@ dependency-check:
 	@vendor/bin/composer-require-checker check -vvv ./composer.json
 
 static-analysis:
-	@vendor/bin/phpstan analyze --level=max ./src
+	@vendor/bin/phpstan analyze --level=max ./src && ./vendor/bin/psalm
 
 style-fix:
 	@vendor/bin/phpcbf --standard=PSR2 ./src ./tests

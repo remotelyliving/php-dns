@@ -15,7 +15,7 @@ class CNAMEData extends DataAbstract
 
     public function __toString(): string
     {
-        return (string) $this->hostname;
+        return (string)$this->hostname;
     }
 
     public function getHostname(): Hostname
@@ -35,6 +35,9 @@ class CNAMEData extends DataAbstract
         return \serialize($this->toArray());
     }
 
+    /**
+     * @param string $serialized
+     */
     public function unserialize($serialized): void
     {
         $unserialized = \unserialize($serialized);

@@ -22,13 +22,16 @@ abstract class ResolverAbstract implements ObservableResolver
         Dispatcher,
         Profileable;
 
+    /**
+     * @var string|null
+     */
     private $name = null;
 
     public function getName(): string
     {
         if ($this->name === null) {
             $explodedClass = explode('\\', get_class($this));
-            $this->name = (string) array_pop($explodedClass);
+            $this->name = (string)array_pop($explodedClass);
         }
 
         return $this->name;
@@ -36,27 +39,27 @@ abstract class ResolverAbstract implements ObservableResolver
 
     public function getARecords(string $hostname): DNSRecordCollection
     {
-        return $this->getRecords($hostname, DNSRecordType::createA());
+        return $this->getRecords($hostname, (string)DNSRecordType::createA());
     }
 
     public function getAAAARecords(string $hostname): DNSRecordCollection
     {
-        return $this->getRecords($hostname, DNSRecordType::createAAAA());
+        return $this->getRecords($hostname, (string)DNSRecordType::createAAAA());
     }
 
     public function getCNAMERecords(string $hostname): DNSRecordCollection
     {
-        return $this->getRecords($hostname, DNSRecordType::createCNAME());
+        return $this->getRecords($hostname, (string)DNSRecordType::createCNAME());
     }
 
     public function getTXTRecords(string $hostname): DNSRecordCollection
     {
-        return $this->getRecords($hostname, DNSRecordType::createTXT());
+        return $this->getRecords($hostname, (string)DNSRecordType::createTXT());
     }
 
     public function getMXRecords(string $hostname): DNSRecordCollection
     {
-        return $this->getRecords($hostname, DNSRecordType::createMX());
+        return $this->getRecords($hostname, (string)DNSRecordType::createMX());
     }
 
     public function recordTypeExists(string $hostname, string $recordType): bool
@@ -66,7 +69,7 @@ abstract class ResolverAbstract implements ObservableResolver
 
     public function hasRecord(DNSRecord $record): bool
     {
-        return $this->getRecords($record->getHostname(), $record->getType())
+        return $this->getRecords((string)$record->getHostname(), (string)$record->getType())
             ->has($record);
     }
 
@@ -108,7 +111,7 @@ abstract class ResolverAbstract implements ObservableResolver
         return $result;
     }
 
-    public function mapResults(MapperInterface $mapper, array $results) : DNSRecordCollection
+    public function mapResults(MapperInterface $mapper, array $results): DNSRecordCollection
     {
         $collection = new DNSRecordCollection();
         array_map(function (array $fields) use (&$collection, $mapper) {

@@ -45,6 +45,14 @@ class NSDataTest extends BaseTestAbstract
     /**
      * @test
      */
+    public function isJsonSerializeable()
+    {
+        $this->assertJsonSerializeableAndEquals(['target' => (string)$this->target], $this->NSData);
+    }
+
+    /**
+     * @test
+     */
     public function isSerializable()
     {
         $this->assertSerializable($this->NSData);

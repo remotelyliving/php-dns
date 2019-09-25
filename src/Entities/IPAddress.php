@@ -41,7 +41,7 @@ class IPAddress extends EntityAbstract
 
     public function equals(IPAddress $IPAddress): bool
     {
-        return $this->IPAddress === (string) $IPAddress;
+        return $this->IPAddress === (string)$IPAddress;
     }
 
     public function getIPAddress(): string

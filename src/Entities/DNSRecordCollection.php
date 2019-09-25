@@ -8,7 +8,7 @@ use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
 class DNSRecordCollection extends EntityAbstract implements \ArrayAccess, \Iterator, \Countable, Arrayable, Serializable
 {
     /**
-     * @var \ArrayIterator|\RemotelyLiving\PHPDNS\Entities\DNSRecord[]
+     * @var \ArrayIterator
      */
     private $records;
 
@@ -117,9 +117,17 @@ class DNSRecordCollection extends EntityAbstract implements \ArrayAccess, \Itera
         return \serialize($this->records->getArrayCopy());
     }
 
-    public function unserialize($records): void
+    /**
+     * @param string $serialized
+     */
+    public function unserialize($serialized): void
     {
-        $this->records = new \ArrayIterator(\unserialize($records));
+        $this->records = new \ArrayIterator(\unserialize($serialized));
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 
     public function withUniqueValuesExcluded(): self

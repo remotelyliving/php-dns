@@ -22,7 +22,7 @@ class DataAbstractTest extends BaseTestAbstract
         parent::setUp();
 
         $this->dataAbstract1 = new class extends DataAbstract {
-            public function __toString()
+            public function __toString(): string
             {
                 return 'dataAbstract1';
             }
@@ -43,7 +43,7 @@ class DataAbstractTest extends BaseTestAbstract
         };
 
         $this->dataAbstract2 = new class extends DataAbstract {
-            public function __toString()
+            public function __toString(): string
             {
                 return 'dataAbstract2';
             }

@@ -148,8 +148,15 @@ class DNSRecordCollectionTest extends BaseTestAbstract
      */
     public function isArrayable()
     {
-        $this->assertInstanceOf(Arrayable::class, $this->dnsRecordCollection);
-        $this->assertEquals([$this->dnsRecord1, $this->dnsRecord2], $this->dnsRecordCollection->toArray());
+        $this->assertArrayableAndEquals([$this->dnsRecord1, $this->dnsRecord2], $this->dnsRecordCollection);
+    }
+
+    /**
+     * @test
+     */
+    public function isJsonSerializable()
+    {
+        $this->assertJsonSerializeableAndEquals([$this->dnsRecord1, $this->dnsRecord2], $this->dnsRecordCollection);
     }
 
     /**

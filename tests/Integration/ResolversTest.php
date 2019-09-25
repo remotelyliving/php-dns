@@ -184,10 +184,16 @@ class ResolversTest extends BaseTestAbstract
         $resolver = $this->createCachedResolver($cache);
         $resolver->flush();
 
+        $cacheKey = md5('php-dns:facebook.com.:A');
+
+        $this->assertFalse($cache->getItem($cacheKey)->isHit());
+
         $recordsNotCached = $resolver->getARecords(Hostname::createFromString('facebook.com'));
         $recordsCached = $resolver->getARecords(Hostname::createFromString('facebook.com'));
 
         $resolver->getARecords(Hostname::createFromString('aksjflksjdf.lksjf'));
+
+        $this->assertTrue($cache->getItem($cacheKey)->isHit());
 
         $this->assertEquals($recordsNotCached, $recordsCached);
     }

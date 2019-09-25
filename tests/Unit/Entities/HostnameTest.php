@@ -70,12 +70,12 @@ class HostnameTest extends BaseTestAbstract
      * @test
      * @dataProvider validHostnamesProvider
      */
-    public function createsHostnamesFromString(string $hostname) : void
+    public function createsHostnamesFromString(string $hostname): void
     {
         $this->assertInstanceOf(Hostname::class, Hostname::createFromString($hostname));
     }
 
-    public function validHostnamesProvider() : array
+    public function validHostnamesProvider(): array
     {
         return [
             ['google.com'],

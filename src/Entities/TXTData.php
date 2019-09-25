@@ -35,6 +35,9 @@ class TXTData extends DataAbstract
         return \serialize($this->toArray());
     }
 
+    /**
+     * @param string $serialized
+     */
     public function unserialize($serialized): void
     {
         $unserialized = \unserialize($serialized);

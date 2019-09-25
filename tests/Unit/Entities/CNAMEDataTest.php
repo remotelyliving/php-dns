@@ -48,6 +48,17 @@ class CNAMEDataTest extends BaseTestAbstract
     /**
      * @test
      */
+    public function isJsonSerializable()
+    {
+        $this->assertJsonSerializeableAndEquals(
+            ['hostname' => (string)$this->hostname],
+            $this->CNAMEData
+        );
+    }
+
+    /**
+     * @test
+     */
     public function isSerializable()
     {
         $this->assertSerializable($this->CNAMEData);

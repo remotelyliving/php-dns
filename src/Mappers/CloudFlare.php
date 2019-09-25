@@ -19,7 +19,7 @@ class CloudFlare extends MapperAbstract
             : null;
 
         return DNSRecord::createFromPrimitives(
-            $type,
+            (string)$type,
             $this->fields['name'],
             $this->fields['TTL'],
             $IPAddress,

@@ -48,6 +48,17 @@ class CAADataTest extends BaseTestAbstract
     /**
      * @test
      */
+    public function isJsonSerializable()
+    {
+        $this->assertJsonSerializeableAndEquals(
+            ['flags' => $this->flags, 'tag' => $this->tag, 'value' => ';'],
+            $this->CAAData
+        );
+    }
+
+    /**
+     * @test
+     */
     public function isSerializable()
     {
         $this->assertSerializable($this->CAAData);
