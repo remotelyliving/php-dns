@@ -44,13 +44,16 @@ class GoogleDNS extends ResolverAbstract
     public function __construct(
         ClientInterface $http = null,
         GoogleDNSMapper $mapper = null,
-        int $consensusAttempts = 10
+        int $consensusAttempts = 3
     ) {
         $this->http = $http ?? new Client(self::DEFAULT_OPTIONS);
         $this->mapper = $mapper ?? new GoogleDNSMapper();
         $this->consensusAttempts = $consensusAttempts;
     }
 
+    /**
+     * Google DNS has consistency issues so this tries a few times to get an answer
+     */
     public function hasRecord(DNSRecord $record): bool
     {
         $attempts = 0;

@@ -30,7 +30,7 @@ trait Dispatcher
 
     public function dispatch(ObservableEventAbstract $event): void
     {
-        $this->getDispatcher()->dispatch($event::getName(), $event);
+        $this->getDispatcher()->dispatch($event, $event::getName());
     }
 
     private function getDispatcher(): EventDispatcherInterface
