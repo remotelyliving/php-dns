@@ -12,11 +12,14 @@ use RemotelyLiving\PHPDNS\Entities\MXData;
 use RemotelyLiving\PHPDNS\Entities\NSData;
 use RemotelyLiving\PHPDNS\Entities\SOAData;
 use RemotelyLiving\PHPDNS\Entities\TXTData;
+use RemotelyLiving\PHPDNS\Resolvers\GoogleDNS;
 use RemotelyLiving\PHPDNS\Resolvers\Interfaces\ReverseDNSQuery;
 use RemotelyLiving\PHPDNS\Resolvers\ResolverAbstract;
 
 class ResolversTest extends BaseTestAbstract
 {
+    const MAX_HAS_RECORD_WAIT_SECONDS = 3;
+
     /**
      * @var \RemotelyLiving\PHPDNS\Entities\Hostname
      */
@@ -49,13 +52,17 @@ class ResolversTest extends BaseTestAbstract
         foreach (DNSRecordType::VALID_TYPES as $type) {
             $collection = $resolver->getRecords($this->hostname, DNSRecordType::createFromString($type));
             $this->assertInstanceOf(DNSRecordCollection::class, $collection);
+            $start = microtime(true);
 
             if (!$collection->isEmpty()) {
                 do {
+                    $now = microtime(true);
+                    if ($now - $start >= self::MAX_HAS_RECORD_WAIT_SECONDS) {
+                        $this->markTestIncomplete('Resolver took too long to determine if has record');
+                        break;
+                    }
                     $hasRecord = $resolver->hasRecord($collection->pickFirst());
                 } while ($hasRecord === false);
-
-                $this->assertTrue($hasRecord);
 
                 if ($collection[0]->getType()->equals(DNSRecordType::createTXT())) {
                     $this->assertInstanceOf(TXTData::class, $collection[0]->getData());
@@ -106,13 +113,17 @@ class ResolversTest extends BaseTestAbstract
         foreach (['CAA'] as $type) {
             $collection = $resolver->getRecords($wwwHostname, DNSRecordType::createFromString($type));
             $this->assertInstanceOf(DNSRecordCollection::class, $collection);
+            $start = microtime(true);
 
             if (!$collection->isEmpty()) {
                 do {
+                    $now = microtime(true);
+                    if ($now - $start >= self::MAX_HAS_RECORD_WAIT_SECONDS) {
+                        $this->markTestIncomplete('Resolver took too long to determine if has record');
+                        break;
+                    }
                     $hasRecord = $resolver->hasRecord($collection->pickFirst());
                 } while ($hasRecord === false);
-
-                $this->assertTrue($hasRecord);
 
                 if ($collection[0]->getType()->equals(DNSRecordType::createTXT())) {
                     $this->assertInstanceOf(TXTData::class, $collection[0]->getData());

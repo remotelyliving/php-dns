@@ -28,9 +28,9 @@ class STDIOSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            DNSQueryFailed::NAME => 'onDNSQueryFailed',
-            DNSQueried::NAME => 'onDNSQueried',
-            DNSQueryProfiled::NAME => 'onDNSQueryProfiled',
+            DNSQueryFailed::getName() => 'onDNSQueryFailed',
+            DNSQueried::getName() => 'onDNSQueried',
+            DNSQueryProfiled::getName() => 'onDNSQueryProfiled',
         ];
     }
 

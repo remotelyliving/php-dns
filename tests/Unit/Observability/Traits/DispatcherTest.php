@@ -95,7 +95,7 @@ class DispatcherTest extends BaseTestAbstract
 
         $this->dispatcher->expects($this->once())
             ->method('dispatch')
-            ->with('the name', $this->event);
+            ->with($this->event, $this->event::getName());
 
         $this->observableClass->dispatch($this->event);
     }

@@ -52,5 +52,11 @@
 
         <InvalidStringClass errorLevel="info" />
         <TypeDoesNotContainType errorLevel="info" />
+
+        <TooManyArguments>
+            <errorLevel type="suppress">
+                <referencedFunction name="Symfony\Component\EventDispatcher\EventDispatcherInterface::dispatch" />
+            </errorLevel>
+        </TooManyArguments>
     </issueHandlers>
 </psalm>
