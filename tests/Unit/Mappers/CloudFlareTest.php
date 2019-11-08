@@ -24,7 +24,7 @@ class CloudFlareTest extends BaseTestAbstract
         ],
     ];
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -34,7 +34,7 @@ class CloudFlareTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function mapsACloudFlareDNSRecordVariants()
+    public function mapsACloudFlareDNSRecordVariants() : void
     {
         $mappedRecord = $this->mapper->mapFields([
             'type' => 1,
@@ -64,7 +64,7 @@ class CloudFlareTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function mapsAllKindsOfGoogleDNSRecordVariants()
+    public function mapsAllKindsOfGoogleDNSRecordVariants() : void
     {
         foreach (self::CLOUD_FLARE_DNS_FORMAT as $record) {
             $mappedRecord = $this->mapper->mapFields($record)->toDNSRecord();

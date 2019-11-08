@@ -17,7 +17,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 abstract class BaseTestAbstract extends TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass() : void
     {
         gc_collect_cycles();
     }

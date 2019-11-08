@@ -16,7 +16,7 @@ class TXTDataTest extends BaseTestAbstract
      */
     private $TXTData;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -26,7 +26,7 @@ class TXTDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function knowsIfEquals()
+    public function knowsIfEquals() : void
     {
         $this->assertTrue($this->TXTData->equals($this->TXTData));
         $this->assertFalse($this->TXTData->equals(new TXTData('beep')));
@@ -35,7 +35,7 @@ class TXTDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable()
+    public function isArrayable() : void
     {
         $this->assertArrayableAndEquals(['value' => $this->value], $this->TXTData);
     }
@@ -43,7 +43,7 @@ class TXTDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isJsonSerializeable()
+    public function isJsonSerializeable() : void
     {
         $this->assertJsonSerializeableAndEquals(['value' => $this->value], $this->TXTData);
     }
@@ -51,7 +51,7 @@ class TXTDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isSerializable()
+    public function isSerializable() : void
     {
         $this->assertSerializable($this->TXTData);
         $this->assertEquals($this->TXTData, \unserialize(\serialize($this->TXTData)));
@@ -60,7 +60,7 @@ class TXTDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isStringable()
+    public function isStringable() : void
     {
         $this->assertStringableAndEquals('boop', $this->TXTData);
     }
@@ -68,7 +68,7 @@ class TXTDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGetters()
+    public function hasBasicGetters() : void
     {
         $this->assertSame($this->value, $this->TXTData->getValue());
     }

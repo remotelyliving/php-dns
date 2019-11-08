@@ -2,6 +2,7 @@
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\Hostname;
+use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
 class HostnameTest extends BaseTestAbstract
@@ -11,7 +12,7 @@ class HostnameTest extends BaseTestAbstract
      */
     private $hostname;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -21,7 +22,7 @@ class HostnameTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGettersAndIsStringy()
+    public function hasBasicGettersAndIsStringy() : void
     {
         $this->assertSame('facebook.com.', (string)$this->hostname);
         $this->assertSame('facebook.com.', $this->hostname->getHostName());
@@ -31,7 +32,7 @@ class HostnameTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function testsForEquality()
+    public function testsForEquality() : void
     {
         $facebook1 = Hostname::createFromString('facebook.com');
         $facebook2 = Hostname::createFromString('facebook.com');
@@ -43,10 +44,11 @@ class HostnameTest extends BaseTestAbstract
 
     /**
      * @test
-     * @expectedException \RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException
      */
-    public function doesNotAllowInvalidHostNames()
+    public function doesNotAllowInvalidHostNames() : void
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $hostname = implode('', array_fill(0, 64, 'A'));
 
         Hostname::createFromString($hostname);
@@ -55,7 +57,7 @@ class HostnameTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function handlesIDNOperations()
+    public function handlesIDNOperations() : void
     {
         $utf8IDN = 'ańodelgatos.com.';
         $IDN = Hostname::createFromString($utf8IDN);

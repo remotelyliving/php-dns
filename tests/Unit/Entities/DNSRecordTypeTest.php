@@ -2,6 +2,7 @@
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
+use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
 class DNSRecordTypeTest extends BaseTestAbstract
@@ -9,7 +10,7 @@ class DNSRecordTypeTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasConvenientNamedFactoryMethods()
+    public function hasConvenientNamedFactoryMethods() : void
     {
         foreach (DNSRecordType::VALID_TYPES as $type) {
             $function = DNSRecordType::class . "::create{$type}";
@@ -21,26 +22,28 @@ class DNSRecordTypeTest extends BaseTestAbstract
 
     /**
      * @test
-     * @expectedException \RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException
      */
-    public function onlyAllowsValidTypesFromStrings()
+    public function onlyAllowsValidTypesFromStrings() : void
     {
+        $this->expectException(InvalidArgumentException::class);
+
         DNSRecordType::createFromString('SDFSF');
     }
 
     /**
      * @test
-     * @expectedException \RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException
      */
-    public function onlyAllowsValidTypesFromIntCodes()
+    public function onlyAllowsValidTypesFromIntCodes() : void
     {
+        $this->expectException(InvalidArgumentException::class);
+
         DNSRecordType::createFromInt(-100);
     }
 
     /**
      * @test
      */
-    public function comparesItself()
+    public function comparesItself() : void
     {
         $aRecord = DNSRecordType::createFromString('A');
         $cnameRecord = DNSRecordType::createFromString('CNAME');

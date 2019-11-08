@@ -47,7 +47,7 @@ class SOADataTest extends BaseTestAbstract
      */
     private $SOAData;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -67,7 +67,7 @@ class SOADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function knowsIfEquals()
+    public function knowsIfEquals() : void
     {
         $anotherSOA = new SOAData($this->rname, $this->mname, 1, 1, 1, 1, 1);
         $this->assertTrue($this->SOAData->equals($this->SOAData));
@@ -77,7 +77,7 @@ class SOADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable()
+    public function isArrayable() : void
     {
         $this->assertArrayableAndEquals(
             [
@@ -96,7 +96,7 @@ class SOADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isJsonSerializeable()
+    public function isJsonSerializeable() : void
     {
         $this->assertJsonSerializeableAndEquals(
             [
@@ -115,7 +115,7 @@ class SOADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isSerializable()
+    public function isSerializable() : void
     {
         $this->assertSerializable($this->SOAData);
         $this->assertEquals($this->SOAData, \unserialize(\serialize($this->SOAData)));
@@ -124,7 +124,7 @@ class SOADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isStringable()
+    public function isStringable() : void
     {
         $this->assertStringableAndEquals('google.com. facebook.com. 2342 123 321 3434 60', $this->SOAData);
     }
@@ -132,7 +132,7 @@ class SOADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGetters()
+    public function hasBasicGetters() : void
     {
         $this->assertSame($this->mname, $this->SOAData->getMname());
         $this->assertSame($this->rname, $this->SOAData->getRname());

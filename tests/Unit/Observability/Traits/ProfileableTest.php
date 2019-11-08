@@ -20,7 +20,7 @@ class ProfileableTest extends BaseTestAbstract
 
     private $profileableClass;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -38,7 +38,7 @@ class ProfileableTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function createsProfiles()
+    public function createsProfiles() : void
     {
         $profile = $this->profileableClass->createProfile('name');
         $this->assertInstanceOf(Profile::class, $profile);
@@ -48,7 +48,7 @@ class ProfileableTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function setsAProfileFactory()
+    public function setsAProfileFactory() : void
     {
         $this->profileableClass->setProfileFactory($this->profileFactory);
         $profile = $this->profileableClass->createProfile('transactionName');

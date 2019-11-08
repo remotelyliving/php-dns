@@ -23,7 +23,7 @@ class ProfileTest extends BaseTestAbstract
      */
     private $profile;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -38,7 +38,7 @@ class ProfileTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function timesTransactions()
+    public function timesTransactions() : void
     {
         $this->profile->startTransaction();
         $this->profile->endTransaction();
@@ -49,7 +49,7 @@ class ProfileTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function getsPeakMemoryUsage()
+    public function getsPeakMemoryUsage() : void
     {
         $this->profile->samplePeakMemoryUsage();
         $this->assertSame($this->profile->getPeakMemoryUsage(), memory_get_peak_usage());
@@ -58,7 +58,7 @@ class ProfileTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function getsATransactionName()
+    public function getsATransactionName() : void
     {
         $this->assertSame('transactionName', $this->profile->getTransactionName());
     }
@@ -66,7 +66,7 @@ class ProfileTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasAnAccompanyingFactory()
+    public function hasAnAccompanyingFactory() : void
     {
         $this->assertEquals(new Profile('transactionName'), $this->factory->create('transactionName'));
     }

@@ -12,6 +12,7 @@ use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Entities\IPAddress;
 use RemotelyLiving\PHPDNS\Mappers\GoogleDNS as GoogleMapper;
+use RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure;
 use RemotelyLiving\PHPDNS\Resolvers\GoogleDNS;
 use RemotelyLiving\PHPDNS\Resolvers\ResolverAbstract;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
@@ -29,7 +30,7 @@ class GoogleDNSTest extends BaseTestAbstract
      */
     private $googleDNS;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->httpClient = $this->createMock(ClientInterface::class);
         $this->googleDNS = new GoogleDNS($this->httpClient, new GoogleMapper(), 3);
@@ -39,7 +40,7 @@ class GoogleDNSTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasOrDoesNotHaveRecord()
+    public function hasOrDoesNotHaveRecord() : void
     {
         $hostname = Hostname::createFromString('facebook.com');
         $type = DNSRecordType::createFromString('A');
@@ -78,10 +79,11 @@ class GoogleDNSTest extends BaseTestAbstract
     /**
      * @test
      * @dataProvider httpExceptionProvider
-     * @expectedException \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
      */
     public function getsRecordsAndThrowsQueryExceptionOnFailures(\Throwable $e)
     {
+        $this->expectException(QueryFailure::class);
+
         $this->httpClient->expects($this->once())
             ->method('request')
             ->with('GET', "/resolve?name=facebook.com.&type=AAAA")

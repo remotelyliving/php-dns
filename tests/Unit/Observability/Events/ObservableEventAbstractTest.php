@@ -12,7 +12,7 @@ class ObservableEventAbstractTest extends BaseTestAbstract
      */
     private $event;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -33,7 +33,7 @@ class ObservableEventAbstractTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function getsName()
+    public function getsName() : void
     {
         $this->assertSame('the name', $this->event::getName());
     }
@@ -41,7 +41,7 @@ class ObservableEventAbstractTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable()
+    public function isArrayable() : void
     {
         $this->assertInstanceOf(Arrayable::class, $this->event);
         $this->assertEquals(['beep' => 'boop'], $this->event->toArray());
@@ -50,7 +50,7 @@ class ObservableEventAbstractTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isJsonSerializable()
+    public function isJsonSerializable() : void
     {
         $this->assertInstanceOf(\JsonSerializable::class, $this->event);
         $this->assertEquals(['the name' => ['beep' => 'boop']], $this->event->jsonSerialize());

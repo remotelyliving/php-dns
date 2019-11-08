@@ -37,7 +37,7 @@ class DNSQueriedTest extends BaseTestAbstract
      */
     private $DNSQueried;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -60,7 +60,7 @@ class DNSQueriedTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGetters()
+    public function hasBasicGetters() : void
     {
         $this->assertSame($this->resolver, $this->DNSQueried->getResolver());
         $this->assertSame($this->hostname, $this->DNSQueried->getHostname());
@@ -72,7 +72,7 @@ class DNSQueriedTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable()
+    public function isArrayable() : void
     {
         $record1 = $this->createMock(DNSRecord::class);
         $record1->method('toArray')

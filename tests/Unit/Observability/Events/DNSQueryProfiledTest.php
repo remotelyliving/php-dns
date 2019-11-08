@@ -18,7 +18,7 @@ class DNSQueryProfiledTest extends BaseTestAbstract
      */
     private $DNSQueryProfiled;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -29,7 +29,7 @@ class DNSQueryProfiledTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGetters()
+    public function hasBasicGetters() : void
     {
         $this->assertSame($this->profile, $this->DNSQueryProfiled->getProfile());
         $this->assertSame(DNSQueryProfiled::NAME, $this->DNSQueryProfiled::getName());
@@ -38,7 +38,7 @@ class DNSQueryProfiledTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable()
+    public function isArrayable() : void
     {
         $this->profile->method('getElapsedSeconds')
             ->willReturn(100.1);

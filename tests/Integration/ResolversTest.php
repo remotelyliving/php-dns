@@ -12,6 +12,7 @@ use RemotelyLiving\PHPDNS\Entities\MXData;
 use RemotelyLiving\PHPDNS\Entities\NSData;
 use RemotelyLiving\PHPDNS\Entities\SOAData;
 use RemotelyLiving\PHPDNS\Entities\TXTData;
+use RemotelyLiving\PHPDNS\Resolvers\Exceptions\ReverseLookupFailure;
 use RemotelyLiving\PHPDNS\Resolvers\GoogleDNS;
 use RemotelyLiving\PHPDNS\Resolvers\Interfaces\ReverseDNSQuery;
 use RemotelyLiving\PHPDNS\Resolvers\ResolverAbstract;
@@ -25,7 +26,7 @@ class ResolversTest extends BaseTestAbstract
      */
     private $hostname;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -165,7 +166,7 @@ class ResolversTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function getsHostnameFromIpAddress()
+    public function getsHostnameFromIpAddress() : void
     {
         $expectedHostname = Hostname::createFromString('localhost');
         $resolver = $this->createLocalSystemResolver();
@@ -177,17 +178,17 @@ class ResolversTest extends BaseTestAbstract
 
     /**
      * @test
-     * @expectedException \RemotelyLiving\PHPDNS\Resolvers\Exceptions\ReverseLookupFailure
      */
-    public function throwsOnReverseLookupFailure()
+    public function throwsOnReverseLookupFailure() : void
     {
+        $this->expectException(ReverseLookupFailure::class);
         $this->createLocalSystemResolver()->getHostnameByAddress(IPAddress::createFromString('41.1.1.14'));
     }
 
     /**
      * @test
      */
-    public function cachesDNSLookups()
+    public function cachesDNSLookups() : void
     {
         $cache = $this->createCachePool();
         $cache->clear();

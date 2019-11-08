@@ -9,7 +9,7 @@ class ExceptionTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isJsonSerializable()
+    public function isJsonSerializable() : void
     {
         $exception = new Exception('The exception', 123);
 

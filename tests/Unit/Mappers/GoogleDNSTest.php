@@ -24,7 +24,7 @@ class GoogleDNSTest extends BaseTestAbstract
         ],
     ];
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -34,7 +34,7 @@ class GoogleDNSTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function mapsAGoogleDNSRecordVariants()
+    public function mapsAGoogleDNSRecordVariants() : void
     {
         $mappedRecord = $this->mapper->mapFields([
             'type' => 1,
@@ -65,7 +65,7 @@ class GoogleDNSTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function mapsAllKindsOfGoogleDNSRecordVariants()
+    public function mapsAllKindsOfGoogleDNSRecordVariants() : void
     {
         foreach (self::GOOGLE_DNS_FORMAT as $record) {
             $mappedRecord = $this->mapper->mapFields($record)->toDNSRecord();

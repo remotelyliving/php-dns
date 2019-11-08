@@ -30,7 +30,7 @@ class LocalSystemTest extends BaseTestAbstract
      */
     private $localSystem;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->dnsClient = $this->createMock(LocalSystemDNS::class);
         $this->localSystemMapper = new LocalSystemMapper();
@@ -41,7 +41,7 @@ class LocalSystemTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasOrDoesNotHaveRecord()
+    public function hasOrDoesNotHaveRecord() : void
     {
         $record = DNSRecord::createFromPrimitives('A', 'facebook.com', 1726, IPAddress::createFromString('192.169.1.1'));
 
@@ -60,7 +60,7 @@ class LocalSystemTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function getsHostnameByAddress()
+    public function getsHostnameByAddress() : void
     {
         $expected = Hostname::createFromString('cnn.com');
         $IPAddress = IPAddress::createFromString('127.0.0.1');

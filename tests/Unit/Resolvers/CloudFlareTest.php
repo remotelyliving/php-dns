@@ -19,6 +19,7 @@ use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Entities\IPAddress;
 use RemotelyLiving\PHPDNS\Mappers\GoogleDNS as GoogleMapper;
 use RemotelyLiving\PHPDNS\Resolvers\CloudFlare;
+use RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure;
 use RemotelyLiving\PHPDNS\Resolvers\GoogleDNS;
 use RemotelyLiving\PHPDNS\Resolvers\ResolverAbstract;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
@@ -36,7 +37,7 @@ class CloudFlareTest extends BaseTestAbstract
      */
     private $cloudFlare;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->httpClient = $this->createMock(ClientInterface::class);
         $this->cloudFlare = new CloudFlare($this->httpClient);
@@ -46,7 +47,7 @@ class CloudFlareTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasOrDoesNotHaveRecord()
+    public function hasOrDoesNotHaveRecord() : void
     {
         $hostname = Hostname::createFromString('facebook.com');
         $type = DNSRecordType::createFromString('A');
@@ -85,7 +86,7 @@ class CloudFlareTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function getsANYRecords()
+    public function getsANYRecords() : void
     {
         $expected = new DNSRecordCollection(...[
             DNSRecord::createFromPrimitives('A', 'google.com', 1300, '192.168.1.1', 'IN'),
@@ -124,10 +125,11 @@ class CloudFlareTest extends BaseTestAbstract
     /**
      * @test
      * @dataProvider httpExceptionProvider
-     * @expectedException \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
      */
     public function rethrowsAllHTTPExceptionsAsQueryFailures(RequestException $e)
     {
+        $this->expectException(QueryFailure::class);
+
         $promise = new Promise(function () use (&$promise, $e) {
             $promise->reject($e);
         });
@@ -143,10 +145,11 @@ class CloudFlareTest extends BaseTestAbstract
     /**
      * @test
      * @dataProvider httpExceptionProvider
-     * @expectedException \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
      */
     public function rethrowsAllHTTPExceptionsAsQueryFailuresForANYQuery(RequestException $e)
     {
+        $this->expectException(QueryFailure::class);
+
         $promise = new Promise(function () use (&$promise, $e) {
             $promise->reject($e);
         });

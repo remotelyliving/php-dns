@@ -12,7 +12,7 @@ class TimerTest extends BaseTestAbstract
     private $timer;
 
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -22,7 +22,7 @@ class TimerTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function getsNowAndMicroTime()
+    public function getsNowAndMicroTime() : void
     {
         $this->assertGreaterThan(0, $this->timer->getMicroTime());
         $this->assertTrue(is_float($this->timer->getMicroTime()));

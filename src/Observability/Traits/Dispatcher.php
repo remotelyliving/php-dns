@@ -30,7 +30,27 @@ trait Dispatcher
 
     public function dispatch(ObservableEventAbstract $event): void
     {
-        $this->getDispatcher()->dispatch($event, $event::getName());
+        call_user_func_array([$this->getDispatcher(), 'dispatch'], $this->getOrderedDispatcherArguments($event));
+    }
+
+    private function getOrderedDispatcherArguments(ObservableEventAbstract $event) : array
+    {
+        $reflection = new \ReflectionClass($this->getDispatcher());
+
+        foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+            if ($method->getName() !== 'dispatch') {
+                continue;
+            }
+            
+            // handle the reverse argument BC from symfony dispatcher 3.* to 4.*
+            foreach ($method->getParameters() as $parameter) {
+                return ($parameter->getName() === 'event')
+                    ? [$event, $event::getName()]
+                    : [$event::getName(), $event];
+            }
+        }
+
+        throw new \LogicException('Could not determine argument order for dispatcher');
     }
 
     private function getDispatcher(): EventDispatcherInterface

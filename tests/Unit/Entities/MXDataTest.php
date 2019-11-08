@@ -22,7 +22,7 @@ class MXDataTest extends BaseTestAbstract
      */
     private $MXData;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -33,7 +33,7 @@ class MXDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function knowsIfEquals()
+    public function knowsIfEquals() : void
     {
         $this->assertTrue($this->MXData->equals($this->MXData));
         $this->assertFalse($this->MXData->equals(new MXData(new Hostname('boop.com'), 60)));
@@ -42,7 +42,7 @@ class MXDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable()
+    public function isArrayable() : void
     {
         $this->assertArrayableAndEquals(
             ['target' => (string)$this->target, 'priority' => $this->priority],
@@ -53,7 +53,7 @@ class MXDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isJsonSerializeable()
+    public function isJsonSerializeable() : void
     {
         $this->assertJsonSerializeableAndEquals(
             ['target' => (string)$this->target, 'priority' => $this->priority],
@@ -64,7 +64,7 @@ class MXDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isSerializable()
+    public function isSerializable() : void
     {
         $this->assertSerializable($this->MXData);
         $this->assertEquals($this->MXData, \unserialize(\serialize($this->MXData)));
@@ -73,7 +73,7 @@ class MXDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isStringable()
+    public function isStringable() : void
     {
         $this->assertStringableAndEquals('60 google.com.', $this->MXData);
     }
@@ -81,7 +81,7 @@ class MXDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGetters()
+    public function hasBasicGetters() : void
     {
         $this->assertSame($this->target, $this->MXData->getTarget());
         $this->assertSame($this->priority, $this->MXData->getPriority());

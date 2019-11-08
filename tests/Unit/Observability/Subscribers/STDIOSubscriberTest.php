@@ -35,7 +35,7 @@ class STDIOSubscriberTest extends BaseTestAbstract
      */
     private $expectedOut;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -76,7 +76,7 @@ EOF;
     /**
      * @test
      */
-    public function getsSubscribedEvents()
+    public function getsSubscribedEvents() : void
     {
         $this->assertEquals([
             DNSQueryFailed::getName() => 'onDNSQueryFailed',
@@ -88,7 +88,7 @@ EOF;
     /**
      * @test
      */
-    public function writesToSTDErrOnQueryFailure()
+    public function writesToSTDErrOnQueryFailure() : void
     {
 
 
@@ -102,7 +102,7 @@ EOF;
     /**
      * @test
      */
-    public function writesToSTDOutOnQuery()
+    public function writesToSTDOutOnQuery() : void
     {
         $this->STDOut->expects($this->once())
             ->method('fwrite')
@@ -114,7 +114,7 @@ EOF;
     /**
      * @test
      */
-    public function writesToSTDOutOnQueryProfiled()
+    public function writesToSTDOutOnQueryProfiled() : void
     {
         $this->STDOut->expects($this->once())
             ->method('fwrite')

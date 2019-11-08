@@ -38,7 +38,7 @@ class ResolverAbstractTest extends BaseTestAbstract
      */
     private $collection = null;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -49,7 +49,7 @@ class ResolverAbstractTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isAnObservableResolver()
+    public function isAnObservableResolver() : void
     {
         $this->assertInstanceOf(ResolverAbstract::class, $this->resolver);
         $this->assertInstanceOf(ObservableResolver::class, $this->resolver);
@@ -58,7 +58,7 @@ class ResolverAbstractTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function mapsResultsReturnsCollection()
+    public function mapsResultsReturnsCollection() : void
     {
         $dnsRecord = DNSRecord::createFromPrimitives('A', 'boop.com', 123);
         $expected = new DNSRecordCollection($dnsRecord);
@@ -78,7 +78,7 @@ class ResolverAbstractTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function mapsResultsAndDiscardsInvalidData()
+    public function mapsResultsAndDiscardsInvalidData() : void
     {
         $expected = new DNSRecordCollection();
         $results =[['type' => 'BAZ', 'ip' => '192.168.1.1', 'class' => 'IN']];
@@ -97,7 +97,7 @@ class ResolverAbstractTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function dispatchedEventsOnSuccessfulQuery()
+    public function dispatchedEventsOnSuccessfulQuery() : void
     {
         $dnsQueried = null;
         $perProfiled = null;
@@ -119,7 +119,7 @@ class ResolverAbstractTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function logsSuccessfulEvents()
+    public function logsSuccessfulEvents() : void
     {
         $this->resolver->setLogger($this->logger);
 
@@ -135,10 +135,11 @@ class ResolverAbstractTest extends BaseTestAbstract
 
     /**
      * @test
-     * @expectedException \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
      */
-    public function logsFailures()
+    public function logsFailures() : void
     {
+        $this->expectException(QueryFailure::class);
+
         $this->resolver = new TestResolver(null, new QueryFailure());
         $this->resolver->setLogger($this->logger);
 
@@ -162,7 +163,7 @@ class ResolverAbstractTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function dispatchedEventsOnQueryFailure()
+    public function dispatchedEventsOnQueryFailure() : void
     {
         $dnsQueryFailed = null;
         $perProfiled = null;

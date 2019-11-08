@@ -20,7 +20,7 @@ class DNSRecordTest extends BaseTestAbstract
      */
     private $DNSTXTRecord;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -45,7 +45,7 @@ class DNSRecordTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGetters()
+    public function hasBasicGetters() : void
     {
         $this->assertSame(123, $this->DNSARecord->getTTL());
         $this->assertTrue(IPAddress::createFromString('127.0.0.1')->equals($this->DNSARecord->getIPAddress()));
@@ -58,7 +58,7 @@ class DNSRecordTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable()
+    public function isArrayable() : void
     {
         $this->assertArrayableAndEquals([
             'hostname' => 'google.com.',
@@ -80,7 +80,7 @@ class DNSRecordTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isJsonSerializable()
+    public function isJsonSerializable() : void
     {
         $this->assertJsonSerializeableAndEquals([
             'hostname' => 'google.com.',
@@ -102,7 +102,7 @@ class DNSRecordTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isSerializable()
+    public function isSerializable() : void
     {
         $this->assertSerializable($this->DNSARecord);
 
@@ -113,7 +113,7 @@ class DNSRecordTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function testsEquality()
+    public function testsEquality() : void
     {
         $record2 = DNSRecord::createFromPrimitives(
             'A',

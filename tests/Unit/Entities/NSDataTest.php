@@ -17,7 +17,7 @@ class NSDataTest extends BaseTestAbstract
      */
     private $NSData;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -28,7 +28,7 @@ class NSDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function knowsIfEquals()
+    public function knowsIfEquals() : void
     {
         $this->assertTrue($this->NSData->equals($this->NSData));
         $this->assertFalse($this->NSData->equals(new NSData(new Hostname('boop.com'))));
@@ -37,7 +37,7 @@ class NSDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable()
+    public function isArrayable() : void
     {
         $this->assertArrayableAndEquals(['target' => (string)$this->target], $this->NSData);
     }
@@ -45,7 +45,7 @@ class NSDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isJsonSerializeable()
+    public function isJsonSerializeable() : void
     {
         $this->assertJsonSerializeableAndEquals(['target' => (string)$this->target], $this->NSData);
     }
@@ -53,7 +53,7 @@ class NSDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isSerializable()
+    public function isSerializable() : void
     {
         $this->assertSerializable($this->NSData);
         $this->assertEquals($this->NSData, \unserialize(\serialize($this->NSData)));
@@ -62,7 +62,7 @@ class NSDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isStringable()
+    public function isStringable() : void
     {
         $this->assertStringableAndEquals('google.com.', $this->NSData);
     }
@@ -70,7 +70,7 @@ class NSDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGetters()
+    public function hasBasicGetters() : void
     {
         $this->assertSame($this->target, $this->NSData->getTarget());
     }

@@ -87,7 +87,7 @@ class LocalSystemTest extends BaseTestAbstract
         ],
     ];
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -97,7 +97,7 @@ class LocalSystemTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function mapsAGoogleDNSRecordVariants()
+    public function mapsAGoogleDNSRecordVariants() : void
     {
         $mappedRecord = $this->mapper->mapFields([
             'type' => 'A',
@@ -116,7 +116,7 @@ class LocalSystemTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function mapsAllKindsOfLocalSystemDNSRecordVariants()
+    public function mapsAllKindsOfLocalSystemDNSRecordVariants() : void
     {
         foreach (self::LOCAL_DNS_FORMAT as $record) {
             $mappedRecord = $this->mapper->mapFields($record)->toDNSRecord();
@@ -127,7 +127,7 @@ class LocalSystemTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function mapsRecordTypesToCorrespondingPHPConsts()
+    public function mapsRecordTypesToCorrespondingPHPConsts() : void
     {
         $this->assertEquals(32768, $this->mapper->getTypeCodeFromType(DNSRecordType::createTXT()));
     }

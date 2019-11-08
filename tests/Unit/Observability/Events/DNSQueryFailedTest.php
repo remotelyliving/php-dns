@@ -36,7 +36,7 @@ class DNSQueryFailedTest extends BaseTestAbstract
      */
     private $DNSQueryFailed;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -59,7 +59,7 @@ class DNSQueryFailedTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGetters()
+    public function hasBasicGetters() : void
     {
         $this->assertSame($this->resolver, $this->DNSQueryFailed->getResolver());
         $this->assertSame($this->hostname, $this->DNSQueryFailed->getHostname());
@@ -71,7 +71,7 @@ class DNSQueryFailedTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable()
+    public function isArrayable() : void
     {
         $expected = [
             'resolver' => 'foo',

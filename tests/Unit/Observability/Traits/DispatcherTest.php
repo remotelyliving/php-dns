@@ -30,7 +30,7 @@ class DispatcherTest extends BaseTestAbstract
      */
     private $observableClass;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -57,7 +57,7 @@ class DispatcherTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function createsAndCachesDispatcher()
+    public function createsAndCachesDispatcher() : void
     {
         $this->dispatcher->expects($this->never())
             ->method('dispatch');
@@ -68,7 +68,7 @@ class DispatcherTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function addsSubscribersAndListeners()
+    public function addsSubscribersAndListeners() : void
     {
         $this->observableClass->setDispatcher($this->dispatcher);
 
@@ -89,7 +89,7 @@ class DispatcherTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function dispatchesObservableEvents()
+    public function dispatchesObservableEvents() : void
     {
         $this->observableClass->setDispatcher($this->dispatcher);
 
