@@ -106,6 +106,12 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
         return $this->data;
     }
 
+    public function setTTL(int $ttl) : self
+    {
+        $this->TTL = $ttl;
+        return $this;
+    }
+
     public function toArray(): array
     {
         $formatted = [

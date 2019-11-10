@@ -55,6 +55,12 @@ class DNSRecordTest extends BaseTestAbstract
         $this->assertNull($this->DNSARecord->getData());
     }
 
+    public function hasBasicSetters() : void
+    {
+        $this->assertSame(123, $this->DNSARecord->getTTL());
+        $this->assertSame(321, $this->DNSARecord->setTTL(321)->getTTL());
+    }
+
     /**
      * @test
      */
