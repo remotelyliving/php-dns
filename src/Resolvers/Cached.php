@@ -5,12 +5,15 @@ use Psr\Cache\CacheItemPoolInterface;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
+use RemotelyLiving\PHPDNS\Resolvers\Traits\Time;
 use RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver;
 
 class Cached extends ResolverAbstract
 {
-    protected const DEFAULT_CACHE_TTL = 300;
+    protected const DEFAULT_CACHE_TTL = 600;
     private const CACHE_KEY_TEMPLATE = '%s:%s:%s';
+
+    use Time;
 
     /**
      * @var \Psr\Cache\CacheItemPoolInterface
@@ -25,7 +28,7 @@ class Cached extends ResolverAbstract
     /**
      * @var string
      */
-    private $namespace = 'php-dns';
+    private $namespace = 'php-dns-v1';
 
     /**
      * @var int|null
@@ -49,13 +52,13 @@ class Cached extends ResolverAbstract
         $cachedResult = $this->cache->getItem($this->buildCacheKey($hostname, $recordType));
 
         if ($cachedResult->isHit()) {
-            return $cachedResult->get();
+            return $this->unwrapResults($cachedResult->get());
         }
 
         $dnsRecords = $this->resolver->getRecords((string)$hostname, (string)$recordType);
         $ttlSeconds = $this->ttlSeconds ?? $this->extractLowestTTL($dnsRecords);
         $cachedResult->expiresAfter($ttlSeconds);
-        $cachedResult->set($dnsRecords);
+        $cachedResult->set(['recordCollection' => $dnsRecords, 'timestamp' => $this->getTimeStamp()]);
         $this->cache->save($cachedResult);
 
         return $dnsRecords;
@@ -81,5 +84,19 @@ class Cached extends ResolverAbstract
         }
 
         return min($ttls);
+    }
+
+    /**
+     * @param array $results ['recordCollection' => $recordCollection, 'timestamp' => $timeStamp]
+     */
+    private function unwrapResults(array $results) : DNSRecordCollection
+    {
+        $records = $results['recordCollection'];
+        foreach ($records as $key => $record) {
+            $records[$key] = $record
+                ->setTTL($record->getTTL() - ($this->getTimeStamp() - (int)$results['timestamp']));
+        }
+
+        return $records;
     }
 }

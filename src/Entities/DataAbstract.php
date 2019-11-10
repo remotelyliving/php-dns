@@ -54,7 +54,7 @@ abstract class DataAbstract implements Arrayable, Serializable
 
 
         if ($recordType->isA(DNSRecordType::TYPE_CAA)) {
-            return new CAAData($parsed[0], $parsed[1], $parsed[2]);
+            return new CAAData((int)$parsed[0], (string)$parsed[1], $parsed[2]);
         }
 
         throw new InvalidArgumentException("{$data} could not be created with type {$recordType}");

@@ -196,7 +196,7 @@ class ResolversTest extends BaseTestAbstract
         $resolver = $this->createCachedResolver($cache);
         $resolver->flush();
 
-        $cacheKey = md5('php-dns:facebook.com.:A');
+        $cacheKey = md5('php-dns-v1:facebook.com.:A');
 
         $this->assertFalse($cache->getItem($cacheKey)->isHit());
 
@@ -207,7 +207,11 @@ class ResolversTest extends BaseTestAbstract
 
         $this->assertTrue($cache->getItem($cacheKey)->isHit());
 
-        $this->assertEquals($recordsNotCached, $recordsCached);
+        $this->assertSame(count($recordsNotCached), count($recordsCached));
+
+        foreach ($recordsNotCached as $record) {
+            $this->assertTrue($recordsCached->has($record));
+        }
     }
 
     public function resolverProvider(): array
