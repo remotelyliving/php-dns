@@ -75,7 +75,7 @@ class CachedTest extends BaseTestAbstract
         $this->cacheItem = $this->createMock(CacheItemInterface::class);
         $this->cache = $this->createMock(CacheItemPoolInterface::class);
         $this->cache->method('getItem')
-            ->with('8edc5a07804665f08fa769a9d760d479')
+            ->with('8ff675286cf9d55c0b32c22741882b33')
             ->willReturnCallback(function () {
                 return $this->cacheItem;
             });
@@ -93,15 +93,14 @@ class CachedTest extends BaseTestAbstract
 
         $this->resolver->method('getRecords')
             ->with('example.com.', 'ANY')
-            ->willReturn($this->DNSRecordCollection);
+            ->willReturnCallback(function () : DNSRecordCollection {
+                return $this->DNSRecordCollection;
+            });
 
         $this->cachedResolver = new Cached($this->cache, $this->resolver);
         $this->cachedResolver->setDateTimeImmutable($this->dateTimeImmutable);
     }
 
-    /**
-     * @test
-     */
     public function testCachesUsingLowestTTLOnReturnedRecordSet() : void
     {
         $this->cacheItem->method('isHit')
@@ -122,9 +121,19 @@ class CachedTest extends BaseTestAbstract
         $this->assertEquals($this->DNSRecordCollection, $this->cachedResolver->getRecords('example.com', 'ANY'));
     }
 
-    /**
-     * @test
-     */
+    public function testDoesNotCacheEmptyResultsIfOptionIsSet() : void
+    {
+        $this->cache->expects($this->never())
+            ->method('save');
+
+        $this->DNSRecordCollection = new DNSRecordCollection();
+
+        $results = $this->cachedResolver->withEmptyResultCachingDisabled()
+            ->getRecords('example.com', 'ANY');
+
+        $this->assertEquals($this->DNSRecordCollection, $results);
+    }
+
     public function testOnHitReturnsCachedValuesAndAdjustsTTLBasedOnTimeElapsedSinceStorage() : void
     {
         $this->cacheItem->method('isHit')

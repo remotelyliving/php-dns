@@ -28,12 +28,17 @@ class Cached extends ResolverAbstract
     /**
      * @var string
      */
-    private $namespace = 'php-dns-v1';
+    private $namespace = 'php-dns-v2';
 
     /**
      * @var int|null
      */
     private $ttlSeconds;
+
+    /**
+     * @var bool
+     */
+    private $shouldCacheEmptyResults = true;
 
     public function __construct(CacheItemPoolInterface $cache, Resolver $resolver, int $ttlSeconds = null)
     {
@@ -47,6 +52,14 @@ class Cached extends ResolverAbstract
         $this->cache->clear();
     }
 
+    public function withEmptyResultCachingDisabled() : self
+    {
+        $emptyCachingDisabled = new static($this->cache, $this->resolver, $this->ttlSeconds);
+        $emptyCachingDisabled->shouldCacheEmptyResults = false;
+
+        return $emptyCachingDisabled;
+    }
+
     protected function doQuery(Hostname $hostname, DNSRecordType $recordType): DNSRecordCollection
     {
         $cachedResult = $this->cache->getItem($this->buildCacheKey($hostname, $recordType));
@@ -56,6 +69,10 @@ class Cached extends ResolverAbstract
         }
 
         $dnsRecords = $this->resolver->getRecords((string)$hostname, (string)$recordType);
+        if ($dnsRecords->isEmpty() && $this->shouldCacheEmptyResults === false) {
+            return $dnsRecords;
+        }
+
         $ttlSeconds = $this->ttlSeconds ?? $this->extractLowestTTL($dnsRecords);
         $cachedResult->expiresAfter($ttlSeconds);
         $cachedResult->set(['recordCollection' => $dnsRecords, 'timestamp' => $this->getTimeStamp()]);
@@ -73,17 +90,13 @@ class Cached extends ResolverAbstract
     {
         $ttls = [];
 
-        if ($recordCollection->isEmpty()) {
-            return self::DEFAULT_CACHE_TTL;
-        }
-
         /** @var \RemotelyLiving\PHPDNS\Entities\DNSRecord $record */
         foreach ($recordCollection as $record) {
             /** @scrutinizer ignore-call */
             $ttls[] = $record->getTTL();
         }
 
-        return min($ttls);
+        return count($ttls) ? min($ttls) : self::DEFAULT_CACHE_TTL;
     }
 
     /**

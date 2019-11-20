@@ -34,19 +34,12 @@ These resolvers at the least implement the `Resolvers\Interfaces\DNSQuery` inter
 
 ```php
 $resolver = new Resolvers\GoogleDNS();
-$hostname = 'google.com';
 
 // can query via convenience methods
-$records = $resolver->getARecords($hostname); // returns a collection of DNS A Records
+$records = $resolver->getARecords('google.com'); // returns a collection of DNS A Records
 
-// can also query by any RecordType. Record Types are a proper object that validate you have the right type.
-$recordType = DNSRecordType::createAAAA();
-
-// OR
-
-$recordType = DNSRecordType::TYPE_AAAA;
-
-$moreRecords = $resolver->getRecords($hostname, $recordType);
+// can also query by any RecordType.
+$moreRecords = $resolver->getRecords($hostname, DNSRecordType::TYPE_AAAA);
 
 // can query to see if any resolvers find a record or type.
 $resolver->hasRecordType($hostname, $type) // true | false
@@ -59,16 +52,17 @@ $resolver->hasRecord($record) // true | false
 **Chain Resolver**
 
 The Chain Resolver can be used to read through DNS Resolvers until an answer is found.
-Whichever you pass in first is the first Resolver it tries in sequence of passing them in.
+Whichever you pass in first is the first Resolver it tries in the call sequence.
 It implements the same `DNSQuery` interface as the other resolvers but with an additional feature set found in the `Chain` interface.
 
-So something like 
+So something like: 
 
 ```php
 $chainResolver = new Chain($cloudFlareResolver, $googleDNSResolver, $localDNSResolver);
 ```
 
-And that will call the GoogleDNS Resolver first, if no answer is found it will continue on to the LocalSystem Resolver
+That will call the GoogleDNS Resolver first, if no answer is found it will continue on to the LocalSystem Resolver.
+The default call through strategy is First to Find aka `Resolvers\Interfaces\Chain::withFirstResults(): Chain`
 
 You can randomly select which Resolver in the chain it tries first too via `Resolvers\Interfaces\Chain::randomly(): Chain`
 Example:
@@ -79,17 +73,21 @@ $foundRecord = $chainResolver->randomly()->getARecords('facebook.com')->pickFirs
 
 The above code calls through the resolvers randomly until it finds any non empty answer or has exhausted order the chain.
 
-There are a few different methods to decide how you want to query through the resolvers. There are a few different strategies. 
-Check them out here:
+Lastly, and most expensively, there is `Resolvers\Interfaces\Chain::withAllResults(): Chain` and `Resolvers\Interfaces\Chain::withConsensusResults(): Chain`
+All results will be a merge from all the different sources, useful if you want to see what all is out there.
+Consensus results will be only the results in common from source to source.
 
 [src/Resolvers/Interfaces](https://github.com/remotelyliving/php-dns/tree/master/src/Resolvers/Interfaces/Chain.php)
 
 ```php
-// returns only common results between resolvers
-$chainResolver->withConsensusResults()->getARecords('facebook.com'); 
-
 // returns the first non empty result set
 $chainResolver->withFirstResults()->getARecords('facebook.com'); 
+
+// returns the first non empty result set from a randomly selected resolver
+$chainResolver->randomly()->getARecords('facebook.com'); 
+
+// returns only common results between resolvers
+$chainResolver->withConsensusResults()->getARecords('facebook.com'); 
 
 // returns all collective responses with duplicates filtered out
 $chainResolver->withAllResults()->getARecords('facebook.com'); 
@@ -98,20 +96,24 @@ $chainResolver->withAllResults()->getARecords('facebook.com');
 **Cached Resolver**
 
 If you use a PSR6 cache implementation, feel free to wrap whatever Resolver you want to use in the Cached Resolver.
-It will take in the TTL of the record(s) average them and use that as the cache TTL.
+It will take in the the lowest TTL of the record(s) and use that as the cache TTL.
 You may override that behavior by setting a cache TTL in the constructor.
 
 ```php
-$cachedResolver = new Resolvers\Cached($cache, $resolverOfChoice, $TTL);
+$cachedResolver = new Resolvers\Cached($cache, $resolverOfChoice);
+$cachedResolver->getRecords('facebook.com'); // get from cache if possible or falls back to the wrapped resolver and caches the returned records
 ```
 
-`Entities\DNSRecordCollection` and `Entities\DNSRecord` are serializable for just such an occasion.
+If you do not wish to cache empty result answers, you may call through with this additional option:
+```php
+$cachedResolver->withEmptyResultCachingDisabled()->getARecords('facebook.com');
+```
 
 **Entities**
 
 Take a look in the `src/Entities` to see what's available for you to query by and receive.
 
-For records with extra type data, like SOA, TXT, MX, CNAME, and NS there is a data attribute on `Entities\DNSRecord` that will be set with the proper type
+For records with extra type data, like SOA, TXT, MX, CNAME, and NS there is a data attribute on `Entities\DNSRecord` that will be set with the proper type.
 
 **Reverse Lookup**
 
@@ -133,7 +135,6 @@ If you want to see how easy it is to wire all this up, check out [the repl boots
 ### Logging
 
 All provided resolvers implement `Psr\Log\LoggerAwareInterface` and have a default `NullLogger` set at runtime. 
-If you want a differen format, I would recommend implementing a logger subscriber.
 
 ### Tinkering
 
