@@ -4,8 +4,7 @@ namespace RemotelyLiving\PHPDNS\Resolvers;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Promise\PromiseInterface;
-use function GuzzleHttp\Promise\unwrap;
+use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Psr7\Response;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
@@ -48,7 +47,7 @@ class CloudFlare extends ResolverAbstract
     {
         try {
             return (!$type->isA(DNSRecordType::TYPE_ANY))
-                ? $this->doApiQuery(['name' => (string)$hostname, 'type' => (string)$type])
+                ? $this->doApiQuery($hostname, $type)
                 : $this->doAnyApiQuery($hostname);
         } catch (RequestException $e) {
             throw new QueryFailure("Unable to query CloudFlare API", 0, $e);
@@ -60,35 +59,46 @@ class CloudFlare extends ResolverAbstract
      */
     private function doAnyApiQuery(Hostname $hostname): DNSRecordCollection
     {
-        $promises = [];
         $results = [];
-        foreach (DNSRecordType::VALID_TYPES as $type) {
-            if ($type === DNSRecordType::TYPE_ANY) {
-                continue;
-            }
+        $eachPromise = new EachPromise($this->generateEachTypeQuery($hostname), [
+            'concurrency' => 4,
+            'fulfilled' => function (Response $response) use (&$results) {
+                $results = array_merge(
+                    $results,
+                    $this->parseResult((array) json_decode((string)$response->getBody(), true))
+                );
+            },
+            'rejected' => function (RequestException $e) : void {
+                throw $e;
+            },
+        ]);
 
-            $promises[] = $this->doAsyncApiQuery(['name' => (string)$hostname, 'type' => $type])
-                ->then(function (Response $response) use (&$results) {
-                    $results = array_merge(
-                        $results,
-                        $this->parseResult((array) json_decode((string)$response->getBody(), true))
-                    );
-                });
-        }
-
-        unwrap($promises);
+        $eachPromise->promise()->wait(true);
 
         return $this->mapResults($this->mapper, $results);
     }
 
-    private function doAsyncApiQuery(array $query): PromiseInterface
+    private function generateEachTypeQuery(Hostname $hostname): \Generator
     {
-        return $this->http->requestAsync('GET', '/dns-query?' . http_build_query($query));
+        foreach (DNSRecordType::VALID_TYPES as $type) {
+            if ($type === DNSRecordType::TYPE_ANY) {
+                continue 1;
+            }
+
+            yield $this->http->requestAsync(
+                'GET',
+                '/dns-query?' . http_build_query(['name' => (string)$hostname, 'type' => $type])
+            );
+        }
     }
 
-    private function doApiQuery(array $query = []): DNSRecordCollection
+    private function doApiQuery(Hostname $hostname, DNSRecordType $type): DNSRecordCollection
     {
-        $decoded = (array) json_decode((string)$this->doAsyncApiQuery($query)->wait()->getBody(), true);
+        $url = '/dns-query?' . http_build_query(['name' => (string)$hostname, 'type' => (string)$type]);
+        $decoded = (array)json_decode(
+            (string)$this->http->requestAsync('GET', $url)->wait(true)->getBody(),
+            true
+        );
 
         return $this->mapResults($this->mapper, $this->parseResult($decoded));
     }
