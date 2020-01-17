@@ -10,7 +10,7 @@ use RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver;
 
 class Cached extends ResolverAbstract
 {
-    protected const DEFAULT_CACHE_TTL = 600;
+    protected const DEFAULT_CACHE_TTL = 300;
     private const CACHE_KEY_TEMPLATE = '%s:%s:%s';
 
     use Time;
@@ -26,9 +26,11 @@ class Cached extends ResolverAbstract
     private $resolver;
 
     /**
+     * Bump this number on breaking changes to invalidate cache
+     *
      * @var string
      */
-    private $namespace = 'php-dns-v2';
+    private $namespace = 'php-dns-v3';
 
     /**
      * @var int|null
@@ -93,6 +95,10 @@ class Cached extends ResolverAbstract
         /** @var \RemotelyLiving\PHPDNS\Entities\DNSRecord $record */
         foreach ($recordCollection as $record) {
             /** @scrutinizer ignore-call */
+            if ($record->getTTL() <= 0) {
+                continue;
+            }
+
             $ttls[] = $record->getTTL();
         }
 
@@ -107,7 +113,7 @@ class Cached extends ResolverAbstract
         $records = $results['recordCollection'];
         foreach ($records as $key => $record) {
             $records[$key] = $record
-                ->setTTL($record->getTTL() - ($this->getTimeStamp() - (int)$results['timestamp']));
+                ->setTTL(max($record->getTTL() - ($this->getTimeStamp() - (int)$results['timestamp']), 0));
         }
 
         return $records;

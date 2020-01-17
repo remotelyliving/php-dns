@@ -75,16 +75,16 @@ class CachedTest extends BaseTestAbstract
         $this->cacheItem = $this->createMock(CacheItemInterface::class);
         $this->cache = $this->createMock(CacheItemPoolInterface::class);
         $this->cache->method('getItem')
-            ->with('8ff675286cf9d55c0b32c22741882b33')
+            ->with('b88c8bc912d8b285807eb4461c6d04e6')
             ->willReturnCallback(function () {
                 return $this->cacheItem;
             });
 
         $this->resolver = $this->createMock(Resolver::class);
 
-        $this->DNSRecord1 = DNSRecord::createFromPrimitives('A', 'example.com', 100);
-        $this->DNSRecord2 = DNSRecord::createFromPrimitives('AAAA', 'example.com', 200);
-        $this->DNSRecord3 = DNSRecord::createFromPrimitives('MX', 'example.com', 300);
+        $this->DNSRecord1 = DNSRecord::createFromPrimitives('A', 'example.com', 0);
+        $this->DNSRecord2 = DNSRecord::createFromPrimitives('AAAA', 'example.com', 100);
+        $this->DNSRecord3 = DNSRecord::createFromPrimitives('MX', 'example.com', 200);
         $this->DNSRecordCollection = new DNSRecordCollection(...[
             $this->DNSRecord1,
             $this->DNSRecord2,
@@ -145,9 +145,9 @@ class CachedTest extends BaseTestAbstract
         $this->cache->expects($this->never())
             ->method('save');
 
-        $DNSRecord1 = DNSRecord::createFromPrimitives('A', 'example.com', 90);
-        $DNSRecord2 = DNSRecord::createFromPrimitives('AAAA', 'example.com', 190);
-        $DNSRecord3 = DNSRecord::createFromPrimitives('MX', 'example.com', 290);
+        $DNSRecord1 = DNSRecord::createFromPrimitives('A', 'example.com', 0);
+        $DNSRecord2 = DNSRecord::createFromPrimitives('AAAA', 'example.com', 90);
+        $DNSRecord3 = DNSRecord::createFromPrimitives('MX', 'example.com', 190);
         $expectedDNSRecordCollection = new DNSRecordCollection(...[
             $DNSRecord1, $DNSRecord2, $DNSRecord3
         ]);
