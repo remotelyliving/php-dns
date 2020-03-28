@@ -2,9 +2,9 @@
 namespace RemotelyLiving\PHPDNS\Observability\Events;
 
 use RemotelyLiving\PHPDNS\Entities\Interfaces\Arrayable;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
-abstract class ObservableEventAbstract extends /** @scrutinizer ignore-deprecated */ Event implements
+abstract class ObservableEventAbstract extends GenericEvent implements
     \JsonSerializable,
     Arrayable
 {
