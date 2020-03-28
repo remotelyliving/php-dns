@@ -14,6 +14,7 @@ class DNSQueryProfiled extends ObservableEventAbstract
 
     public function __construct(Profile $profile)
     {
+        parent::__construct();
         $this->profile = $profile;
     }
 

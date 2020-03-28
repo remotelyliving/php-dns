@@ -29,6 +29,8 @@ class DNSQueryFailed extends ObservableEventAbstract
 
     public function __construct(Resolver $resolver, Hostname $hostname, DNSRecordType $recordType, Exception $error)
     {
+        parent::__construct();
+
         $this->resolver = $resolver;
         $this->hostname = $hostname;
         $this->recordType = $recordType;
