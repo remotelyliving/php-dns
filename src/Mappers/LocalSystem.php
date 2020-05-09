@@ -70,6 +70,11 @@ class LocalSystem extends MapperAbstract
             );
         }
 
+        if (isset($fields['target'], $fields['pri'], $fields['weight'], $fields['port'])) {
+            return "{$fields['pri']} {$fields['weight']} {$fields['port']} {$fields['target']}";
+        }
+
+
         if (isset($fields['target'], $fields['pri'])) {
             return "{$fields['pri']} {$fields['target']}";
         }
