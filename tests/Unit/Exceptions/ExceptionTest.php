@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Exceptions;
 
 use RemotelyLiving\PHPDNS\Exceptions\Exception;
@@ -9,7 +10,7 @@ class ExceptionTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isJsonSerializable() : void
+    public function isJsonSerializable(): void
     {
         $exception = new Exception('The exception', 123);
 

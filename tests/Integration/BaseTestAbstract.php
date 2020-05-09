@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Integration;
 
 use PHPUnit\Framework\TestCase;
@@ -17,7 +18,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 abstract class BaseTestAbstract extends TestCase
 {
-    public static function setUpBeforeClass() : void
+    public static function setUpBeforeClass(): void
     {
         gc_collect_cycles();
     }
@@ -42,7 +43,7 @@ abstract class BaseTestAbstract extends TestCase
         return new LocalSystemDNS();
     }
 
-    protected function createChainResolver(Resolver...$resolvers): Chain
+    protected function createChainResolver(Resolver ...$resolvers): Chain
     {
         return new Chain(...$resolvers);
     }

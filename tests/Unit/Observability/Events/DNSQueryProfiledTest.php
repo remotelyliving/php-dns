@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Observability\Events;
 
 use RemotelyLiving\PHPDNS\Entities\Interfaces\Arrayable;
@@ -18,7 +19,7 @@ class DNSQueryProfiledTest extends BaseTestAbstract
      */
     private $DNSQueryProfiled;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -29,7 +30,7 @@ class DNSQueryProfiledTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGetters() : void
+    public function hasBasicGetters(): void
     {
         $this->assertSame($this->profile, $this->DNSQueryProfiled->getProfile());
         $this->assertSame(DNSQueryProfiled::NAME, $this->DNSQueryProfiled::getName());
@@ -38,7 +39,7 @@ class DNSQueryProfiledTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable() : void
+    public function isArrayable(): void
     {
         $this->profile->method('getElapsedSeconds')
             ->willReturn(100.1);

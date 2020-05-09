@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\Hostname;
@@ -22,7 +23,7 @@ class MXDataTest extends BaseTestAbstract
      */
     private $MXData;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -33,7 +34,7 @@ class MXDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function knowsIfEquals() : void
+    public function knowsIfEquals(): void
     {
         $this->assertTrue($this->MXData->equals($this->MXData));
         $this->assertFalse($this->MXData->equals(new MXData(new Hostname('boop.com'), 60)));
@@ -42,7 +43,7 @@ class MXDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable() : void
+    public function isArrayable(): void
     {
         $this->assertArrayableAndEquals(
             ['target' => (string)$this->target, 'priority' => $this->priority],
@@ -53,7 +54,7 @@ class MXDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isJsonSerializeable() : void
+    public function isJsonSerializeable(): void
     {
         $this->assertJsonSerializeableAndEquals(
             ['target' => (string)$this->target, 'priority' => $this->priority],
@@ -64,7 +65,7 @@ class MXDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isSerializable() : void
+    public function isSerializable(): void
     {
         $this->assertSerializable($this->MXData);
         $this->assertEquals($this->MXData, \unserialize(\serialize($this->MXData)));
@@ -73,7 +74,7 @@ class MXDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isStringable() : void
+    public function isStringable(): void
     {
         $this->assertStringableAndEquals('60 google.com.', $this->MXData);
     }
@@ -81,7 +82,7 @@ class MXDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGetters() : void
+    public function hasBasicGetters(): void
     {
         $this->assertSame($this->target, $this->MXData->getTarget());
         $this->assertSame($this->priority, $this->MXData->getPriority());

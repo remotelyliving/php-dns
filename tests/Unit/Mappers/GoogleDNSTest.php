@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Mappers;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
@@ -12,7 +13,7 @@ class GoogleDNSTest extends BaseTestAbstract
      */
     private $mapper;
 
-    const GOOGLE_DNS_FORMAT = [
+    private const GOOGLE_DNS_FORMAT = [
         [
             'type' => 1, 'TTL' => 343, 'data' => '127.0.0.1', 'name' => 'yelp.com.',
         ],
@@ -24,7 +25,7 @@ class GoogleDNSTest extends BaseTestAbstract
         ],
     ];
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -34,7 +35,7 @@ class GoogleDNSTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function mapsAGoogleDNSRecordVariants() : void
+    public function mapsAGoogleDNSRecordVariants(): void
     {
         $mappedRecord = $this->mapper->mapFields([
             'type' => 1,
@@ -65,7 +66,7 @@ class GoogleDNSTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function mapsAllKindsOfGoogleDNSRecordVariants() : void
+    public function mapsAllKindsOfGoogleDNSRecordVariants(): void
     {
         foreach (self::GOOGLE_DNS_FORMAT as $record) {
             $mappedRecord = $this->mapper->mapFields($record)->toDNSRecord();

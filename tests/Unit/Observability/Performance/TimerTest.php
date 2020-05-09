@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Observability\Performance;
 
 use RemotelyLiving\PHPDNS\Observability\Performance\Timer;
@@ -12,7 +13,7 @@ class TimerTest extends BaseTestAbstract
     private $timer;
 
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -22,7 +23,7 @@ class TimerTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function getsNowAndMicroTime() : void
+    public function getsNowAndMicroTime(): void
     {
         $this->assertGreaterThan(0, $this->timer->getMicroTime());
         $this->assertTrue(is_float($this->timer->getMicroTime()));

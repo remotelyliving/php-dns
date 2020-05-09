@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Observability\Performance;
 
 use RemotelyLiving\PHPDNS\Observability\Performance\Interfaces\Time;

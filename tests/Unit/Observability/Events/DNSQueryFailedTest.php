@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Observability\Events;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
@@ -36,7 +37,7 @@ class DNSQueryFailedTest extends BaseTestAbstract
      */
     private $DNSQueryFailed;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -59,7 +60,7 @@ class DNSQueryFailedTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGetters() : void
+    public function hasBasicGetters(): void
     {
         $this->assertSame($this->resolver, $this->DNSQueryFailed->getResolver());
         $this->assertSame($this->hostname, $this->DNSQueryFailed->getHostname());
@@ -71,7 +72,7 @@ class DNSQueryFailedTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable() : void
+    public function isArrayable(): void
     {
         $expected = [
             'resolver' => 'foo',

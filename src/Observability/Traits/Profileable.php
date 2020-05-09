@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Observability\Traits;
 
 use RemotelyLiving\PHPDNS\Observability\Performance\Profile;

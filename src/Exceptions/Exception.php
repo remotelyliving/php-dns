@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Exceptions;
 
 class Exception extends \Exception implements \JsonSerializable

@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Mappers;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
@@ -12,7 +13,7 @@ class CloudFlareTest extends BaseTestAbstract
      */
     private $mapper;
 
-    const CLOUD_FLARE_DNS_FORMAT = [
+    private const CLOUD_FLARE_DNS_FORMAT = [
         [
             'type' => 1, 'TTL' => 343, 'data' => '127.0.0.1', 'name' => 'yelp.com.',
         ],
@@ -24,7 +25,7 @@ class CloudFlareTest extends BaseTestAbstract
         ],
     ];
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -34,7 +35,7 @@ class CloudFlareTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function mapsACloudFlareDNSRecordVariants() : void
+    public function mapsACloudFlareDNSRecordVariants(): void
     {
         $mappedRecord = $this->mapper->mapFields([
             'type' => 1,
@@ -64,7 +65,7 @@ class CloudFlareTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function mapsAllKindsOfGoogleDNSRecordVariants() : void
+    public function mapsAllKindsOfGoogleDNSRecordVariants(): void
     {
         foreach (self::CLOUD_FLARE_DNS_FORMAT as $record) {
             $mappedRecord = $this->mapper->mapFields($record)->toDNSRecord();

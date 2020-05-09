@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Observability\Events;
 
 use RemotelyLiving\PHPDNS\Entities\Interfaces\Arrayable;
@@ -12,7 +13,7 @@ class ObservableEventAbstractTest extends BaseTestAbstract
      */
     private $event;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -33,7 +34,7 @@ class ObservableEventAbstractTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function getsName() : void
+    public function getsName(): void
     {
         $this->assertSame('the name', $this->event::getName());
     }
@@ -41,7 +42,7 @@ class ObservableEventAbstractTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable() : void
+    public function isArrayable(): void
     {
         $this->assertInstanceOf(Arrayable::class, $this->event);
         $this->assertEquals(['beep' => 'boop'], $this->event->toArray());
@@ -50,7 +51,7 @@ class ObservableEventAbstractTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isJsonSerializable() : void
+    public function isJsonSerializable(): void
     {
         $this->assertInstanceOf(\JsonSerializable::class, $this->event);
         $this->assertEquals(['the name' => ['beep' => 'boop']], $this->event->jsonSerialize());

@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Resolvers;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
@@ -18,9 +19,9 @@ use RemotelyLiving\PHPDNS\Resolvers\Interfaces\ObservableResolver;
 
 abstract class ResolverAbstract implements ObservableResolver
 {
-    use Logger,
-        Dispatcher,
-        Profileable;
+    use Logger;
+    use Dispatcher;
+    use Profileable;
 
     /**
      * @var string|null

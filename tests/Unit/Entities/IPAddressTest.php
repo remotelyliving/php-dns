@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\IPAddress;
@@ -12,7 +13,7 @@ class IPAddressTest extends BaseTestAbstract
      */
     private $IPAddress;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -22,7 +23,7 @@ class IPAddressTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGettersAndIsStringy() : void
+    public function hasBasicGettersAndIsStringy(): void
     {
         $this->assertSame('127.0.0.1', (string)$this->IPAddress);
         $this->assertSame('127.0.0.1', $this->IPAddress->getIPAddress());
@@ -31,7 +32,7 @@ class IPAddressTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function testsForEquality() : void
+    public function testsForEquality(): void
     {
         $IPAddress1 = IPAddress::createFromString('127.0.0.1');
         $IPAddress2 = IPAddress::createFromString('192.168.1.1');
@@ -44,7 +45,7 @@ class IPAddressTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function doesNotAllowInvalidHostNames() : void
+    public function doesNotAllowInvalidHostNames(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->assertFalse(IPAddress::isValid('lskjf'));
@@ -54,7 +55,7 @@ class IPAddressTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function knowsWhatVersionItIs() : void
+    public function knowsWhatVersionItIs(): void
     {
         $IPv4 = IPAddress::createFromString('127.0.0.1');
         $IPv6 = IPAddress::createFromString('2001:0db8:85a3:0000:0000:8a2e:0370:7334');

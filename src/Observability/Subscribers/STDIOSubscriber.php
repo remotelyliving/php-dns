@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Observability\Subscribers;
 
 use RemotelyLiving\PHPDNS\Observability\Events\DNSQueried;

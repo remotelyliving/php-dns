@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Resolvers;
 
 use Psr\Cache\CacheItemPoolInterface;
@@ -10,10 +11,10 @@ use RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver;
 
 class Cached extends ResolverAbstract
 {
+    use Time;
+
     protected const DEFAULT_CACHE_TTL = 300;
     private const CACHE_KEY_TEMPLATE = '%s:%s:%s';
-
-    use Time;
 
     /**
      * @var \Psr\Cache\CacheItemPoolInterface
@@ -54,7 +55,7 @@ class Cached extends ResolverAbstract
         $this->cache->clear();
     }
 
-    public function withEmptyResultCachingDisabled() : self
+    public function withEmptyResultCachingDisabled(): self
     {
         $emptyCachingDisabled = new static($this->cache, $this->resolver, $this->ttlSeconds);
         $emptyCachingDisabled->shouldCacheEmptyResults = false;
@@ -108,7 +109,7 @@ class Cached extends ResolverAbstract
     /**
      * @param array $results ['recordCollection' => $recordCollection, 'timestamp' => $timeStamp]
      */
-    private function unwrapResults(array $results) : DNSRecordCollection
+    private function unwrapResults(array $results): DNSRecordCollection
     {
         $records = $results['recordCollection'];
         foreach ($records as $key => $record) {

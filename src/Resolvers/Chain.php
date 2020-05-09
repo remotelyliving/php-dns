@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Resolvers;
 
 use Psr\Log\LoggerAwareInterface;
@@ -15,9 +16,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class Chain extends ResolverAbstract implements Interfaces\Chain
 {
-    const STRATEGY_FIRST_TO_FIND = 0;
-    const STRATEGY_ALL_RESULTS = 1;
-    const STRATEGY_CONSENSUS = 2;
+    public const STRATEGY_FIRST_TO_FIND = 0;
+    public const STRATEGY_ALL_RESULTS = 1;
+    public const STRATEGY_CONSENSUS = 2;
 
     /**
      * @var \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver[]
@@ -29,14 +30,14 @@ class Chain extends ResolverAbstract implements Interfaces\Chain
      */
     private $callThroughStrategy = self::STRATEGY_FIRST_TO_FIND;
 
-    public function __construct(Resolver...$resolvers)
+    public function __construct(Resolver ...$resolvers)
     {
         foreach ($resolvers as $resolver) {
             $this->pushResolver($resolver);
         }
     }
 
-    public function pushResolver(Resolver...$resolvers): void
+    public function pushResolver(Resolver ...$resolvers): void
     {
         foreach ($resolvers as $resolver) {
             $this->resolvers[] = $resolver;

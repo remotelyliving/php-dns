@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Observability\Traits;
 
 use RemotelyLiving\PHPDNS\Observability\Performance\Profile;
@@ -20,7 +21,7 @@ class ProfileableTest extends BaseTestAbstract
 
     private $profileableClass;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -38,7 +39,7 @@ class ProfileableTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function createsProfiles() : void
+    public function createsProfiles(): void
     {
         $profile = $this->profileableClass->createProfile('name');
         $this->assertInstanceOf(Profile::class, $profile);
@@ -48,7 +49,7 @@ class ProfileableTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function setsAProfileFactory() : void
+    public function setsAProfileFactory(): void
     {
         $this->profileableClass->setProfileFactory($this->profileFactory);
         $profile = $this->profileableClass->createProfile('transactionName');

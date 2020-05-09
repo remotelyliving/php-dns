@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Integration;
 
 use Psr\Log\NullLogger;
@@ -13,20 +14,19 @@ use RemotelyLiving\PHPDNS\Entities\NSData;
 use RemotelyLiving\PHPDNS\Entities\SOAData;
 use RemotelyLiving\PHPDNS\Entities\TXTData;
 use RemotelyLiving\PHPDNS\Resolvers\Exceptions\ReverseLookupFailure;
-use RemotelyLiving\PHPDNS\Resolvers\GoogleDNS;
 use RemotelyLiving\PHPDNS\Resolvers\Interfaces\ReverseDNSQuery;
 use RemotelyLiving\PHPDNS\Resolvers\ResolverAbstract;
 
 class ResolversTest extends BaseTestAbstract
 {
-    const MAX_HAS_RECORD_WAIT_SECONDS = 3;
+    private const MAX_HAS_RECORD_WAIT_SECONDS = 3;
 
     /**
      * @var \RemotelyLiving\PHPDNS\Entities\Hostname
      */
     private $hostname;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -166,7 +166,7 @@ class ResolversTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function getsHostnameFromIpAddress() : void
+    public function getsHostnameFromIpAddress(): void
     {
         $expectedHostname = Hostname::createFromString('localhost');
         $resolver = $this->createLocalSystemResolver();
@@ -179,7 +179,7 @@ class ResolversTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function throwsOnReverseLookupFailure() : void
+    public function throwsOnReverseLookupFailure(): void
     {
         $this->expectException(ReverseLookupFailure::class);
         $this->createLocalSystemResolver()->getHostnameByAddress(IPAddress::createFromString('41.1.1.14'));
@@ -188,7 +188,7 @@ class ResolversTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function cachesDNSLookups() : void
+    public function cachesDNSLookups(): void
     {
         $cache = $this->createCachePool();
         $cache->clear();

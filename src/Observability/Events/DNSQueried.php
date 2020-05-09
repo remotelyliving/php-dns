@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Observability\Events;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;

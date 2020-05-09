@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Mappers;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
@@ -13,7 +14,7 @@ class LocalSystemTest extends BaseTestAbstract
      */
     private $mapper;
 
-    const LOCAL_DNS_FORMAT = [
+    private const LOCAL_DNS_FORMAT = [
         [
             'type' => 'AAAA',
             'ttl' => 343,
@@ -87,7 +88,7 @@ class LocalSystemTest extends BaseTestAbstract
         ],
     ];
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -97,7 +98,7 @@ class LocalSystemTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function mapsAGoogleDNSRecordVariants() : void
+    public function mapsAGoogleDNSRecordVariants(): void
     {
         $mappedRecord = $this->mapper->mapFields([
             'type' => 'A',
@@ -116,7 +117,7 @@ class LocalSystemTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function mapsAllKindsOfLocalSystemDNSRecordVariants() : void
+    public function mapsAllKindsOfLocalSystemDNSRecordVariants(): void
     {
         foreach (self::LOCAL_DNS_FORMAT as $record) {
             $mappedRecord = $this->mapper->mapFields($record)->toDNSRecord();
@@ -127,7 +128,7 @@ class LocalSystemTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function mapsRecordTypesToCorrespondingPHPConsts() : void
+    public function mapsRecordTypesToCorrespondingPHPConsts(): void
     {
         $this->assertEquals(32768, $this->mapper->getTypeCodeFromType(DNSRecordType::createTXT()));
     }

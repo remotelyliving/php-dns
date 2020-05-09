@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
@@ -20,7 +21,7 @@ class DNSRecordTest extends BaseTestAbstract
      */
     private $DNSTXTRecord;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -45,7 +46,7 @@ class DNSRecordTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGetters() : void
+    public function hasBasicGetters(): void
     {
         $this->assertSame(123, $this->DNSARecord->getTTL());
         $this->assertTrue(IPAddress::createFromString('127.0.0.1')->equals($this->DNSARecord->getIPAddress()));
@@ -55,7 +56,7 @@ class DNSRecordTest extends BaseTestAbstract
         $this->assertNull($this->DNSARecord->getData());
     }
 
-    public function hasBasicSetters() : void
+    public function hasBasicSetters(): void
     {
         $this->assertSame(123, $this->DNSARecord->getTTL());
         $this->assertSame(321, $this->DNSARecord->setTTL(321)->getTTL());
@@ -64,7 +65,7 @@ class DNSRecordTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable() : void
+    public function isArrayable(): void
     {
         $this->assertArrayableAndEquals([
             'hostname' => 'google.com.',
@@ -86,7 +87,7 @@ class DNSRecordTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isJsonSerializable() : void
+    public function isJsonSerializable(): void
     {
         $this->assertJsonSerializeableAndEquals([
             'hostname' => 'google.com.',
@@ -108,7 +109,7 @@ class DNSRecordTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isSerializable() : void
+    public function isSerializable(): void
     {
         $this->assertSerializable($this->DNSARecord);
 
@@ -119,7 +120,7 @@ class DNSRecordTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function testsEquality() : void
+    public function testsEquality(): void
     {
         $record2 = DNSRecord::createFromPrimitives(
             'A',

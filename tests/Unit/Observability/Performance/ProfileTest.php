@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Observability\Performance;
 
 use RemotelyLiving\PHPDNS\Observability\Performance\Interfaces\Time;
@@ -23,7 +24,7 @@ class ProfileTest extends BaseTestAbstract
      */
     private $profile;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -38,7 +39,7 @@ class ProfileTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function timesTransactions() : void
+    public function timesTransactions(): void
     {
         $this->profile->startTransaction();
         $this->profile->endTransaction();
@@ -49,7 +50,7 @@ class ProfileTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function getsPeakMemoryUsage() : void
+    public function getsPeakMemoryUsage(): void
     {
         $this->profile->samplePeakMemoryUsage();
         $this->assertSame($this->profile->getPeakMemoryUsage(), memory_get_peak_usage());
@@ -58,7 +59,7 @@ class ProfileTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function getsATransactionName() : void
+    public function getsATransactionName(): void
     {
         $this->assertSame('transactionName', $this->profile->getTransactionName());
     }
@@ -66,7 +67,7 @@ class ProfileTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasAnAccompanyingFactory() : void
+    public function hasAnAccompanyingFactory(): void
     {
         $this->assertEquals(new Profile('transactionName'), $this->factory->create('transactionName'));
     }

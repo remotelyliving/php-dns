@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Services\Interfaces;
 
 interface LocalSystemDNS
