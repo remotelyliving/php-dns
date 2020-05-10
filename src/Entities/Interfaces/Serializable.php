@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Entities\Interfaces;
 
 interface Serializable extends \Serializable, \JsonSerializable

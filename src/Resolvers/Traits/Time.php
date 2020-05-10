@@ -14,7 +14,7 @@ trait Time
         $this->dateTimeImmutable = $dateTimeImmutable;
     }
 
-    public function getTimeStamp() : int
+    public function getTimeStamp(): int
     {
         return $this->getNewDateTimeImmutable()->getTimestamp();
     }

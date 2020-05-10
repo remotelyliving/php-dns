@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Resolvers\Interfaces;
 
 interface Chain extends Resolver

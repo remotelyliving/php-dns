@@ -1,9 +1,10 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Services;
 
 use RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure;
 use RemotelyLiving\PHPDNS\Resolvers\Exceptions\ReverseLookupFailure;
-use \RemotelyLiving\PHPDNS\Services\Interfaces\LocalSystemDNS as LocalSystemDNSInterface;
+use RemotelyLiving\PHPDNS\Services\Interfaces\LocalSystemDNS as LocalSystemDNSInterface;
 
 final class LocalSystemDNS implements LocalSystemDNSInterface
 {

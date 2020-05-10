@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Observability\Events;
 
 use RemotelyLiving\PHPDNS\Observability\Events\DNSQueried;
@@ -35,7 +36,7 @@ class STDIOSubscriberTest extends BaseTestAbstract
      */
     private $expectedOut;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -76,7 +77,7 @@ EOF;
     /**
      * @test
      */
-    public function getsSubscribedEvents() : void
+    public function getsSubscribedEvents(): void
     {
         $this->assertEquals([
             DNSQueryFailed::getName() => 'onDNSQueryFailed',
@@ -88,7 +89,7 @@ EOF;
     /**
      * @test
      */
-    public function writesToSTDErrOnQueryFailure() : void
+    public function writesToSTDErrOnQueryFailure(): void
     {
 
 
@@ -102,7 +103,7 @@ EOF;
     /**
      * @test
      */
-    public function writesToSTDOutOnQuery() : void
+    public function writesToSTDOutOnQuery(): void
     {
         $this->STDOut->expects($this->once())
             ->method('fwrite')
@@ -114,7 +115,7 @@ EOF;
     /**
      * @test
      */
-    public function writesToSTDOutOnQueryProfiled() : void
+    public function writesToSTDOutOnQueryProfiled(): void
     {
         $this->STDOut->expects($this->once())
             ->method('fwrite')

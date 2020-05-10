@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\Interfaces\Arrayable;
@@ -70,7 +71,7 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
             $type,
             $hostname,
             $ttl,
-            $IPAddress ? IPAddress::createFromString($IPAddress): null,
+            $IPAddress ? IPAddress::createFromString($IPAddress) : null,
             $class,
             $data
         );
@@ -106,7 +107,7 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
         return $this->data;
     }
 
-    public function setTTL(int $ttl) : self
+    public function setTTL(int $ttl): self
     {
         $this->TTL = $ttl;
         return $this;
@@ -156,7 +157,7 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
         $this->recordType = DNSRecordType::createFromString($unserialized['type']);
         $this->hostname = Hostname::createFromString($unserialized['hostname']);
         $this->TTL = (int) $unserialized['TTL'];
-        $this->IPAddress = $rawIPAddres ? IPAddress::createFromString($rawIPAddres): null;
+        $this->IPAddress = $rawIPAddres ? IPAddress::createFromString($rawIPAddres) : null;
         $this->class = $unserialized['class'];
         $this->data = (isset($unserialized['data']))
          ? DataAbstract::createFromTypeAndString($this->recordType, $unserialized['data'])

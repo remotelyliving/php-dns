@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\CNAMEData;
@@ -17,7 +18,7 @@ class CNAMEDataTest extends BaseTestAbstract
      */
     private $CNAMEData;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -28,7 +29,7 @@ class CNAMEDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function knowsIfEquals() : void
+    public function knowsIfEquals(): void
     {
         $this->assertTrue($this->CNAMEData->equals($this->CNAMEData));
         $this->assertFalse($this->CNAMEData->equals(new CNAMEData(new Hostname('boop.com'))));
@@ -37,7 +38,7 @@ class CNAMEDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable() : void
+    public function isArrayable(): void
     {
         $this->assertArrayableAndEquals(
             ['hostname' => (string)$this->hostname],
@@ -48,7 +49,7 @@ class CNAMEDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isJsonSerializable() : void
+    public function isJsonSerializable(): void
     {
         $this->assertJsonSerializeableAndEquals(
             ['hostname' => (string)$this->hostname],
@@ -59,7 +60,7 @@ class CNAMEDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isSerializable() : void
+    public function isSerializable(): void
     {
         $this->assertSerializable($this->CNAMEData);
     }
@@ -67,7 +68,7 @@ class CNAMEDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isStringable() : void
+    public function isStringable(): void
     {
         $this->assertStringableAndEquals('google.com.', $this->CNAMEData);
         $this->assertEquals($this->CNAMEData, \unserialize(\serialize($this->CNAMEData)));
@@ -76,7 +77,7 @@ class CNAMEDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGetters() : void
+    public function hasBasicGetters(): void
     {
         $this->assertSame($this->hostname, $this->CNAMEData->getHostname());
     }

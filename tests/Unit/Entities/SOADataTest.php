@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\Hostname;
@@ -47,7 +48,7 @@ class SOADataTest extends BaseTestAbstract
      */
     private $SOAData;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -67,7 +68,7 @@ class SOADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function knowsIfEquals() : void
+    public function knowsIfEquals(): void
     {
         $anotherSOA = new SOAData($this->rname, $this->mname, 1, 1, 1, 1, 1);
         $this->assertTrue($this->SOAData->equals($this->SOAData));
@@ -77,7 +78,7 @@ class SOADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable() : void
+    public function isArrayable(): void
     {
         $this->assertArrayableAndEquals(
             [
@@ -96,7 +97,7 @@ class SOADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isJsonSerializeable() : void
+    public function isJsonSerializeable(): void
     {
         $this->assertJsonSerializeableAndEquals(
             [
@@ -115,7 +116,7 @@ class SOADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isSerializable() : void
+    public function isSerializable(): void
     {
         $this->assertSerializable($this->SOAData);
         $this->assertEquals($this->SOAData, \unserialize(\serialize($this->SOAData)));
@@ -124,7 +125,7 @@ class SOADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isStringable() : void
+    public function isStringable(): void
     {
         $this->assertStringableAndEquals('google.com. facebook.com. 2342 123 321 3434 60', $this->SOAData);
     }
@@ -132,7 +133,7 @@ class SOADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGetters() : void
+    public function hasBasicGetters(): void
     {
         $this->assertSame($this->mname, $this->SOAData->getMname());
         $this->assertSame($this->rname, $this->SOAData->getRname());

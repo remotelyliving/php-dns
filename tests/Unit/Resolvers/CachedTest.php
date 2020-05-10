@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Resolvers;
 
 use Psr\Cache\CacheItemInterface;
@@ -61,7 +62,7 @@ class CachedTest extends BaseTestAbstract
      */
     private $timestamp;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->timestamp = time();
         $this->dateTimeImmutable = $this->createMock(\DateTimeImmutable::class);
@@ -93,7 +94,7 @@ class CachedTest extends BaseTestAbstract
 
         $this->resolver->method('getRecords')
             ->with('example.com.', 'ANY')
-            ->willReturnCallback(function () : DNSRecordCollection {
+            ->willReturnCallback(function (): DNSRecordCollection {
                 return $this->DNSRecordCollection;
             });
 
@@ -101,7 +102,7 @@ class CachedTest extends BaseTestAbstract
         $this->cachedResolver->setDateTimeImmutable($this->dateTimeImmutable);
     }
 
-    public function testCachesUsingLowestTTLOnReturnedRecordSet() : void
+    public function testCachesUsingLowestTTLOnReturnedRecordSet(): void
     {
         $this->cacheItem->method('isHit')
             ->willReturn(false);
@@ -121,7 +122,7 @@ class CachedTest extends BaseTestAbstract
         $this->assertEquals($this->DNSRecordCollection, $this->cachedResolver->getRecords('example.com', 'ANY'));
     }
 
-    public function testDoesNotCacheEmptyResultsIfOptionIsSet() : void
+    public function testDoesNotCacheEmptyResultsIfOptionIsSet(): void
     {
         $this->cache->expects($this->never())
             ->method('save');
@@ -134,7 +135,7 @@ class CachedTest extends BaseTestAbstract
         $this->assertEquals($this->DNSRecordCollection, $results);
     }
 
-    public function testOnHitReturnsCachedValuesAndAdjustsTTLBasedOnTimeElapsedSinceStorage() : void
+    public function testOnHitReturnsCachedValuesAndAdjustsTTLBasedOnTimeElapsedSinceStorage(): void
     {
         $this->cacheItem->method('isHit')
             ->willReturn(true);

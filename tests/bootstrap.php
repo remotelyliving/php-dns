@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 $root_directory = realpath(dirname(__FILE__) . '/../') . '/';

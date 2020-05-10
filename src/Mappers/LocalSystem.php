@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Mappers;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
@@ -69,6 +70,11 @@ class LocalSystem extends MapperAbstract
                 $fields['minimum-ttl']
             );
         }
+
+        if (isset($fields['target'], $fields['pri'], $fields['weight'], $fields['port'])) {
+            return "{$fields['pri']} {$fields['weight']} {$fields['port']} {$fields['target']}";
+        }
+
 
         if (isset($fields['target'], $fields['pri'])) {
             return "{$fields['pri']} {$fields['target']}";

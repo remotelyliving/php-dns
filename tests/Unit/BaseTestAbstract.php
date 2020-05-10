@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;

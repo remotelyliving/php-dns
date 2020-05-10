@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Entities;
 
 class SOAData extends DataAbstract

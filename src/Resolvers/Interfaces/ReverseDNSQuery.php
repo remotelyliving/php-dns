@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Resolvers\Interfaces;
 
 use RemotelyLiving\PHPDNS\Entities\Hostname;

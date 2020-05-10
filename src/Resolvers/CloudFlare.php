@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Resolvers;
 
 use GuzzleHttp\Client;
@@ -68,7 +69,7 @@ class CloudFlare extends ResolverAbstract
                     $this->parseResult((array) json_decode((string)$response->getBody(), true))
                 );
             },
-            'rejected' => function (RequestException $e) : void {
+            'rejected' => function (RequestException $e): void {
                 throw $e;
             },
         ]);

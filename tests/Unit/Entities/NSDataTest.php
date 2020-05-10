@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\Hostname;
@@ -17,7 +18,7 @@ class NSDataTest extends BaseTestAbstract
      */
     private $NSData;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -28,7 +29,7 @@ class NSDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function knowsIfEquals() : void
+    public function knowsIfEquals(): void
     {
         $this->assertTrue($this->NSData->equals($this->NSData));
         $this->assertFalse($this->NSData->equals(new NSData(new Hostname('boop.com'))));
@@ -37,7 +38,7 @@ class NSDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable() : void
+    public function isArrayable(): void
     {
         $this->assertArrayableAndEquals(['target' => (string)$this->target], $this->NSData);
     }
@@ -45,7 +46,7 @@ class NSDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isJsonSerializeable() : void
+    public function isJsonSerializeable(): void
     {
         $this->assertJsonSerializeableAndEquals(['target' => (string)$this->target], $this->NSData);
     }
@@ -53,7 +54,7 @@ class NSDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isSerializable() : void
+    public function isSerializable(): void
     {
         $this->assertSerializable($this->NSData);
         $this->assertEquals($this->NSData, \unserialize(\serialize($this->NSData)));
@@ -62,7 +63,7 @@ class NSDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isStringable() : void
+    public function isStringable(): void
     {
         $this->assertStringableAndEquals('google.com.', $this->NSData);
     }
@@ -70,7 +71,7 @@ class NSDataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGetters() : void
+    public function hasBasicGetters(): void
     {
         $this->assertSame($this->target, $this->NSData->getTarget());
     }

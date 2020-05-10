@@ -14,7 +14,7 @@ test-coverage:
 	@vendor/bin/phpunit --coverage-html ./coverage
 
 style-check:
-	@vendor/bin/phpcs --standard=PSR2 ./src/* ./tests/*
+	@vendor/bin/phpcs --standard=PSR12 ./src/* ./tests/*
 
 dependency-check:
 	@vendor/bin/composer-require-checker check -vvv ./composer.json
@@ -23,7 +23,7 @@ static-analysis:
 	@vendor/bin/phpstan analyze --level=max ./src && ./vendor/bin/psalm --show-info=false
 
 style-fix:
-	@vendor/bin/phpcbf --standard=PSR2 ./src ./tests
+	@vendor/bin/phpcbf --standard=PSR12 ./src ./tests
 
 repl:
 	@vendor/bin/psysh ./bootstrap/repl.php

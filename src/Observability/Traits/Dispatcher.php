@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Observability\Traits;
 
 use RemotelyLiving\PHPDNS\Observability\Events\ObservableEventAbstract;
@@ -33,7 +34,7 @@ trait Dispatcher
         call_user_func_array([$this->getDispatcher(), 'dispatch'], $this->getOrderedDispatcherArguments($event));
     }
 
-    private function getOrderedDispatcherArguments(ObservableEventAbstract $event) : array
+    private function getOrderedDispatcherArguments(ObservableEventAbstract $event): array
     {
         $reflection = new \ReflectionClass($this->getDispatcher());
 

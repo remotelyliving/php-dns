@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Observability\Interfaces;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

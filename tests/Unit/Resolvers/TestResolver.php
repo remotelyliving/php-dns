@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Resolvers;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;

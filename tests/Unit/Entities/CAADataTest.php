@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\CAAData;
@@ -18,7 +19,7 @@ class CAADataTest extends BaseTestAbstract
      */
     private $CAAData;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -28,7 +29,7 @@ class CAADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function knowsIfEquals() : void
+    public function knowsIfEquals(): void
     {
         $this->assertTrue($this->CAAData->equals($this->CAAData));
         $this->assertFalse($this->CAAData->equals(new CAAData(0, 'issue', 'boop.com')));
@@ -37,7 +38,7 @@ class CAADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable() : void
+    public function isArrayable(): void
     {
         $this->assertArrayableAndEquals(
             ['flags' => $this->flags, 'tag' => $this->tag, 'value' => ';'],
@@ -48,7 +49,7 @@ class CAADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isJsonSerializable() : void
+    public function isJsonSerializable(): void
     {
         $this->assertJsonSerializeableAndEquals(
             ['flags' => $this->flags, 'tag' => $this->tag, 'value' => ';'],
@@ -59,7 +60,7 @@ class CAADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isSerializable() : void
+    public function isSerializable(): void
     {
         $this->assertSerializable($this->CAAData);
         $this->assertEquals($this->CAAData, \unserialize(\serialize($this->CAAData)));
@@ -68,7 +69,7 @@ class CAADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isStringable() : void
+    public function isStringable(): void
     {
         $this->assertStringableAndEquals('0 issue ";"', $this->CAAData);
     }
@@ -76,7 +77,7 @@ class CAADataTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGetters() : void
+    public function hasBasicGetters(): void
     {
         $this->assertSame($this->flags, $this->CAAData->getFlags());
         $this->assertSame($this->tag, $this->CAAData->getTag());

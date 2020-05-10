@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\Hostname;
@@ -12,7 +13,7 @@ class HostnameTest extends BaseTestAbstract
      */
     private $hostname;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -22,7 +23,7 @@ class HostnameTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGettersAndIsStringy() : void
+    public function hasBasicGettersAndIsStringy(): void
     {
         $this->assertSame('facebook.com.', (string)$this->hostname);
         $this->assertSame('facebook.com.', $this->hostname->getHostName());
@@ -32,7 +33,7 @@ class HostnameTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function testsForEquality() : void
+    public function testsForEquality(): void
     {
         $facebook1 = Hostname::createFromString('facebook.com');
         $facebook2 = Hostname::createFromString('facebook.com');
@@ -45,7 +46,7 @@ class HostnameTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function doesNotAllowInvalidHostNames() : void
+    public function doesNotAllowInvalidHostNames(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -57,7 +58,7 @@ class HostnameTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function handlesIDNOperations() : void
+    public function handlesIDNOperations(): void
     {
         $utf8IDN = 'ańodelgatos.com.';
         $IDN = Hostname::createFromString($utf8IDN);

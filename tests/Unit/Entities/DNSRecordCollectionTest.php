@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
@@ -25,7 +26,7 @@ class DNSRecordCollectionTest extends BaseTestAbstract
      */
     private $dnsRecordCollection;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -51,7 +52,7 @@ class DNSRecordCollectionTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isTraversable() : void
+    public function isTraversable(): void
     {
         $this->assertTrue(true);
     }
@@ -59,7 +60,7 @@ class DNSRecordCollectionTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isSerializable() : void
+    public function isSerializable(): void
     {
         $this->assertSerializable($this->dnsRecordCollection);
     }
@@ -67,7 +68,7 @@ class DNSRecordCollectionTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function picksFirst() : void
+    public function picksFirst(): void
     {
         $this->assertEquals($this->dnsRecord1, $this->dnsRecordCollection->pickFirst());
         $this->assertEquals($this->dnsRecord1, $this->dnsRecordCollection->pickFirst());
@@ -77,7 +78,7 @@ class DNSRecordCollectionTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function filtersByType() : void
+    public function filtersByType(): void
     {
         $filtered = $this->dnsRecordCollection->filteredByType(DNSRecordType::createCNAME());
         $this->assertEquals($this->dnsRecord2, iterator_to_array($filtered)[0]);
@@ -90,7 +91,7 @@ class DNSRecordCollectionTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasARecord() : void
+    public function hasARecord(): void
     {
         $notInCollection = DNSRecord::createFromPrimitives('A', 'facebook.com', 3434);
 
@@ -102,7 +103,7 @@ class DNSRecordCollectionTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isCountableTraversableIteratable() : void
+    public function isCountableTraversableIteratable(): void
     {
         $this->assertInstanceOf(\Traversable::class, $this->dnsRecordCollection);
         $this->assertInstanceOf(\Countable::class, $this->dnsRecordCollection);
@@ -136,7 +137,7 @@ class DNSRecordCollectionTest extends BaseTestAbstract
         $this->assertFalse((bool)$this->dnsRecordCollection->key());
     }
 
-    public function testOnlyAllowsDNSRecordsToBeSet() : void
+    public function testOnlyAllowsDNSRecordsToBeSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->dnsRecordCollection[0] = 'boop';
@@ -145,7 +146,7 @@ class DNSRecordCollectionTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable() : void
+    public function isArrayable(): void
     {
         $this->assertArrayableAndEquals([$this->dnsRecord1, $this->dnsRecord2], $this->dnsRecordCollection);
     }
@@ -153,7 +154,7 @@ class DNSRecordCollectionTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isJsonSerializable() : void
+    public function isJsonSerializable(): void
     {
         $this->assertJsonSerializeableAndEquals([$this->dnsRecord1, $this->dnsRecord2], $this->dnsRecordCollection);
     }
@@ -161,7 +162,7 @@ class DNSRecordCollectionTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasFilterMethods() : void
+    public function hasFilterMethods(): void
     {
         $expectedDupes = new DNSRecordCollection($this->dnsRecord2);
         $expectedUniques = new DNSRecordCollection($this->dnsRecord1, $this->dnsRecord2);

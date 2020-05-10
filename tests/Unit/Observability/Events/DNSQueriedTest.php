@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Observability\Events;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
@@ -37,7 +38,7 @@ class DNSQueriedTest extends BaseTestAbstract
      */
     private $DNSQueried;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -60,7 +61,7 @@ class DNSQueriedTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasBasicGetters() : void
+    public function hasBasicGetters(): void
     {
         $this->assertSame($this->resolver, $this->DNSQueried->getResolver());
         $this->assertSame($this->hostname, $this->DNSQueried->getHostname());
@@ -72,7 +73,7 @@ class DNSQueriedTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function isArrayable() : void
+    public function isArrayable(): void
     {
         $record1 = $this->createMock(DNSRecord::class);
         $record1->method('toArray')

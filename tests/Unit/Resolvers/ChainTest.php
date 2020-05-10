@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Resolvers;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
@@ -30,7 +31,7 @@ class ChainTest extends BaseTestAbstract
      */
     private $chainResolver;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->resolver1 = $this->createMock(ObservableResolver::class);
         $this->resolver2 = $this->createMock(ObservableResolver::class);
@@ -42,7 +43,7 @@ class ChainTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function randomizesOrderOfChain() : void
+    public function randomizesOrderOfChain(): void
     {
         $this->assertNotSame($this->chainResolver, $this->chainResolver->randomly());
     }
@@ -50,7 +51,7 @@ class ChainTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function pushesSubscribersAndObserversToObservableChainResolvers() : void
+    public function pushesSubscribersAndObserversToObservableChainResolvers(): void
     {
         $subscriber = $this->createMock(EventSubscriberInterface::class);
         $callable = function () {
@@ -82,7 +83,7 @@ class ChainTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasRecordFallsThroughToFalse() : void
+    public function hasRecordFallsThroughToFalse(): void
     {
         $record = $this->createMock(DNSRecord::class);
 
@@ -101,7 +102,7 @@ class ChainTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasOrDoesNotHaveRecord() : void
+    public function hasOrDoesNotHaveRecord(): void
     {
         $record = $this->createMock(DNSRecord::class);
 
@@ -120,7 +121,7 @@ class ChainTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function letsQueryErrorsContinue() : void
+    public function letsQueryErrorsContinue(): void
     {
         $record = DNSRecord::createFromPrimitives('A', 'facebook.com', 123);
         $hostname = Hostname::createFromString('facebook.com');
@@ -140,7 +141,7 @@ class ChainTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function letsQueryErrorsContinueAndFallsThroughToEmptyCollection() : void
+    public function letsQueryErrorsContinueAndFallsThroughToEmptyCollection(): void
     {
         $hostname = Hostname::createFromString('facebook.com');
         $type = DNSRecordType::createFromString('A');
@@ -159,7 +160,7 @@ class ChainTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function doesQueryOnResolversUntilAnswerIsFoundAsDefaultBehavior() : void
+    public function doesQueryOnResolversUntilAnswerIsFoundAsDefaultBehavior(): void
     {
         $expectedCollection = new DNSRecordCollection(DNSRecord::createFromPrimitives('TXT', 'twitter.com', 123));
         $hostname = Hostname::createFromString('twitter.com');
@@ -183,7 +184,7 @@ class ChainTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function doesQueryOnResolversUntilAllAnswersAreFound() : void
+    public function doesQueryOnResolversUntilAllAnswersAreFound(): void
     {
         $mxRecord = DNSRecord::createFromPrimitives('TXT', 'twitter.com', 123);
         $aRecord = DNSRecord::createFromPrimitives('A', 'twitter.com', 321, '192.168.1.1');
@@ -211,7 +212,7 @@ class ChainTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function doesQueryOnResolversAndOnlyConsensusRecordsAreFound() : void
+    public function doesQueryOnResolversAndOnlyConsensusRecordsAreFound(): void
     {
         $mxRecord = DNSRecord::createFromPrimitives('TXT', 'twitter.com', 123);
         $aRecord = DNSRecord::createFromPrimitives(

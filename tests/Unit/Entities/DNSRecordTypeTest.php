@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
@@ -10,7 +11,7 @@ class DNSRecordTypeTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function hasConvenientNamedFactoryMethods() : void
+    public function hasConvenientNamedFactoryMethods(): void
     {
         foreach (DNSRecordType::VALID_TYPES as $type) {
             $function = DNSRecordType::class . "::create{$type}";
@@ -23,7 +24,7 @@ class DNSRecordTypeTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function onlyAllowsValidTypesFromStrings() : void
+    public function onlyAllowsValidTypesFromStrings(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -33,7 +34,7 @@ class DNSRecordTypeTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function onlyAllowsValidTypesFromIntCodes() : void
+    public function onlyAllowsValidTypesFromIntCodes(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -43,7 +44,7 @@ class DNSRecordTypeTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function comparesItself() : void
+    public function comparesItself(): void
     {
         $aRecord = DNSRecordType::createFromString('A');
         $cnameRecord = DNSRecordType::createFromString('CNAME');

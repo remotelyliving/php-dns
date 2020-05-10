@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\DataAbstract;
@@ -18,7 +19,7 @@ class DataAbstractTest extends BaseTestAbstract
      */
     private $dataAbstract2;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -68,7 +69,7 @@ class DataAbstractTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function knowsIfEquals() : void
+    public function knowsIfEquals(): void
     {
         $this->assertTrue($this->dataAbstract1->equals($this->dataAbstract1));
         $this->assertFalse($this->dataAbstract1->equals($this->dataAbstract2));
@@ -77,7 +78,7 @@ class DataAbstractTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function createsDataByType() : void
+    public function createsDataByType(): void
     {
         /** @var \RemotelyLiving\PHPDNS\Entities\TXTData $txtData */
         $txtData = $this->dataAbstract1::createFromTypeAndString(DNSRecordType::createTXT(), 'value');
@@ -114,12 +115,19 @@ class DataAbstractTest extends BaseTestAbstract
         $this->assertSame('comodoca.com', $caaData->getValue());
         $this->assertSame(0, $caaData->getFlags());
         $this->assertSame('issue', $caaData->getTag());
+
+        $srvString = '100 200 9090 target.co.';
+        $srvData = $this->dataAbstract1::createFromTypeAndString(DNSRecordType::createSRV(), $srvString);
+        $this->assertSame(100, $srvData->getPriority());
+        $this->assertSame(200, $srvData->getWeight());
+        $this->assertSame(9090, $srvData->getPort());
+        $this->assertSame('target.co.', (string)$srvData->getTarget());
     }
 
     /**
      * @test
      */
-    public function createsDataByTypeOrThrows() : void
+    public function createsDataByTypeOrThrows(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->dataAbstract1::createFromTypeAndString(DNSRecordType::createA(), '');

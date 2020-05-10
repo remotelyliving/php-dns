@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Observability\Traits;
 
 use RemotelyLiving\PHPDNS\Observability\Events\ObservableEventAbstract;
@@ -30,7 +31,7 @@ class DispatcherTest extends BaseTestAbstract
      */
     private $observableClass;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -57,7 +58,7 @@ class DispatcherTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function createsAndCachesDispatcher() : void
+    public function createsAndCachesDispatcher(): void
     {
         $this->dispatcher->expects($this->never())
             ->method('dispatch');
@@ -68,7 +69,7 @@ class DispatcherTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function addsSubscribersAndListeners() : void
+    public function addsSubscribersAndListeners(): void
     {
         $this->observableClass->setDispatcher($this->dispatcher);
 
@@ -89,7 +90,7 @@ class DispatcherTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function dispatchesObservableEvents() : void
+    public function dispatchesObservableEvents(): void
     {
         $this->observableClass->setDispatcher($this->dispatcher);
 

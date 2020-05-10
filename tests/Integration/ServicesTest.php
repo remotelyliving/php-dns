@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Integration;
 
 use RemotelyLiving\PHPDNS\Resolvers\Exceptions\ReverseLookupFailure;
@@ -8,7 +9,7 @@ class ServicesTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function localDNSServiceProvidesRecords() : void
+    public function localDNSServiceProvidesRecords(): void
     {
         $localDNS = $this->createLocalSystemDNS();
 
@@ -22,7 +23,7 @@ class ServicesTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function localDNSServiceProvidesReverseLookup() : void
+    public function localDNSServiceProvidesReverseLookup(): void
     {
         $localDNS = $this->createLocalSystemDNS();
 
@@ -33,7 +34,7 @@ class ServicesTest extends BaseTestAbstract
     /**
      * @test
      */
-    public function throwsOnReverseLookupFailure() : void
+    public function throwsOnReverseLookupFailure(): void
     {
         $this->expectException(ReverseLookupFailure::class);
         $this->createLocalSystemDNS()->getHostnameByAddress('40.1.1.40');

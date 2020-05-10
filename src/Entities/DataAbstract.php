@@ -1,4 +1,5 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\Interfaces\Arrayable;
@@ -51,10 +52,17 @@ abstract class DataAbstract implements Arrayable, Serializable
             );
         }
 
-
-
         if ($recordType->isA(DNSRecordType::TYPE_CAA)) {
             return new CAAData((int)$parsed[0], (string)$parsed[1], $parsed[2]);
+        }
+
+        if ($recordType->isA(DNSRecordType::TYPE_SRV)) {
+            return new SRVData(
+                (int)$parsed[0] ?? 0,
+                (int) $parsed[1] ?? 0,
+                (int) $parsed[2] ?? 0,
+                new Hostname($parsed[3]),
+            );
         }
 
         throw new InvalidArgumentException("{$data} could not be created with type {$recordType}");
