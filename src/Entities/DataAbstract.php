@@ -58,16 +58,12 @@ abstract class DataAbstract implements Arrayable, Serializable
 
         if ($recordType->isA(DNSRecordType::TYPE_SRV)) {
             return new SRVData(
-                $parsed[0] ?? 0,
-                $parsed[1] ?? 0,
-                $parsed[2] ?? 0,
+                (int)$parsed[0] ?? 0,
+                (int) $parsed[1] ?? 0,
+                (int) $parsed[2] ?? 0,
                 new Hostname($parsed[3]),
-                $data
             );
-
         }
-
-
 
         throw new InvalidArgumentException("{$data} could not be created with type {$recordType}");
     }

@@ -1,25 +1,35 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Entities;
 
 class SRVData extends DataAbstract
 {
     /**
-     * @var string
+     * @var int
      */
-    private $value;
-    private $weight;
-    private $target;
     private $priority;
+
+    /**
+     * @var int
+     */
+    private $weight;
+
+    /**
+     * @var int
+     */
     private $port;
 
-    public function __construct(int $priority, int $weight, int $port, Hostname $target, string $value)
+    /**
+     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
+     */
+    private $target;
+
+    public function __construct(int $priority, int $weight, int $port, Hostname $target)
     {
         $this->priority = $priority;
-        $this->target = $target;
-        $this->value = $value;
         $this->weight = $weight;
         $this->port = $port;
-        
+        $this->target = $target;
     }
 
     public function __toString(): string
@@ -27,24 +37,24 @@ class SRVData extends DataAbstract
         return "{$this->priority} {$this->weight} {$this->port} {$this->target}";
     }
 
-    public function getPriority(): string
+    public function getPriority(): int
     {
         return $this->priority;
     }
 
-    public function getTarget(): string
-    {
-        return $this->target;
-    }
-
-    public function getValue(): string
-    {
-        return $this->value;
-    }
-
-    public function getWeight(): string
+    public function getWeight(): int
     {
         return $this->weight;
+    }
+
+    public function getPort(): int
+    {
+        return $this->port;
+    }
+
+    public function getTarget(): Hostname
+    {
+        return $this->target;
     }
 
     public function toArray(): array
@@ -53,8 +63,7 @@ class SRVData extends DataAbstract
             'priority' => $this->priority,
             'weight'  => $this->weight,
             'port'    => $this->port,
-            'target' => $this->target,
-            'value' => $this->value                        
+            'target' => (string)$this->target,
         ];
     }
 
@@ -73,7 +82,5 @@ class SRVData extends DataAbstract
         $this->weight = $unserialized['weight'];
         $this->port = $unserialized['port'];
         $this->target = new Hostname($unserialized['target']);
-        $this->value = $unserialized['value'];
-        
     }
 }

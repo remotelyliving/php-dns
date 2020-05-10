@@ -86,6 +86,16 @@ class LocalSystemTest extends BaseTestAbstract
             'tag' => 'issue',
             'flags' => 0
         ],
+        [
+            'type' => 'SRV',
+            'host' => '_x-puppet._tcp.dnscheck.co.',
+            'target' => 'master-a.dnscheck.co.',
+            'pri' => 100,
+            'ttl' => 833,
+            'class' => 'IN',
+            'weight' => 200,
+            'port' => 9999,
+        ]
     ];
 
     protected function setUp(): void

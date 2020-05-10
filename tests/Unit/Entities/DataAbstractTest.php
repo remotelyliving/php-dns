@@ -115,6 +115,13 @@ class DataAbstractTest extends BaseTestAbstract
         $this->assertSame('comodoca.com', $caaData->getValue());
         $this->assertSame(0, $caaData->getFlags());
         $this->assertSame('issue', $caaData->getTag());
+
+        $srvString = '100 200 9090 target.co.';
+        $srvData = $this->dataAbstract1::createFromTypeAndString(DNSRecordType::createSRV(), $srvString);
+        $this->assertSame(100, $srvData->getPriority());
+        $this->assertSame(200, $srvData->getWeight());
+        $this->assertSame(9090, $srvData->getPort());
+        $this->assertSame('target.co.', (string)$srvData->getTarget());
     }
 
     /**
