@@ -8,6 +8,7 @@ use RemotelyLiving\PHPDNS\Observability\Subscribers\STDIOSubscriber;
 use RemotelyLiving\PHPDNS\Resolvers\Cached;
 use RemotelyLiving\PHPDNS\Resolvers\CloudFlare;
 use RemotelyLiving\PHPDNS\Resolvers\Chain;
+use RemotelyLiving\PHPDNS\Resolvers\Dig;
 use RemotelyLiving\PHPDNS\Resolvers\GoogleDNS;
 use RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver;
 use RemotelyLiving\PHPDNS\Resolvers\LocalSystem;
@@ -31,6 +32,11 @@ abstract class BaseTestAbstract extends TestCase
     protected function createCloudFlareResolver(): CloudFlare
     {
         return new CloudFlare();
+    }
+
+    protected function createDigResolver(): Dig
+    {
+        return new Dig();
     }
 
     protected function createLocalSystemResolver(): LocalSystem
