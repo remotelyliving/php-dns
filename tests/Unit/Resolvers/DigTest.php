@@ -32,6 +32,12 @@ class DigTest extends Tests\Unit\BaseTestAbstract
 
     protected function setUp() : void
     {
+        exec('dig', $output, $exit_code);
+
+        if ($exit_code !== 0) {
+            $this->markTestSkipped('dig is required to run Dig resolver tests');
+        }
+
         $this->hostname = Entities\Hostname::createFromString('christianthomas.me');
         $this->spatieDNS = $this->createMock(Spatie\Dns\Dns::class);
         $this->spatieDNSFactory = $this->createMock(Factories\SpatieDNS::class);

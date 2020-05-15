@@ -216,11 +216,10 @@ class ResolversTest extends BaseTestAbstract
 
     public function resolverProvider(): array
     {
-        return [
+        $resolvers = [
             'google dns resolver' => [$this->createGoogleDNSResolver()],
             'local system resolver' => [$this->createLocalSystemResolver()],
             'cloud flare resolver' => [$this->createCloudFlareResolver()],
-            'dig resolver' => [$this->createDigResolver()],
             'chain resolver with google first' => [
                 $this->createChainResolver(
                     $this->createGoogleDNSResolver(),
@@ -239,5 +238,15 @@ class ResolversTest extends BaseTestAbstract
                 )
             ],
         ];
+
+        exec('dig', $output, $exit_code);
+
+        if ($exit_code !== 0) {
+            return $resolvers;
+        }
+
+        $resolvers['dig resolver'] = [$this->createDigResolver()];
+
+        return $resolvers;
     }
 }
