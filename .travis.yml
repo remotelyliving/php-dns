@@ -7,6 +7,9 @@ php:
   - '7.4'
   - '7.3'
 
+before_install:
+  - sudo apt-get -y install dnsutils
+
 install:
   - composer install
 

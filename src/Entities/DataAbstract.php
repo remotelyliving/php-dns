@@ -23,7 +23,7 @@ abstract class DataAbstract implements Arrayable, Serializable
     public static function createFromTypeAndString(DNSRecordType $recordType, string $data): self
     {
         if ($recordType->isA(DNSRecordType::TYPE_TXT)) {
-            return new TXTData($data);
+            return new TXTData(trim($data, '"'));
         }
 
         if ($recordType->isA(DNSRecordType::TYPE_NS)) {
@@ -44,11 +44,11 @@ abstract class DataAbstract implements Arrayable, Serializable
             return new SOAData(
                 new Hostname($parsed[0]),
                 new Hostname($parsed[1]),
-                (int)$parsed[2] ?? 0,
-                (int)$parsed[3] ?? 0,
-                (int)$parsed[4] ?? 0,
-                (int)$parsed[5] ?? 0,
-                (int)$parsed[6] ?? 0
+                (int)($parsed[2] ?? 0),
+                (int)($parsed[3] ?? 0),
+                (int)($parsed[4] ?? 0),
+                (int)($parsed[5] ?? 0),
+                (int)($parsed[6] ?? 0)
             );
         }
 
