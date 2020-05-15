@@ -4,7 +4,6 @@ namespace RemotelyLiving\PHPDNS\Mappers;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
-use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
 
 class Dig extends MapperAbstract
 {

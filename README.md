@@ -31,6 +31,7 @@ These resolvers at the least implement the `Resolvers\Interfaces\DNSQuery` inter
 - GoogleDNS (uses the GoogleDNS DNS over HTTPS API)
 - CloudFlare (uses the CloudFlare DNS over HTTPS API)
 - LocalSystem (uses the local PHP dns query function)
+- Dig (Can use a specific nameserver per instance but requires the host OS to have dig installed). Based on [Spatie DNS](https://github.com/spatie/dns)
 
 ```php
 $resolver = new Resolvers\GoogleDNS();
