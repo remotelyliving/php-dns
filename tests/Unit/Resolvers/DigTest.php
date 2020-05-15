@@ -85,4 +85,16 @@ class DigTest extends Tests\Unit\BaseTestAbstract
             $this->dig->getRecords($this->hostname)->isEmpty()
         );
     }
+
+    public function testHandlesSpatieExceptionAndRethrowsAsQueryFailure(): void
+    {
+        $this->expectException(Resolvers\Exceptions\QueryFailure::class);
+        $this->expectExceptionMessage('The message');
+
+        $this->spatieDNS->method('getRecords')
+            ->with(...Resolvers\Dig::SUPPORTED_QUERY_TYPES)
+            ->willThrowException(new \InvalidArgumentException('The message'));
+
+        $this->dig->getRecords($this->hostname);
+    }
 }
