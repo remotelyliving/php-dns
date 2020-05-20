@@ -2,6 +2,8 @@
 
 namespace RemotelyLiving\PHPDNS\Entities;
 
+use RemotelyLiving\PHPDNS\Exceptions;
+
 class CAAData extends DataAbstract
 {
     /**
@@ -24,7 +26,7 @@ class CAAData extends DataAbstract
         $this->flags = $flags;
         $this->tag = $tag;
         $this->value = ($value)
-            ? trim(str_ireplace('"', '', $value))
+            ? $this->normalizeValue($value)
             : null;
     }
 
@@ -71,5 +73,16 @@ class CAAData extends DataAbstract
         $this->flags = $unserialized['flags'];
         $this->tag = $unserialized['tag'];
         $this->value = $unserialized['value'];
+    }
+
+    private function normalizeValue(string $value): string
+    {
+        $normalized = trim(str_ireplace('"', '', $value));
+
+        if (preg_match('/\s/m', $normalized)) {
+            throw new Exceptions\InvalidArgumentException("$value is not a valid CAA value");
+        }
+
+        return $normalized;
     }
 }
