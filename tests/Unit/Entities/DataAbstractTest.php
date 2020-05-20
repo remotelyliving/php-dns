@@ -132,4 +132,15 @@ class DataAbstractTest extends BaseTestAbstract
         $this->expectException(InvalidArgumentException::class);
         $this->dataAbstract1::createFromTypeAndString(DNSRecordType::createA(), '');
     }
+
+    /**
+     * @test
+     */
+    public function checksCAADataAndThrowsIfTooManySegments(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        // example of bad data from Cloudflare API
+        $invalid = '0 issue \\# 26 00 09 69 73 73 75 65 77 69 6c 64 6c 65 74 73 65 6e 63 72 79 70 74 2e 6f 72 67';
+        $this->dataAbstract1::createFromTypeAndString(DNSRecordType::createCAA(), $invalid);
+    }
 }

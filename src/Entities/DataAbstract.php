@@ -52,7 +52,7 @@ abstract class DataAbstract implements Arrayable, Serializable
             );
         }
 
-        if ($recordType->isA(DNSRecordType::TYPE_CAA)) {
+        if ($recordType->isA(DNSRecordType::TYPE_CAA) && count($parsed) === 3) {
             return new CAAData((int)$parsed[0], (string)$parsed[1], $parsed[2]);
         }
 
