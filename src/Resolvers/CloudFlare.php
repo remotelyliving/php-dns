@@ -50,7 +50,7 @@ class CloudFlare extends ResolverAbstract
             return (!$type->isA(DNSRecordType::TYPE_ANY))
                 ? $this->doApiQuery($hostname, $type)
                 : $this->doAnyApiQuery($hostname);
-        } catch (RequestException $e) {
+        } catch (\Throwable $e) {
             throw new QueryFailure("Unable to query CloudFlare API", 0, $e);
         }
     }
@@ -69,7 +69,7 @@ class CloudFlare extends ResolverAbstract
                     $this->parseResult((array) json_decode((string)$response->getBody(), true))
                 );
             },
-            'rejected' => function (RequestException $e): void {
+            'rejected' => function (\Throwable $e): void {
                 throw $e;
             },
         ]);

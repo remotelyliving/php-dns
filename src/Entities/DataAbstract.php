@@ -61,7 +61,7 @@ abstract class DataAbstract implements Arrayable, Serializable
                 (int)$parsed[0] ?? 0,
                 (int) $parsed[1] ?? 0,
                 (int) $parsed[2] ?? 0,
-                new Hostname($parsed[3]),
+                new Hostname($parsed[3])
             );
         }
 
