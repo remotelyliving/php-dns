@@ -37,7 +37,7 @@ class IPAddress extends EntityAbstract
 
     public static function createFromString(string $IPAddress): IPAddress
     {
-        return new static($IPAddress);
+        return new self($IPAddress);
     }
 
     public function equals(IPAddress $IPAddress): bool

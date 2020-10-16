@@ -67,7 +67,7 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
             ? DataAbstract::createFromTypeAndString($type, $data)
             : null;
 
-        return new static(
+        return new self(
             $type,
             $hostname,
             $ttl,

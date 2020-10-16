@@ -12,7 +12,7 @@ abstract class MapperAbstract implements MapperInterface
      */
     protected $fields = [];
 
-    public function __construct(array $fields = [])
+    final public function __construct(array $fields = [])
     {
         $this->fields = $fields;
     }

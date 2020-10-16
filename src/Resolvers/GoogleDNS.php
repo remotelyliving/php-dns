@@ -16,7 +16,7 @@ class GoogleDNS extends ResolverAbstract
 {
     protected const BASE_URI = 'https://dns.google.com';
     protected const DEFAULT_TIMEOUT = 5.0;
-    protected const DEFAULT_OPTIONS = [
+    public const DEFAULT_OPTIONS = [
         'base_uri' => self::BASE_URI,
         'strict' => true,
         'allow_redirects' => false,
@@ -42,14 +42,21 @@ class GoogleDNS extends ResolverAbstract
      */
     private $consensusAttempts;
 
+    /**
+     * @var array<string, mixed>
+     */
+    private $options;
+
     public function __construct(
         ClientInterface $http = null,
         GoogleDNSMapper $mapper = null,
-        int $consensusAttempts = 3
+        int $consensusAttempts = 3,
+        array $options = self::DEFAULT_OPTIONS
     ) {
-        $this->http = $http ?? new Client(self::DEFAULT_OPTIONS);
+        $this->http = $http ?? new Client();
         $this->mapper = $mapper ?? new GoogleDNSMapper();
         $this->consensusAttempts = $consensusAttempts;
+        $this->options = $options;
     }
 
     /**
@@ -69,9 +76,9 @@ class GoogleDNS extends ResolverAbstract
         return $hasRecord;
     }
 
-    protected function doQuery(Hostname $hostname, DNSRecordType $type): DNSRecordCollection
+    protected function doQuery(Hostname $hostname, DNSRecordType $recordType): DNSRecordCollection
     {
-        $results = $this->doApiQuery(['name' => (string)$hostname, 'type' => (string)$type]);
+        $results = $this->doApiQuery(['name' => (string)$hostname, 'type' => (string)$recordType]);
 
         return $this->mapResults($this->mapper, $results);
     }
@@ -82,7 +89,7 @@ class GoogleDNS extends ResolverAbstract
     private function doApiQuery(array $query = []): array
     {
         try {
-            $response = $this->http->request('GET', '/resolve?' . http_build_query($query));
+            $response = $this->http->request('GET', '/resolve?' . http_build_query($query), $this->options);
         } catch (RequestException $e) {
             throw new QueryFailure("Unable to query GoogleDNS API", 0, $e);
         }

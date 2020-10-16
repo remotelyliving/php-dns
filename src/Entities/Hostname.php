@@ -37,7 +37,7 @@ class Hostname extends EntityAbstract
 
     public static function createFromString(string $hostname): Hostname
     {
-        return new static($hostname);
+        return new self($hostname);
     }
 
     public function getHostName(): string

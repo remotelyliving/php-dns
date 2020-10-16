@@ -49,18 +49,18 @@ class Dig extends ResolverAbstract
         $this->nameserver = $nameserver;
     }
 
-    protected function doQuery(Hostname $hostname, DNSRecordType $type): DNSRecordCollection
+    protected function doQuery(Hostname $hostname, DNSRecordType $recordType): DNSRecordCollection
     {
-        if (!self::isSupportedQueryType($type)) {
+        if (!self::isSupportedQueryType($recordType)) {
             return new DNSRecordCollection();
         }
 
         $dig = $this->spatieDNSFactory->createResolver($hostname, $this->nameserver);
 
         try {
-            $response = ($type->equals(DNSRecordType::createANY()))
+            $response = ($recordType->equals(DNSRecordType::createANY()))
                 ? $dig->getRecords(...self::SUPPORTED_QUERY_TYPES)
-                : $dig->getRecords((string) $type);
+                : $dig->getRecords((string) $recordType);
         } catch (\Throwable $e) {
             throw new QueryFailure($e->getMessage(), 0, $e);
         }

@@ -17,7 +17,7 @@ class CloudFlare extends ResolverAbstract
 {
     protected const BASE_URI = 'https://cloudflare-dns.com';
     protected const DEFAULT_TIMEOUT = 5.0;
-    protected const DEFAULT_OPTIONS = [
+    public const DEFAULT_OPTIONS = [
         'base_uri' => self::BASE_URI,
         'connect_timeout' => self::DEFAULT_TIMEOUT,
         'strict' => true,
@@ -38,17 +38,26 @@ class CloudFlare extends ResolverAbstract
      */
     private $mapper;
 
-    public function __construct(ClientInterface $http = null, CloudFlareMapper $mapper = null)
-    {
-        $this->http = $http ?? new Client(self::DEFAULT_OPTIONS);
+    /**
+     * @var array<string, mixed>
+     */
+    private $options;
+
+    public function __construct(
+        ClientInterface $http = null,
+        CloudFlareMapper $mapper = null,
+        array $options = self::DEFAULT_OPTIONS
+    ) {
+        $this->http = $http ?? new Client();
         $this->mapper = $mapper ?? new CloudFlareMapper();
+        $this->options = $options;
     }
 
-    protected function doQuery(Hostname $hostname, DNSRecordType $type): DNSRecordCollection
+    protected function doQuery(Hostname $hostname, DNSRecordType $recordType): DNSRecordCollection
     {
         try {
-            return (!$type->isA(DNSRecordType::TYPE_ANY))
-                ? $this->doApiQuery($hostname, $type)
+            return (!$recordType->isA(DNSRecordType::TYPE_ANY))
+                ? $this->doApiQuery($hostname, $recordType)
                 : $this->doAnyApiQuery($hostname);
         } catch (\Throwable $e) {
             throw new QueryFailure("Unable to query CloudFlare API", 0, $e);
@@ -88,7 +97,8 @@ class CloudFlare extends ResolverAbstract
 
             yield $this->http->requestAsync(
                 'GET',
-                '/dns-query?' . http_build_query(['name' => (string)$hostname, 'type' => $type])
+                '/dns-query?' . http_build_query(['name' => (string)$hostname, 'type' => $type]),
+                $this->options
             );
         }
     }
@@ -97,7 +107,7 @@ class CloudFlare extends ResolverAbstract
     {
         $url = '/dns-query?' . http_build_query(['name' => (string)$hostname, 'type' => (string)$type]);
         $decoded = (array)json_decode(
-            (string)$this->http->requestAsync('GET', $url)->wait(true)->getBody(),
+            (string)$this->http->requestAsync('GET', $url, $this->options)->wait(true)->getBody(),
             true
         );
 

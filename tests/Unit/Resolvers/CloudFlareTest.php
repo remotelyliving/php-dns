@@ -100,20 +100,20 @@ class CloudFlareTest extends BaseTestAbstract
         $this->httpClient
             ->method('requestAsync')
             ->willReturnMap([
-                ['GET', '/dns-query?name=google.com.&type=A', [], new FulfilledPromise(new Response(200, [], $ARecordResponse))],
-                ['GET', '/dns-query?name=google.com.&type=MX', [], new FulfilledPromise(new Response(200, [], $MXRecordResponse))],
-                ['GET', '/dns-query?name=google.com.&type=CNAME', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
-                ['GET', '/dns-query?name=google.com.&type=HINFO', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
-                ['GET', '/dns-query?name=google.com.&type=CAA', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
-                ['GET', '/dns-query?name=google.com.&type=NS', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
-                ['GET', '/dns-query?name=google.com.&type=PTR', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
-                ['GET', '/dns-query?name=google.com.&type=SOA', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
-                ['GET', '/dns-query?name=google.com.&type=TXT', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
-                ['GET', '/dns-query?name=google.com.&type=AAAA', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
-                ['GET', '/dns-query?name=google.com.&type=SRV', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
-                ['GET', '/dns-query?name=google.com.&type=NAPTR', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
-                ['GET', '/dns-query?name=google.com.&type=A6', [], new FulfilledPromise(new Response(200, [], $emptyResponse))],
-                ['GET', '/dns-query?name=google.com.&type=A6', [], new FulfilledPromise(new Response(200, [], null))],
+                ['GET', '/dns-query?name=google.com.&type=A', CloudFlare::DEFAULT_OPTIONS, new FulfilledPromise(new Response(200, [], $ARecordResponse))],
+                ['GET', '/dns-query?name=google.com.&type=MX', CloudFlare::DEFAULT_OPTIONS, new FulfilledPromise(new Response(200, [], $MXRecordResponse))],
+                ['GET', '/dns-query?name=google.com.&type=CNAME', CloudFlare::DEFAULT_OPTIONS, new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=HINFO', CloudFlare::DEFAULT_OPTIONS, new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=CAA', CloudFlare::DEFAULT_OPTIONS, new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=NS', CloudFlare::DEFAULT_OPTIONS, new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=PTR', CloudFlare::DEFAULT_OPTIONS, new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=SOA', CloudFlare::DEFAULT_OPTIONS, new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=TXT', CloudFlare::DEFAULT_OPTIONS, new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=AAAA', CloudFlare::DEFAULT_OPTIONS, new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=SRV', CloudFlare::DEFAULT_OPTIONS, new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=NAPTR', CloudFlare::DEFAULT_OPTIONS, new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=A6', CloudFlare::DEFAULT_OPTIONS, new FulfilledPromise(new Response(200, [], $emptyResponse))],
+                ['GET', '/dns-query?name=google.com.&type=A6', CloudFlare::DEFAULT_OPTIONS, new FulfilledPromise(new Response(200, [], null))],
             ]);
 
         $actual = $this->cloudFlare->getRecords('google.com');

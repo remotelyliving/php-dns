@@ -86,12 +86,12 @@ class DNSRecordType extends EntityAbstract
             throw new InvalidArgumentException("{$code} is not able to be mapped to an existing DNS record type");
         }
 
-        return new static(self::CODE_TYPE_MAP[$code]);
+        return new self(self::CODE_TYPE_MAP[$code]);
     }
 
     public static function createFromString(string $type): DNSRecordType
     {
-        return new static($type);
+        return new self($type);
     }
 
     public function toInt(): int

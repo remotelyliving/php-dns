@@ -57,7 +57,7 @@ class Cached extends ResolverAbstract
 
     public function withEmptyResultCachingDisabled(): self
     {
-        $emptyCachingDisabled = new static($this->cache, $this->resolver, $this->ttlSeconds);
+        $emptyCachingDisabled = new self($this->cache, $this->resolver, $this->ttlSeconds);
         $emptyCachingDisabled->shouldCacheEmptyResults = false;
 
         return $emptyCachingDisabled;
@@ -111,7 +111,12 @@ class Cached extends ResolverAbstract
      */
     private function unwrapResults(array $results): DNSRecordCollection
     {
+        /** @var DNSRecordCollection $records */
         $records = $results['recordCollection'];
+        /**
+         * @var int $key
+         * @var \RemotelyLiving\PHPDNS\Entities\DNSRecord $record
+         */
         foreach ($records as $key => $record) {
             $records[$key] = $record
                 ->setTTL(max($record->getTTL() - ($this->getTimeStamp() - (int)$results['timestamp']), 0));
