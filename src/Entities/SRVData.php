@@ -2,27 +2,15 @@
 
 namespace RemotelyLiving\PHPDNS\Entities;
 
-class SRVData extends DataAbstract
+final class SRVData extends DataAbstract
 {
-    /**
-     * @var int
-     */
-    private $priority;
+    private int $priority;
 
-    /**
-     * @var int
-     */
-    private $weight;
+    private int $weight;
 
-    /**
-     * @var int
-     */
-    private $port;
+    private int $port;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $target;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $target;
 
     public function __construct(int $priority, int $weight, int $port, Hostname $target)
     {

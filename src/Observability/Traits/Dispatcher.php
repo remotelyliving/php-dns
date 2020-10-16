@@ -9,10 +9,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 trait Dispatcher
 {
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface|null
-     */
-    private $dispatcher = null;
+    private ?\Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher = null;
 
     public function setDispatcher(EventDispatcherInterface $dispatcher): void
     {
@@ -31,7 +28,7 @@ trait Dispatcher
 
     public function dispatch(ObservableEventAbstract $event): void
     {
-        call_user_func_array([$this->getDispatcher(), 'dispatch'], $this->getOrderedDispatcherArguments($event));
+        \call_user_func_array([$this->getDispatcher(), 'dispatch'], $this->getOrderedDispatcherArguments($event));
     }
 
     private function getOrderedDispatcherArguments(ObservableEventAbstract $event): array

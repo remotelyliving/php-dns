@@ -13,7 +13,7 @@ use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Mappers\CloudFlare as CloudFlareMapper;
 use RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure;
 
-class CloudFlare extends ResolverAbstract
+final class CloudFlare extends ResolverAbstract
 {
     protected const BASE_URI = 'https://cloudflare-dns.com';
     protected const DEFAULT_TIMEOUT = 5.0;
@@ -28,20 +28,14 @@ class CloudFlare extends ResolverAbstract
         ],
     ];
 
-    /**
-     * @var \GuzzleHttp\Client|\GuzzleHttp\ClientInterface
-     */
-    private $http;
+    private \GuzzleHttp\ClientInterface $http;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Mappers\CloudFlare
-     */
-    private $mapper;
+    private CloudFlareMapper $mapper;
 
     /**
      * @var array<string, mixed>
      */
-    private $options;
+    private array $options;
 
     public function __construct(
         ClientInterface $http = null,
@@ -73,9 +67,9 @@ class CloudFlare extends ResolverAbstract
         $eachPromise = new EachPromise($this->generateEachTypeQuery($hostname), [
             'concurrency' => 4,
             'fulfilled' => function (Response $response) use (&$results) {
-                $results = array_merge(
+                $results = \array_merge(
                     $results,
-                    $this->parseResult((array) json_decode((string)$response->getBody(), true))
+                    $this->parseResult((array) \json_decode((string)$response->getBody(), true))
                 );
             },
             'rejected' => function (\Throwable $e): void {
@@ -97,7 +91,7 @@ class CloudFlare extends ResolverAbstract
 
             yield $this->http->requestAsync(
                 'GET',
-                '/dns-query?' . http_build_query(['name' => (string)$hostname, 'type' => $type]),
+                '/dns-query?' . \http_build_query(['name' => (string)$hostname, 'type' => $type]),
                 $this->options
             );
         }
@@ -105,8 +99,8 @@ class CloudFlare extends ResolverAbstract
 
     private function doApiQuery(Hostname $hostname, DNSRecordType $type): DNSRecordCollection
     {
-        $url = '/dns-query?' . http_build_query(['name' => (string)$hostname, 'type' => (string)$type]);
-        $decoded = (array)json_decode(
+        $url = '/dns-query?' . \http_build_query(['name' => (string)$hostname, 'type' => (string)$type]);
+        $decoded = (array)\json_decode(
             (string)$this->http->requestAsync('GET', $url, $this->options)->wait(true)->getBody(),
             true
         );

@@ -4,6 +4,7 @@ namespace RemotelyLiving\PHPDNS\Resolvers\Interfaces;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
+use RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
 
@@ -47,5 +48,5 @@ interface DNSQuery
     /**
      * @throws \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
      */
-    public function hasRecord(DNSRecord $record): bool;
+    public function hasRecord(DNSRecordInterface $record): bool;
 }

@@ -2,42 +2,25 @@
 
 namespace RemotelyLiving\PHPDNS\Entities;
 
-class SOAData extends DataAbstract
+final class SOAData extends DataAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $mname;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $mname;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $rname;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $rname;
 
-    /**
-     * @var int
-     */
-    private $serial;
+    private int $serial;
 
-    /**
-     * @var int
-     */
-    private $refresh;
+    private int $refresh;
 
-    /**
-     * @var int
-     */
-    private $retry;
+    private int $retry;
 
-    /**
-     * @var int
-     */
-    private $expire;
+    private int $expire;
 
+    private int $minTTL;
     /**
-     * @var int
+     * @var string
      */
-    private $minTTL;
+    private const TEMPLATE = '%s %s %s %s %s %s %s';
 
     public function __construct(
         Hostname $mname,
@@ -59,8 +42,7 @@ class SOAData extends DataAbstract
 
     public function __toString(): string
     {
-        $template = '%s %s %s %s %s %s %s';
-        return vsprintf($template, $this->toArray());
+        return \vsprintf(self::TEMPLATE, $this->toArray());
     }
 
     /**

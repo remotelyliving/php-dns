@@ -11,17 +11,11 @@ use RemotelyLiving\PHPDNS\Resolvers\Interfaces\ReverseDNSQuery;
 use RemotelyLiving\PHPDNS\Services\Interfaces\LocalSystemDNS;
 use RemotelyLiving\PHPDNS\Services\LocalSystemDNS as LocalDNSService;
 
-class LocalSystem extends ResolverAbstract implements ReverseDNSQuery
+final class LocalSystem extends ResolverAbstract implements ReverseDNSQuery
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Services\Interfaces\LocalSystemDNS
-     */
-    private $systemDNS;
+    private \RemotelyLiving\PHPDNS\Services\Interfaces\LocalSystemDNS $systemDNS;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Mappers\LocalSystem
-     */
-    private $mapper;
+    private LocalMapper $mapper;
 
     public function __construct(LocalSystemDNS $systemDNS = null, LocalMapper $mapper = null)
     {

@@ -2,7 +2,7 @@
 
 namespace RemotelyLiving\PHPDNS\Exceptions;
 
-class InvalidArgumentException extends Exception
+final class InvalidArgumentException extends Exception
 {
 
 }

@@ -7,17 +7,21 @@ use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Entities\IPAddress;
 
-class GoogleDNS extends MapperAbstract
+final class GoogleDNS extends MapperAbstract
 {
+    /**
+     * @var string
+     */
+    private const DATA = 'data';
     public function toDNSRecord(): DNSRecord
     {
         $type = DNSRecordType::createFromInt((int) $this->fields['type']);
-        $IPAddress = (isset($this->fields['data']) && IPAddress::isValid($this->fields['data']))
-            ? $this->fields['data']
+        $IPAddress = (isset($this->fields[self::DATA]) && IPAddress::isValid($this->fields[self::DATA]))
+            ? $this->fields[self::DATA]
             : null;
 
-        $value = (isset($this->fields['data']) && !$IPAddress)
-            ? str_ireplace('"', '', (string)$this->fields['data'])
+        $value = (isset($this->fields[self::DATA]) && !$IPAddress)
+            ? \str_ireplace('"', '', (string)$this->fields[self::DATA])
             : null;
 
         return DNSRecord::createFromPrimitives(

@@ -2,15 +2,11 @@
 
 namespace RemotelyLiving\PHPDNS\Mappers;
 
-use RemotelyLiving\PHPDNS\Entities\DNSRecord;
-use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
+use RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface;
 
 abstract class MapperAbstract implements MapperInterface
 {
-    /**
-     * @var array
-     */
-    protected $fields = [];
+    protected array $fields = [];
 
     final public function __construct(array $fields = [])
     {
@@ -22,5 +18,5 @@ abstract class MapperAbstract implements MapperInterface
         return new static($fields);
     }
 
-    abstract public function toDNSRecord(): DNSRecord;
+    abstract public function toDNSRecord(): DNSRecordInterface;
 }

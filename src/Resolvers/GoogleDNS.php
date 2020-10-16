@@ -7,12 +7,13 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
+use RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Mappers\GoogleDNS as GoogleDNSMapper;
 use RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure;
 
-class GoogleDNS extends ResolverAbstract
+final class GoogleDNS extends ResolverAbstract
 {
     protected const BASE_URI = 'https://dns.google.com';
     protected const DEFAULT_TIMEOUT = 5.0;
@@ -27,25 +28,16 @@ class GoogleDNS extends ResolverAbstract
         ],
     ];
 
-    /**
-     * @var \GuzzleHttp\Client|\GuzzleHttp\ClientInterface
-     */
-    private $http;
+    private \GuzzleHttp\ClientInterface $http;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Mappers\GoogleDNS
-     */
-    private $mapper;
+    private GoogleDNSMapper $mapper;
 
-    /**
-     * @var int
-     */
-    private $consensusAttempts;
+    private int $consensusAttempts;
 
     /**
      * @var array<string, mixed>
      */
-    private $options;
+    private array $options;
 
     public function __construct(
         ClientInterface $http = null,
@@ -62,7 +54,7 @@ class GoogleDNS extends ResolverAbstract
     /**
      * Google DNS has consistency issues so this tries a few times to get an answer
      */
-    public function hasRecord(DNSRecord $record): bool
+    public function hasRecord(DNSRecordInterface $record): bool
     {
         $attempts = 0;
 
@@ -89,12 +81,12 @@ class GoogleDNS extends ResolverAbstract
     private function doApiQuery(array $query = []): array
     {
         try {
-            $response = $this->http->request('GET', '/resolve?' . http_build_query($query), $this->options);
+            $response = $this->http->request('GET', '/resolve?' . \http_build_query($query), $this->options);
         } catch (RequestException $e) {
             throw new QueryFailure("Unable to query GoogleDNS API", 0, $e);
         }
 
-        $result = (array) json_decode((string)$response->getBody(), true);
+        $result = (array) \json_decode((string)$response->getBody(), true);
 
         if (isset($result['Answer'])) {
             return $result['Answer'];

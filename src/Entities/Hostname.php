@@ -4,12 +4,9 @@ namespace RemotelyLiving\PHPDNS\Entities;
 
 use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
 
-class Hostname extends EntityAbstract
+final class Hostname extends EntityAbstract
 {
-    /**
-     * @var string
-     */
-    private $hostname;
+    private string $hostname;
 
     /**
      * @throws \RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException
@@ -18,7 +15,7 @@ class Hostname extends EntityAbstract
     {
         $hostname = $this->normalizeHostName($hostname);
 
-        if (filter_var($hostname, FILTER_VALIDATE_DOMAIN) !== $hostname) {
+        if (\filter_var($hostname, FILTER_VALIDATE_DOMAIN) !== $hostname) {
             throw new InvalidArgumentException("{$hostname} is not a valid hostname");
         }
 
@@ -47,7 +44,7 @@ class Hostname extends EntityAbstract
 
     public function getHostnameWithoutTrailingDot(): string
     {
-        return substr($this->hostname, 0, -1);
+        return \substr($this->hostname, 0, -1);
     }
 
     public function isPunycoded(): bool
@@ -57,19 +54,19 @@ class Hostname extends EntityAbstract
 
     public function toUTF8(): string
     {
-        return (string)idn_to_utf8($this->hostname, IDNA_ERROR_PUNYCODE, INTL_IDNA_VARIANT_UTS46);
+        return (string)\idn_to_utf8($this->hostname, IDNA_ERROR_PUNYCODE, INTL_IDNA_VARIANT_UTS46);
     }
 
     private static function punyCode(string $hostname): string
     {
-        return (string)idn_to_ascii($hostname, IDNA_ERROR_PUNYCODE, INTL_IDNA_VARIANT_UTS46);
+        return (string)\idn_to_ascii($hostname, IDNA_ERROR_PUNYCODE, INTL_IDNA_VARIANT_UTS46);
     }
 
     private function normalizeHostName(string $hostname): string
     {
-        $hostname = self::punyCode(mb_strtolower(trim($hostname)));
+        $hostname = self::punyCode(\mb_strtolower(\trim($hostname)));
 
-        if (substr($hostname, -1) !== '.') {
+        if (\substr($hostname, -1) !== '.') {
             return "{$hostname}.";
         }
 

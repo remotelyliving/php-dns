@@ -7,6 +7,7 @@ use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Entities\Interfaces\Arrayable;
+use RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface;
 use RemotelyLiving\PHPDNS\Observability\Events\DNSQueried;
 use RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
@@ -75,11 +76,11 @@ class DNSQueriedTest extends BaseTestAbstract
      */
     public function isArrayable(): void
     {
-        $record1 = $this->createMock(DNSRecord::class);
+        $record1 = $this->createMock(DNSRecordInterface::class);
         $record1->method('toArray')
             ->willReturn(['herp' => 'derp']);
 
-        $record2 = $this->createMock(DNSRecord::class);
+        $record2 = $this->createMock(DNSRecordInterface::class);
         $record2->method('toArray')
             ->willReturn(['beep' => 'boop']);
 

@@ -4,10 +4,7 @@ namespace RemotelyLiving\PHPDNS\Resolvers\Traits;
 
 trait Time
 {
-    /**
-     * @var \DateTimeImmutable|null
-     */
-    private $dateTimeImmutable = null;
+    private ?\DateTimeImmutable $dateTimeImmutable = null;
 
     public function setDateTimeImmutable(\DateTimeImmutable $dateTimeImmutable): void
     {
@@ -26,6 +23,6 @@ trait Time
         }
 
         return /** @scrutinizer ignore-type */ $this->dateTimeImmutable
-            ->setTimestamp(time());
+            ->setTimestamp(\time());
     }
 }

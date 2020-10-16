@@ -4,11 +4,11 @@ namespace RemotelyLiving\PHPDNS\Observability\Performance;
 
 use RemotelyLiving\PHPDNS\Observability\Performance\Interfaces\Time;
 
-class Timer implements Time
+final class Timer implements Time
 {
     public function getMicroTime(): float
     {
-        return microtime(true);
+        return \microtime(true);
     }
 
     public function now(): \DateTimeInterface

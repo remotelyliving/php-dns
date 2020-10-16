@@ -9,39 +9,25 @@ use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Resolvers\Traits\Time;
 use RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver;
 
-class Cached extends ResolverAbstract
+final class Cached extends ResolverAbstract
 {
     use Time;
 
     protected const DEFAULT_CACHE_TTL = 300;
     private const CACHE_KEY_TEMPLATE = '%s:%s:%s';
 
-    /**
-     * @var \Psr\Cache\CacheItemPoolInterface
-     */
-    private $cache;
+    private \Psr\Cache\CacheItemPoolInterface $cache;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver
-     */
-    private $resolver;
+    private \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver $resolver;
 
     /**
      * Bump this number on breaking changes to invalidate cache
-     *
-     * @var string
      */
-    private $namespace = 'php-dns-v3';
+    private const NAMESPACE = 'php-dns-v3';
 
-    /**
-     * @var int|null
-     */
-    private $ttlSeconds;
+    private ?int $ttlSeconds;
 
-    /**
-     * @var bool
-     */
-    private $shouldCacheEmptyResults = true;
+    private bool $shouldCacheEmptyResults = true;
 
     public function __construct(CacheItemPoolInterface $cache, Resolver $resolver, int $ttlSeconds = null)
     {
@@ -86,7 +72,7 @@ class Cached extends ResolverAbstract
 
     private function buildCacheKey(Hostname $hostname, DNSRecordType $recordType): string
     {
-        return md5(sprintf(self::CACHE_KEY_TEMPLATE, $this->namespace, (string)$hostname, (string)$recordType));
+        return \md5(\sprintf(self::CACHE_KEY_TEMPLATE, self::NAMESPACE, (string)$hostname, (string)$recordType));
     }
 
     private function extractLowestTTL(DNSRecordCollection $recordCollection): int
@@ -103,7 +89,7 @@ class Cached extends ResolverAbstract
             $ttls[] = $record->getTTL();
         }
 
-        return count($ttls) ? min($ttls) : self::DEFAULT_CACHE_TTL;
+        return \count($ttls) ? \min($ttls) : self::DEFAULT_CACHE_TTL;
     }
 
     /**
@@ -119,7 +105,7 @@ class Cached extends ResolverAbstract
          */
         foreach ($records as $key => $record) {
             $records[$key] = $record
-                ->setTTL(max($record->getTTL() - ($this->getTimeStamp() - (int)$results['timestamp']), 0));
+                ->setTTL(\max($record->getTTL() - ($this->getTimeStamp() - (int)$results['timestamp']), 0));
         }
 
         return $records;

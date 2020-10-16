@@ -4,7 +4,7 @@ namespace RemotelyLiving\PHPDNS\Entities;
 
 use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
 
-class DNSRecordType extends EntityAbstract
+final class DNSRecordType extends EntityAbstract
 {
     public const TYPE_A = 'A';
     public const TYPE_CNAME = 'CNAME';
@@ -55,17 +55,14 @@ class DNSRecordType extends EntityAbstract
         255 => DNSRecordType::TYPE_ANY,
     ];
 
-    /**
-     * @var string
-     */
-    private $type;
+    private string $type;
 
     /**
      * @throws \RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException
      */
     public function __construct(string $type)
     {
-        if (!in_array($type, self::VALID_TYPES, true)) {
+        if (!\in_array($type, self::VALID_TYPES, true)) {
             throw new InvalidArgumentException("{$type} is not an existing DNS record type");
         }
 
@@ -96,12 +93,12 @@ class DNSRecordType extends EntityAbstract
 
     public function toInt(): int
     {
-        return (int) array_flip(self::CODE_TYPE_MAP)[$this->type];
+        return (int) \array_flip(self::CODE_TYPE_MAP)[$this->type];
     }
 
     public function isA(string $type): bool
     {
-        return $this->type === strtoupper($type);
+        return $this->type === \strtoupper($type);
     }
 
     public function equals(DNSRecordType $recordType): bool
