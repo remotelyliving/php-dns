@@ -77,7 +77,7 @@ class CachedTest extends BaseTestAbstract
         $this->cacheItem = $this->createMock(CacheItemInterface::class);
         $this->cache = $this->createMock(CacheItemPoolInterface::class);
         $this->cache->method('getItem')
-            ->with('b88c8bc912d8b285807eb4461c6d04e6')
+            ->with('a7e06a7e6216ad8ce85b0fcfb4a91582')
             ->willReturnCallback(function () {
                 return $this->cacheItem;
             });
