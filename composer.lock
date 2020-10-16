@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "defea91ff7aff7cc26f15aa697036e45",
+    "content-hash": "d26c64d4692ea278aef1da427d67a95a",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -425,16 +425,16 @@
         },
         {
             "name": "spatie/dns",
-            "version": "1.5.0",
+            "version": "1.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/dns.git",
-                "reference": "7daac14625f6b9810068f593b1c25ef80cb857cd"
+                "reference": "dcb0027eb5e94db01256c8ee6ee841fbf4708172"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/dns/zipball/7daac14625f6b9810068f593b1c25ef80cb857cd",
-                "reference": "7daac14625f6b9810068f593b1c25ef80cb857cd",
+                "url": "https://api.github.com/repos/spatie/dns/zipball/dcb0027eb5e94db01256c8ee6ee841fbf4708172",
+                "reference": "dcb0027eb5e94db01256c8ee6ee841fbf4708172",
                 "shasum": ""
             },
             "require": {
@@ -474,7 +474,7 @@
                 "dns",
                 "spatie"
             ],
-            "time": "2020-08-24T13:47:36+00:00"
+            "time": "2019-11-30T18:38:16+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
