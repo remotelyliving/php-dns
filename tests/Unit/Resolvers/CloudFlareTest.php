@@ -7,6 +7,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\RejectedPromise;
@@ -126,7 +127,7 @@ class CloudFlareTest extends BaseTestAbstract
      * @test
      * @dataProvider httpExceptionProvider
      */
-    public function rethrowsAllHTTPExceptionsAsQueryFailures(RequestException $e)
+    public function rethrowsAllHTTPExceptionsAsQueryFailures(TransferException $e)
     {
         $this->expectException(QueryFailure::class);
 
@@ -164,7 +165,7 @@ class CloudFlareTest extends BaseTestAbstract
     public function httpExceptionProvider(): array
     {
         return [
-            [$this->createMock(ConnectException::class)],
+            [$this->createMock(RequestException::class)],
             [$this->createMock(ClientException::class)],
             [$this->createMock(ServerException::class)],
         ];
