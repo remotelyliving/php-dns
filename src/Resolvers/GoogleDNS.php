@@ -4,7 +4,7 @@ namespace RemotelyLiving\PHPDNS\Resolvers;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\TransferException;
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
@@ -83,7 +83,7 @@ class GoogleDNS extends ResolverAbstract
     {
         try {
             $response = $this->http->request('GET', '/resolve?' . http_build_query($query));
-        } catch (RequestException $e) {
+        } catch (TransferException $e) {
             throw new QueryFailure("Unable to query GoogleDNS API", 0, $e);
         }
 

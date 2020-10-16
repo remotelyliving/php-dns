@@ -4,7 +4,6 @@ namespace RemotelyLiving\PHPDNS\Resolvers;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Psr7\Response;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
