@@ -2,24 +2,22 @@
 
 namespace RemotelyLiving\PHPDNS\Observability\Events;
 
+use RemotelyLiving\PHPDNS\Observability\Performance\Interfaces\ProfileInterface;
 use RemotelyLiving\PHPDNS\Observability\Performance\Profile;
 
-class DNSQueryProfiled extends ObservableEventAbstract
+final class DNSQueryProfiled extends ObservableEventAbstract
 {
     public const NAME = 'dns.query.profiled';
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Observability\Performance\Profile
-     */
-    private $profile;
+    private ProfileInterface $profile;
 
-    public function __construct(Profile $profile)
+    public function __construct(ProfileInterface $profile)
     {
         parent::__construct();
         $this->profile = $profile;
     }
 
-    public function getProfile(): Profile
+    public function getProfile(): ProfileInterface
     {
         return $this->profile;
     }

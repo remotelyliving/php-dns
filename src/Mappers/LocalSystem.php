@@ -4,8 +4,9 @@ namespace RemotelyLiving\PHPDNS\Mappers;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
+use RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface;
 
-class LocalSystem extends MapperAbstract
+final class LocalSystem extends MapperAbstract
 {
     private const PHP_CODE_TYPE_MAP = [
         \DNS_A => DNSRecordType::TYPE_A,
@@ -23,8 +24,20 @@ class LocalSystem extends MapperAbstract
         \DNS_A6 => DNSRecordType::TYPE_A6,
         \DNS_ANY => DNSRecordType::TYPE_ANY,
     ];
+    /**
+     * @var string
+     */
+    private const TARGET = 'target';
+    /**
+     * @var string
+     */
+    private const PRI = 'pri';
+    /**
+     * @var string
+     */
+    private const TEMPLATE = '%s %s %s %s %s %s %s';
 
-    public function toDNSRecord(): DNSRecord
+    public function toDNSRecord(): DNSRecordInterface
     {
         $IPAddress = null;
 
@@ -48,7 +61,7 @@ class LocalSystem extends MapperAbstract
 
     public function getTypeCodeFromType(DNSRecordType $type): int
     {
-        return array_flip(self::PHP_CODE_TYPE_MAP)[(string)$type] ?? \DNS_ANY;
+        return \array_flip(self::PHP_CODE_TYPE_MAP)[(string)$type] ?? \DNS_ANY;
     }
 
     private function formatData(array $fields): ?string
@@ -58,9 +71,8 @@ class LocalSystem extends MapperAbstract
         }
 
         if (isset($fields['mname'])) {
-            $template = '%s %s %s %s %s %s %s';
-            return sprintf(
-                $template,
+            return \sprintf(
+                self::TEMPLATE,
                 $fields['mname'],
                 $fields['rname'],
                 $fields['serial'],
@@ -71,17 +83,17 @@ class LocalSystem extends MapperAbstract
             );
         }
 
-        if (isset($fields['target'], $fields['pri'], $fields['weight'], $fields['port'])) {
-            return "{$fields['pri']} {$fields['weight']} {$fields['port']} {$fields['target']}";
+        if (isset($fields[self::TARGET], $fields[self::PRI], $fields['weight'], $fields['port'])) {
+            return "{$fields[self::PRI]} {$fields['weight']} {$fields['port']} {$fields[self::TARGET]}";
         }
 
 
-        if (isset($fields['target'], $fields['pri'])) {
-            return "{$fields['pri']} {$fields['target']}";
+        if (isset($fields[self::TARGET], $fields[self::PRI])) {
+            return "{$fields[self::PRI]} {$fields[self::TARGET]}";
         }
 
-        if (isset($fields['target'])) {
-            return $fields['target'];
+        if (isset($fields[self::TARGET])) {
+            return $fields[self::TARGET];
         }
 
         if (isset($fields['txt'])) {

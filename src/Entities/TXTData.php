@@ -2,12 +2,9 @@
 
 namespace RemotelyLiving\PHPDNS\Entities;
 
-class TXTData extends DataAbstract
+final class TXTData extends DataAbstract
 {
-    /**
-     * @var string
-     */
-    private $value;
+    private string $value;
 
     public function __construct(string $value)
     {

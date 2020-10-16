@@ -2,40 +2,25 @@
 
 namespace RemotelyLiving\PHPDNS\Entities;
 
-use RemotelyLiving\PHPDNS\Entities\Interfaces\Arrayable;
-use RemotelyLiving\PHPDNS\Entities\Interfaces\Serializable;
+use RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface;
 
-class DNSRecord extends EntityAbstract implements Arrayable, Serializable
+final class DNSRecord extends EntityAbstract implements DNSRecordInterface
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecordType
-     */
-    private $recordType;
+    private \RemotelyLiving\PHPDNS\Entities\DNSRecordType $recordType;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $hostname;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $hostname;
 
-    /**
-     * @var int
-     */
-    private $TTL;
+    private int $TTL;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\IPAddress|null
-     */
-    private $IPAddress;
+    private ?\RemotelyLiving\PHPDNS\Entities\IPAddress $IPAddress;
 
+    private string $class;
+
+    private ?\RemotelyLiving\PHPDNS\Entities\DataAbstract $data;
     /**
      * @var string
      */
-    private $class;
-
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DataAbstract|null
-     */
-    private $data;
+    private const DATA = 'data';
 
     public function __construct(
         DNSRecordType $recordType,
@@ -67,7 +52,7 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
             ? DataAbstract::createFromTypeAndString($type, $data)
             : null;
 
-        return new static(
+        return new self(
             $type,
             $hostname,
             $ttl,
@@ -127,13 +112,13 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
         }
 
         if ($this->data) {
-            $formatted['data'] = (string)$this->data;
+            $formatted[self::DATA] = (string)$this->data;
         }
 
         return $formatted;
     }
 
-    public function equals(DNSRecord $record): bool
+    public function equals(DNSRecordInterface $record): bool
     {
         return $this->hostname->equals($record->getHostname())
             && $this->recordType->equals($record->getType())
@@ -159,8 +144,8 @@ class DNSRecord extends EntityAbstract implements Arrayable, Serializable
         $this->TTL = (int) $unserialized['TTL'];
         $this->IPAddress = $rawIPAddres ? IPAddress::createFromString($rawIPAddres) : null;
         $this->class = $unserialized['class'];
-        $this->data = (isset($unserialized['data']))
-         ? DataAbstract::createFromTypeAndString($this->recordType, $unserialized['data'])
+        $this->data = (isset($unserialized[self::DATA]))
+         ? DataAbstract::createFromTypeAndString($this->recordType, $unserialized[self::DATA])
          : null;
     }
 

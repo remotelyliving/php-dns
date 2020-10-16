@@ -2,12 +2,9 @@
 
 namespace RemotelyLiving\PHPDNS\Entities;
 
-class NSData extends DataAbstract
+final class NSData extends DataAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $target;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $target;
 
     public function __construct(Hostname $target)
     {

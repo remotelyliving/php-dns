@@ -2,12 +2,9 @@
 
 namespace RemotelyLiving\PHPDNS\Entities;
 
-class CNAMEData extends DataAbstract
+final class CNAMEData extends DataAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $hostname;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $hostname;
 
     public function __construct(Hostname $hostname)
     {

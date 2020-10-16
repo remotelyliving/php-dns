@@ -3,17 +3,20 @@
 namespace RemotelyLiving\PHPDNS\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\Interfaces\Arrayable;
+use RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface;
 use RemotelyLiving\PHPDNS\Entities\Interfaces\Serializable;
 use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
 
-class DNSRecordCollection extends EntityAbstract implements \ArrayAccess, \Iterator, \Countable, Arrayable, Serializable
+final class DNSRecordCollection extends EntityAbstract implements
+    \ArrayAccess,
+    \Iterator,
+    \Countable,
+    Arrayable,
+    Serializable
 {
-    /**
-     * @var \ArrayIterator
-     */
-    private $records;
+    private \ArrayIterator $records;
 
-    public function __construct(DNSRecord ...$records)
+    public function __construct(DNSRecordInterface ...$records)
     {
         $this->records = new \ArrayIterator($records);
     }
@@ -23,21 +26,21 @@ class DNSRecordCollection extends EntityAbstract implements \ArrayAccess, \Itera
         return $this->records->getArrayCopy();
     }
 
-    public function pickFirst(): ?DNSRecord
+    public function pickFirst(): ?DNSRecordInterface
     {
         $copy = $this->records->getArrayCopy();
 
-        return array_shift($copy);
+        return \array_shift($copy);
     }
 
     public function filteredByType(DNSRecordType $type): self
     {
-        return new self(...array_filter($this->records->getArrayCopy(), function (DNSRecord $record) use ($type) {
-            return $record->getType()->equals($type);
-        }));
+        return new self(
+            ...\array_filter($this->records->getArrayCopy(), fn(DNSRecord $record) => $record->getType()->equals($type))
+        );
     }
 
-    public function has(DNSRecord $lookupRecord): bool
+    public function has(DNSRecordInterface $lookupRecord): bool
     {
         foreach ($this->records->getArrayCopy() as $record) {
             if ($lookupRecord->equals($record)) {
@@ -48,7 +51,7 @@ class DNSRecordCollection extends EntityAbstract implements \ArrayAccess, \Itera
         return false;
     }
 
-    public function current(): ?DNSRecord
+    public function current(): ?DNSRecordInterface
     {
         return $this->records->current();
     }
@@ -81,7 +84,7 @@ class DNSRecordCollection extends EntityAbstract implements \ArrayAccess, \Itera
         return $this->records->offsetExists($offset);
     }
 
-    public function offsetGet($offset): DNSRecord
+    public function offsetGet($offset): DNSRecordInterface
     {
         return $this->records->offsetGet($offset);
     }
@@ -91,7 +94,7 @@ class DNSRecordCollection extends EntityAbstract implements \ArrayAccess, \Itera
      */
     public function offsetSet($offset, $value): void
     {
-        if (!$value instanceof DNSRecord) {
+        if (!$value instanceof DNSRecordInterface) {
             throw new InvalidArgumentException('Invalid value');
         }
 
@@ -133,16 +136,20 @@ class DNSRecordCollection extends EntityAbstract implements \ArrayAccess, \Itera
 
     public function withUniqueValuesExcluded(): self
     {
-        return $this->filterValues(function (DNSRecord $candidateRecord, DNSRecordCollection $remaining): bool {
-            return $remaining->has($candidateRecord);
-        })->withUniqueValues();
+        return $this->filterValues(
+            fn(DNSRecordInterface $candidateRecord, DNSRecordCollection $remaining): bool => $remaining->has(
+                $candidateRecord
+            )
+        )->withUniqueValues();
     }
 
     public function withUniqueValues(): self
     {
-        return $this->filterValues(function (DNSRecord $candidateRecord, DNSRecordCollection $remaining): bool {
-            return !$remaining->has($candidateRecord);
-        });
+        return $this->filterValues(
+            fn(DNSRecordInterface $candidateRecord, DNSRecordCollection $remaining): bool => !$remaining->has(
+                $candidateRecord
+            )
+        );
     }
 
     private function filterValues(callable $eval): self
@@ -150,8 +157,8 @@ class DNSRecordCollection extends EntityAbstract implements \ArrayAccess, \Itera
         $filtered = new self();
         $records = $this->records->getArrayCopy();
 
-        /** @var \RemotelyLiving\PHPDNS\Entities\DNSRecord $record */
-        while ($record = array_shift($records)) {
+        /** @var \RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface $record */
+        while ($record = \array_shift($records)) {
             if ($eval($record, new self(...$records))) {
                 $filtered[] = $record;
             }

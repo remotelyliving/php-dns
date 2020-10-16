@@ -23,7 +23,7 @@ abstract class DataAbstract implements Arrayable, Serializable
     public static function createFromTypeAndString(DNSRecordType $recordType, string $data): self
     {
         if ($recordType->isA(DNSRecordType::TYPE_TXT)) {
-            return new TXTData(trim($data, '"'));
+            return new TXTData(\trim($data, '"'));
         }
 
         if ($recordType->isA(DNSRecordType::TYPE_NS)) {
@@ -52,7 +52,7 @@ abstract class DataAbstract implements Arrayable, Serializable
             );
         }
 
-        if ($recordType->isA(DNSRecordType::TYPE_CAA) && count($parsed) === 3) {
+        if ($recordType->isA(DNSRecordType::TYPE_CAA) && \count($parsed) === 3) {
             return new CAAData((int)$parsed[0], (string)$parsed[1], $parsed[2]);
         }
 
@@ -75,6 +75,6 @@ abstract class DataAbstract implements Arrayable, Serializable
 
     private static function parseDataToArray(string $data): array
     {
-        return explode(' ', $data);
+        return \explode(' ', $data);
     }
 }

@@ -6,6 +6,7 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
+use RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Exceptions\Exception;
@@ -14,7 +15,7 @@ use RemotelyLiving\PHPDNS\Resolvers\Interfaces;
 use RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class Chain extends ResolverAbstract implements Interfaces\Chain
+final class Chain extends ResolverAbstract implements Interfaces\Chain
 {
     public const STRATEGY_FIRST_TO_FIND = 0;
     public const STRATEGY_ALL_RESULTS = 1;
@@ -23,12 +24,9 @@ class Chain extends ResolverAbstract implements Interfaces\Chain
     /**
      * @var \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver[]
      */
-    private $resolvers = [];
+    private array $resolvers = [];
 
-    /**
-     * @var int
-     */
-    private $callThroughStrategy = self::STRATEGY_FIRST_TO_FIND;
+    private int $callThroughStrategy = self::STRATEGY_FIRST_TO_FIND;
 
     public function __construct(Resolver ...$resolvers)
     {
@@ -71,7 +69,7 @@ class Chain extends ResolverAbstract implements Interfaces\Chain
     public function randomly(): Interfaces\Chain
     {
         $randomized = clone $this;
-        shuffle($randomized->resolvers);
+        \shuffle($randomized->resolvers);
 
         return $randomized;
     }
@@ -103,7 +101,7 @@ class Chain extends ResolverAbstract implements Interfaces\Chain
         }
     }
 
-    public function hasRecord(DNSRecord $record): bool
+    public function hasRecord(DNSRecordInterface $record): bool
     {
         foreach ($this->resolvers as $resolver) {
             if ($resolver->hasRecord($record)) {

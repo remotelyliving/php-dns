@@ -2,17 +2,11 @@
 
 namespace RemotelyLiving\PHPDNS\Entities;
 
-class MXData extends DataAbstract
+final class MXData extends DataAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $target;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $target;
 
-    /**
-     * @var int
-     */
-    private $priority;
+    private int $priority;
 
     public function __construct(Hostname $target, int $priority = 0)
     {

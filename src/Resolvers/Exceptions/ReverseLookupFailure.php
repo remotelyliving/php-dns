@@ -2,7 +2,7 @@
 
 namespace RemotelyLiving\PHPDNS\Resolvers\Exceptions;
 
-class ReverseLookupFailure extends QueryFailure
+final class ReverseLookupFailure extends QueryFailure
 {
 
 }

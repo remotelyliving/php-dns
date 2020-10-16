@@ -2,11 +2,11 @@
 
 namespace RemotelyLiving\PHPDNS\Mappers;
 
-use RemotelyLiving\PHPDNS\Entities\DNSRecord;
+use RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface;
 
 interface MapperInterface
 {
     public function mapFields(array $record): MapperInterface;
 
-    public function toDNSRecord(): DNSRecord;
+    public function toDNSRecord(): DNSRecordInterface;
 }

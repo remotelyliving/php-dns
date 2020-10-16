@@ -4,6 +4,7 @@ namespace RemotelyLiving\PHPDNS\Resolvers;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
+use RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
@@ -23,16 +24,17 @@ abstract class ResolverAbstract implements ObservableResolver
     use Dispatcher;
     use Profileable;
 
+    private ?string $name = null;
     /**
-     * @var string|null
+     * @var string
      */
-    private $name = null;
+    private const EVENT = 'event';
 
     public function getName(): string
     {
         if ($this->name === null) {
-            $explodedClass = explode('\\', get_class($this));
-            $this->name = (string)array_pop($explodedClass);
+            $explodedClass = \explode('\\', \get_class($this));
+            $this->name = (string)\array_pop($explodedClass);
         }
 
         return $this->name;
@@ -68,7 +70,7 @@ abstract class ResolverAbstract implements ObservableResolver
         return !$this->getRecords($hostname, $recordType)->isEmpty();
     }
 
-    public function hasRecord(DNSRecord $record): bool
+    public function hasRecord(DNSRecordInterface $record): bool
     {
         return $this->getRecords((string)$record->getHostname(), (string)$record->getType())
             ->has($record);
@@ -94,7 +96,7 @@ abstract class ResolverAbstract implements ObservableResolver
             $this->dispatch($dnsQueryFailureEvent);
             $this->getLogger()->error(
                 'DNS query failed',
-                ['event' => json_encode($dnsQueryFailureEvent), 'exception' => $e]
+                [self::EVENT => \json_encode($dnsQueryFailureEvent), 'exception' => $e]
             );
 
             throw $e;
@@ -103,19 +105,19 @@ abstract class ResolverAbstract implements ObservableResolver
             $profile->samplePeakMemoryUsage();
             $dnsQueryProfiledEvent = new DNSQueryProfiled($profile);
             $this->dispatch($dnsQueryProfiledEvent);
-            $this->getLogger()->info('DNS query profiled', ['event' => json_encode($dnsQueryProfiledEvent)]);
+            $this->getLogger()->info('DNS query profiled', [self::EVENT => \json_encode($dnsQueryProfiledEvent)]);
         }
 
         $dnsQueriedEvent = new DNSQueried($this, $hostname, $recordType, $result);
         $this->dispatch($dnsQueriedEvent);
-        $this->getLogger()->info('DNS queried', ['event' => json_encode($dnsQueriedEvent)]);
+        $this->getLogger()->info('DNS queried', [self::EVENT => \json_encode($dnsQueriedEvent)]);
         return $result;
     }
 
     public function mapResults(MapperInterface $mapper, array $results): DNSRecordCollection
     {
         $collection = new DNSRecordCollection();
-        array_map(function (array $fields) use (&$collection, $mapper) {
+        \array_map(function (array $fields) use (&$collection, $mapper) {
             try {
                 $collection[] = $mapper->mapFields($fields)->toDNSRecord();
             } catch (InvalidArgumentException $e) {

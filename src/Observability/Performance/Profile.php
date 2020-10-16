@@ -2,34 +2,20 @@
 
 namespace RemotelyLiving\PHPDNS\Observability\Performance;
 
+use RemotelyLiving\PHPDNS\Observability\Performance\Interfaces\ProfileInterface;
 use RemotelyLiving\PHPDNS\Observability\Performance\Interfaces\Time;
 
-class Profile
+final class Profile implements ProfileInterface
 {
-    /**
-     * @var string
-     */
-    private $transactionName;
+    private string $transactionName;
 
-    /**
-     * @var float
-     */
-    private $startTime = 0.0;
+    private float $startTime = 0.0;
 
-    /**
-     * @var float
-     */
-    private $stopTime = 0.0;
+    private float $stopTime = 0.0;
 
-    /**
-     * @var int
-     */
-    private $peakMemoryUsage = 0;
+    private int $peakMemoryUsage = 0;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Observability\Performance\Interfaces\Time
-     */
-    private $time;
+    private \RemotelyLiving\PHPDNS\Observability\Performance\Interfaces\Time $time;
 
     public function __construct(string $transactionName, Time $time = null)
     {
@@ -59,7 +45,7 @@ class Profile
 
     public function samplePeakMemoryUsage(): void
     {
-        $this->peakMemoryUsage = memory_get_peak_usage();
+        $this->peakMemoryUsage = \memory_get_peak_usage();
     }
 
     public function getPeakMemoryUsage(): int

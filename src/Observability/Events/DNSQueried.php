@@ -7,29 +7,17 @@ use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver;
 
-class DNSQueried extends ObservableEventAbstract
+final class DNSQueried extends ObservableEventAbstract
 {
     public const NAME = 'dns.queried';
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver
-     */
-    private $resolver;
+    private \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver $resolver;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $hostname;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $hostname;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecordType
-     */
-    private $recordType;
+    private \RemotelyLiving\PHPDNS\Entities\DNSRecordType $recordType;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecordCollection
-     */
-    private $recordCollection;
+    private \RemotelyLiving\PHPDNS\Entities\DNSRecordCollection $recordCollection;
 
     public function __construct(
         Resolver $resolver,

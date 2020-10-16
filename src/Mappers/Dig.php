@@ -5,7 +5,7 @@ namespace RemotelyLiving\PHPDNS\Mappers;
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 
-class Dig extends MapperAbstract
+final class Dig extends MapperAbstract
 {
     public function toDNSRecord(): DNSRecord
     {

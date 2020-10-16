@@ -4,6 +4,7 @@ namespace RemotelyLiving\PHPDNS\Tests\Unit\Observability\Events;
 
 use RemotelyLiving\PHPDNS\Entities\Interfaces\Arrayable;
 use RemotelyLiving\PHPDNS\Observability\Events\DNSQueryProfiled;
+use RemotelyLiving\PHPDNS\Observability\Performance\Interfaces\ProfileInterface;
 use RemotelyLiving\PHPDNS\Observability\Performance\Profile;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
@@ -23,7 +24,7 @@ class DNSQueryProfiledTest extends BaseTestAbstract
     {
         parent::setUp();
 
-        $this->profile = $this->createMock(Profile::class);
+        $this->profile = $this->createMock(ProfileInterface::class);
         $this->DNSQueryProfiled = new DNSQueryProfiled($this->profile);
     }
 

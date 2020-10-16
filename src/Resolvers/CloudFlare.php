@@ -13,11 +13,11 @@ use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Mappers\CloudFlare as CloudFlareMapper;
 use RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure;
 
-class CloudFlare extends ResolverAbstract
+final class CloudFlare extends ResolverAbstract
 {
     protected const BASE_URI = 'https://cloudflare-dns.com';
     protected const DEFAULT_TIMEOUT = 5.0;
-    protected const DEFAULT_OPTIONS = [
+    public const DEFAULT_OPTIONS = [
         'base_uri' => self::BASE_URI,
         'connect_timeout' => self::DEFAULT_TIMEOUT,
         'strict' => true,
@@ -28,27 +28,30 @@ class CloudFlare extends ResolverAbstract
         ],
     ];
 
-    /**
-     * @var \GuzzleHttp\Client|\GuzzleHttp\ClientInterface
-     */
-    private $http;
+    private \GuzzleHttp\ClientInterface $http;
+
+    private CloudFlareMapper $mapper;
 
     /**
-     * @var \RemotelyLiving\PHPDNS\Mappers\CloudFlare
+     * @var array<string, mixed>
      */
-    private $mapper;
+    private array $options;
 
-    public function __construct(ClientInterface $http = null, CloudFlareMapper $mapper = null)
-    {
-        $this->http = $http ?? new Client(self::DEFAULT_OPTIONS);
+    public function __construct(
+        ClientInterface $http = null,
+        CloudFlareMapper $mapper = null,
+        array $options = self::DEFAULT_OPTIONS
+    ) {
+        $this->http = $http ?? new Client();
         $this->mapper = $mapper ?? new CloudFlareMapper();
+        $this->options = $options;
     }
 
-    protected function doQuery(Hostname $hostname, DNSRecordType $type): DNSRecordCollection
+    protected function doQuery(Hostname $hostname, DNSRecordType $recordType): DNSRecordCollection
     {
         try {
-            return (!$type->isA(DNSRecordType::TYPE_ANY))
-                ? $this->doApiQuery($hostname, $type)
+            return (!$recordType->isA(DNSRecordType::TYPE_ANY))
+                ? $this->doApiQuery($hostname, $recordType)
                 : $this->doAnyApiQuery($hostname);
         } catch (\Throwable $e) {
             throw new QueryFailure("Unable to query CloudFlare API", 0, $e);
@@ -64,9 +67,9 @@ class CloudFlare extends ResolverAbstract
         $eachPromise = new EachPromise($this->generateEachTypeQuery($hostname), [
             'concurrency' => 4,
             'fulfilled' => function (Response $response) use (&$results) {
-                $results = array_merge(
+                $results = \array_merge(
                     $results,
-                    $this->parseResult((array) json_decode((string)$response->getBody(), true))
+                    $this->parseResult((array) \json_decode((string)$response->getBody(), true))
                 );
             },
             'rejected' => function (\Throwable $e): void {
@@ -88,16 +91,17 @@ class CloudFlare extends ResolverAbstract
 
             yield $this->http->requestAsync(
                 'GET',
-                '/dns-query?' . http_build_query(['name' => (string)$hostname, 'type' => $type])
+                '/dns-query?' . \http_build_query(['name' => (string)$hostname, 'type' => $type]),
+                $this->options
             );
         }
     }
 
     private function doApiQuery(Hostname $hostname, DNSRecordType $type): DNSRecordCollection
     {
-        $url = '/dns-query?' . http_build_query(['name' => (string)$hostname, 'type' => (string)$type]);
-        $decoded = (array)json_decode(
-            (string)$this->http->requestAsync('GET', $url)->wait(true)->getBody(),
+        $url = '/dns-query?' . \http_build_query(['name' => (string)$hostname, 'type' => (string)$type]);
+        $decoded = (array)\json_decode(
+            (string)$this->http->requestAsync('GET', $url, $this->options)->wait(true)->getBody(),
             true
         );
 

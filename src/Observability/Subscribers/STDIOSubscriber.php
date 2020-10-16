@@ -8,17 +8,11 @@ use RemotelyLiving\PHPDNS\Observability\Events\DNSQueryProfiled;
 use RemotelyLiving\PHPDNS\Observability\Events\ObservableEventAbstract;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class STDIOSubscriber implements EventSubscriberInterface
+final class STDIOSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var \SplFileObject
-     */
-    private $STDOUT;
+    private \SplFileObject $STDOUT;
 
-    /**
-     * @var \SplFileObject
-     */
-    private $STDERR;
+    private \SplFileObject $STDERR;
 
     public function __construct(\SplFileObject $stdOut, \SplFileObject $stdErr)
     {

@@ -7,26 +7,17 @@ use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Exceptions\Exception;
 use RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver;
 
-class DNSQueryFailed extends ObservableEventAbstract
+final class DNSQueryFailed extends ObservableEventAbstract
 {
     public const NAME = 'dns.query.failed';
 
-    private $resolver;
+    private \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver $resolver;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $hostname;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $hostname;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecordType
-     */
-    private $recordType;
+    private \RemotelyLiving\PHPDNS\Entities\DNSRecordType $recordType;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Exceptions\Exception
-     */
-    private $error;
+    private \RemotelyLiving\PHPDNS\Exceptions\Exception $error;
 
     public function __construct(Resolver $resolver, Hostname $hostname, DNSRecordType $recordType, Exception $error)
     {

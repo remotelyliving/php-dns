@@ -4,6 +4,7 @@ namespace RemotelyLiving\PHPDNS\Tests\Unit\Resolvers;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
+use RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Resolvers\Chain;
@@ -85,7 +86,7 @@ class ChainTest extends BaseTestAbstract
      */
     public function hasRecordFallsThroughToFalse(): void
     {
-        $record = $this->createMock(DNSRecord::class);
+        $record = $this->createMock(DNSRecordInterface::class);
 
         $this->resolver1->method('hasRecord')
             ->with($record)
@@ -104,7 +105,7 @@ class ChainTest extends BaseTestAbstract
      */
     public function hasOrDoesNotHaveRecord(): void
     {
-        $record = $this->createMock(DNSRecord::class);
+        $record = $this->createMock(DNSRecordInterface::class);
 
         $this->resolver1->method('hasRecord')
             ->with($record)
