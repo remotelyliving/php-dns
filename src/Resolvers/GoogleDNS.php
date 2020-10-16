@@ -82,7 +82,7 @@ final class GoogleDNS extends ResolverAbstract
     {
         try {
             $response = $this->http->request('GET', '/resolve?' . \http_build_query($query), $this->options);
-        } catch (RequestException $e) {
+        } catch (\Throwable $e) {
             throw new QueryFailure("Unable to query GoogleDNS API", 0, $e);
         }
 
