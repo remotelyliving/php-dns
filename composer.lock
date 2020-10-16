@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9fdbeaf0c9a87fabb470560e11194081",
+    "content-hash": "c5e6688cf24e703393183946af3f5848",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -506,24 +506,24 @@
         },
         {
             "name": "spatie/dns",
-            "version": "1.4.3",
+            "version": "1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/dns.git",
-                "reference": "dcb0027eb5e94db01256c8ee6ee841fbf4708172"
+                "reference": "403865f19c01e0b9cfa9356fba5748dd5307b35c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/dns/zipball/dcb0027eb5e94db01256c8ee6ee841fbf4708172",
-                "reference": "dcb0027eb5e94db01256c8ee6ee841fbf4708172",
+                "url": "https://api.github.com/repos/spatie/dns/zipball/403865f19c01e0b9cfa9356fba5748dd5307b35c",
+                "reference": "403865f19c01e0b9cfa9356fba5748dd5307b35c",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.4",
-                "symfony/process": "^5.0"
+                "php": "^7.1",
+                "symfony/process": "^4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^8.0"
+                "phpunit/phpunit": "^7.0"
             },
             "type": "library",
             "autoload": {
@@ -537,14 +537,14 @@
             ],
             "authors": [
                 {
-                    "name": "Harish Toshniwal",
-                    "email": "harish@spatie.be",
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
                     "homepage": "https://spatie.be",
                     "role": "Developer"
                 },
                 {
-                    "name": "Freek Van der Herten",
-                    "email": "freek@spatie.be",
+                    "name": "Harish Toshniwal",
+                    "email": "harish@spatie.be",
                     "homepage": "https://spatie.be",
                     "role": "Developer"
                 }
@@ -555,7 +555,7 @@
                 "dns",
                 "spatie"
             ],
-            "time": "2019-11-30T18:38:16+00:00"
+            "time": "2019-05-17T07:19:43+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -866,26 +866,25 @@
         },
         {
             "name": "symfony/process",
-            "version": "v5.1.7",
+            "version": "v4.4.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "d3a2e64866169586502f0cd9cab69135ad12cee9"
+                "reference": "9b887acc522935f77555ae8813495958c7771ba7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/d3a2e64866169586502f0cd9cab69135ad12cee9",
-                "reference": "d3a2e64866169586502f0cd9cab69135ad12cee9",
+                "url": "https://api.github.com/repos/symfony/process/zipball/9b887acc522935f77555ae8813495958c7771ba7",
+                "reference": "9b887acc522935f77555ae8813495958c7771ba7",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2.5",
-                "symfony/polyfill-php80": "^1.15"
+                "php": ">=7.1.3"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.1-dev"
+                    "dev-master": "4.4-dev"
                 }
             },
             "autoload": {
@@ -926,7 +925,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-02T16:23:27+00:00"
+            "time": "2020-09-02T16:08:58+00:00"
         }
     ],
     "packages-dev": [
