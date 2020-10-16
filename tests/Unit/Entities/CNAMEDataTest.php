@@ -6,6 +6,9 @@ use RemotelyLiving\PHPDNS\Entities\CNAMEData;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
+use function serialize;
+use function unserialize;
+
 class CNAMEDataTest extends BaseTestAbstract
 {
     /**
@@ -71,7 +74,7 @@ class CNAMEDataTest extends BaseTestAbstract
     public function isStringable(): void
     {
         $this->assertStringableAndEquals('google.com.', $this->CNAMEData);
-        $this->assertEquals($this->CNAMEData, \unserialize(\serialize($this->CNAMEData)));
+        $this->assertEquals($this->CNAMEData, unserialize(serialize($this->CNAMEData)));
     }
 
     /**

@@ -6,6 +6,9 @@ use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Entities\NSData;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
+use function serialize;
+use function unserialize;
+
 class NSDataTest extends BaseTestAbstract
 {
     /**
@@ -57,7 +60,7 @@ class NSDataTest extends BaseTestAbstract
     public function isSerializable(): void
     {
         $this->assertSerializable($this->NSData);
-        $this->assertEquals($this->NSData, \unserialize(\serialize($this->NSData)));
+        $this->assertEquals($this->NSData, unserialize(serialize($this->NSData)));
     }
 
     /**

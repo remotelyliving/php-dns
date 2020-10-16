@@ -2,9 +2,9 @@
 
 namespace RemotelyLiving\PHPDNS\Resolvers;
 
+use Generator;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Psr7\Response;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
@@ -12,6 +12,11 @@ use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Mappers\CloudFlare as CloudFlareMapper;
 use RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure;
+use Throwable;
+
+use function array_merge;
+use function http_build_query;
+use function json_decode;
 
 final class CloudFlare extends ResolverAbstract
 {
@@ -28,7 +33,7 @@ final class CloudFlare extends ResolverAbstract
         ],
     ];
 
-    private \GuzzleHttp\ClientInterface $http;
+    private ClientInterface $http;
 
     private CloudFlareMapper $mapper;
 
@@ -53,7 +58,7 @@ final class CloudFlare extends ResolverAbstract
             return (!$recordType->isA(DNSRecordType::TYPE_ANY))
                 ? $this->doApiQuery($hostname, $recordType)
                 : $this->doAnyApiQuery($hostname);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new QueryFailure("Unable to query CloudFlare API", 0, $e);
         }
     }
@@ -67,12 +72,12 @@ final class CloudFlare extends ResolverAbstract
         $eachPromise = new EachPromise($this->generateEachTypeQuery($hostname), [
             'concurrency' => 4,
             'fulfilled' => function (Response $response) use (&$results) {
-                $results = \array_merge(
+                $results = array_merge(
                     $results,
-                    $this->parseResult((array) \json_decode((string)$response->getBody(), true))
+                    $this->parseResult((array) json_decode((string)$response->getBody(), true))
                 );
             },
-            'rejected' => function (\Throwable $e): void {
+            'rejected' => function (Throwable $e): void {
                 throw $e;
             },
         ]);
@@ -82,7 +87,7 @@ final class CloudFlare extends ResolverAbstract
         return $this->mapResults($this->mapper, $results);
     }
 
-    private function generateEachTypeQuery(Hostname $hostname): \Generator
+    private function generateEachTypeQuery(Hostname $hostname): Generator
     {
         foreach (DNSRecordType::VALID_TYPES as $type) {
             if ($type === DNSRecordType::TYPE_ANY) {
@@ -91,7 +96,7 @@ final class CloudFlare extends ResolverAbstract
 
             yield $this->http->requestAsync(
                 'GET',
-                '/dns-query?' . \http_build_query(['name' => (string)$hostname, 'type' => $type]),
+                '/dns-query?' . http_build_query(['name' => (string)$hostname, 'type' => $type]),
                 $this->options
             );
         }
@@ -99,8 +104,8 @@ final class CloudFlare extends ResolverAbstract
 
     private function doApiQuery(Hostname $hostname, DNSRecordType $type): DNSRecordCollection
     {
-        $url = '/dns-query?' . \http_build_query(['name' => (string)$hostname, 'type' => (string)$type]);
-        $decoded = (array)\json_decode(
+        $url = '/dns-query?' . http_build_query(['name' => (string)$hostname, 'type' => (string)$type]);
+        $decoded = (array)json_decode(
             (string)$this->http->requestAsync('GET', $url, $this->options)->wait(true)->getBody(),
             true
         );

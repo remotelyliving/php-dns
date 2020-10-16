@@ -2,11 +2,13 @@
 
 namespace RemotelyLiving\PHPDNS\Resolvers\Traits;
 
+use DateTimeImmutable;
+
 trait Time
 {
-    private ?\DateTimeImmutable $dateTimeImmutable = null;
+    private ?DateTimeImmutable $dateTimeImmutable = null;
 
-    public function setDateTimeImmutable(\DateTimeImmutable $dateTimeImmutable): void
+    public function setDateTimeImmutable(DateTimeImmutable $dateTimeImmutable): void
     {
         $this->dateTimeImmutable = $dateTimeImmutable;
     }
@@ -16,10 +18,10 @@ trait Time
         return $this->getNewDateTimeImmutable()->getTimestamp();
     }
 
-    private function getNewDateTimeImmutable(): \DateTimeImmutable
+    private function getNewDateTimeImmutable(): DateTimeImmutable
     {
         if (!$this->dateTimeImmutable) {
-            $this->dateTimeImmutable = new \DateTimeImmutable();
+            $this->dateTimeImmutable = new DateTimeImmutable();
         }
 
         return /** @scrutinizer ignore-type */ $this->dateTimeImmutable

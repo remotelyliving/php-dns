@@ -2,7 +2,9 @@
 
 namespace RemotelyLiving\PHPDNS\Entities\Interfaces;
 
-interface Serializable extends \Serializable, \JsonSerializable
+use JsonSerializable;
+
+interface Serializable extends \Serializable, JsonSerializable
 {
     public function serialize(): string;
 

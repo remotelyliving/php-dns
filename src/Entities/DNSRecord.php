@@ -4,19 +4,22 @@ namespace RemotelyLiving\PHPDNS\Entities;
 
 use RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface;
 
+use function serialize;
+use function unserialize;
+
 final class DNSRecord extends EntityAbstract implements DNSRecordInterface
 {
-    private \RemotelyLiving\PHPDNS\Entities\DNSRecordType $recordType;
+    private DNSRecordType $recordType;
 
-    private \RemotelyLiving\PHPDNS\Entities\Hostname $hostname;
+    private Hostname $hostname;
 
     private int $TTL;
 
-    private ?\RemotelyLiving\PHPDNS\Entities\IPAddress $IPAddress;
+    private ?IPAddress $IPAddress;
 
     private string $class;
 
-    private ?\RemotelyLiving\PHPDNS\Entities\DataAbstract $data;
+    private ?DataAbstract $data;
     /**
      * @var string
      */
@@ -128,7 +131,7 @@ final class DNSRecord extends EntityAbstract implements DNSRecordInterface
 
     public function serialize(): string
     {
-        return \serialize($this->toArray());
+        return serialize($this->toArray());
     }
 
     /**
@@ -136,7 +139,7 @@ final class DNSRecord extends EntityAbstract implements DNSRecordInterface
      */
     public function unserialize($serialized): void
     {
-        $unserialized = \unserialize($serialized);
+        $unserialized = unserialize($serialized);
 
         $rawIPAddres = $unserialized['IPAddress'] ?? null;
         $this->recordType = DNSRecordType::createFromString($unserialized['type']);

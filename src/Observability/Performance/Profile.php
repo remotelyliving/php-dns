@@ -5,6 +5,8 @@ namespace RemotelyLiving\PHPDNS\Observability\Performance;
 use RemotelyLiving\PHPDNS\Observability\Performance\Interfaces\ProfileInterface;
 use RemotelyLiving\PHPDNS\Observability\Performance\Interfaces\Time;
 
+use function memory_get_peak_usage;
+
 final class Profile implements ProfileInterface
 {
     private string $transactionName;
@@ -15,7 +17,7 @@ final class Profile implements ProfileInterface
 
     private int $peakMemoryUsage = 0;
 
-    private \RemotelyLiving\PHPDNS\Observability\Performance\Interfaces\Time $time;
+    private Time $time;
 
     public function __construct(string $transactionName, Time $time = null)
     {
@@ -45,7 +47,7 @@ final class Profile implements ProfileInterface
 
     public function samplePeakMemoryUsage(): void
     {
-        $this->peakMemoryUsage = \memory_get_peak_usage();
+        $this->peakMemoryUsage = memory_get_peak_usage();
     }
 
     public function getPeakMemoryUsage(): int

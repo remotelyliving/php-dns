@@ -8,6 +8,13 @@ use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Factories\SpatieDNS;
 use RemotelyLiving\PHPDNS\Mappers\Dig as DigMapper;
 use RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure;
+use Throwable;
+
+use function array_slice;
+use function explode;
+use function implode;
+use function preg_replace;
+use function trim;
 
 final class Dig extends ResolverAbstract
 {
@@ -24,11 +31,11 @@ final class Dig extends ResolverAbstract
         DNSRecordType::TYPE_NAPTR,
     ];
 
-    private \RemotelyLiving\PHPDNS\Factories\SpatieDNS $spatieDNSFactory;
+    private SpatieDNS $spatieDNSFactory;
 
     private DigMapper $mapper;
 
-    private ?\RemotelyLiving\PHPDNS\Entities\Hostname $nameserver;
+    private ?Hostname $nameserver;
 
     public function __construct(
         SpatieDNS $spatieDNSFactory = null,
@@ -52,7 +59,7 @@ final class Dig extends ResolverAbstract
             $response = ($recordType->equals(DNSRecordType::createANY()))
                 ? $dig->getRecords(...self::SUPPORTED_QUERY_TYPES)
                 : $dig->getRecords((string) $recordType);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new QueryFailure($e->getMessage(), 0, $e);
         }
 
@@ -62,13 +69,13 @@ final class Dig extends ResolverAbstract
     private static function parseDigResponseToRows(string $digResponse): array
     {
         $rows = [];
-        foreach (\explode(PHP_EOL, self::normalizeColumns($digResponse)) as $line) {
-            if (!\trim($line)) {
+        foreach (explode(PHP_EOL, self::normalizeColumns($digResponse)) as $line) {
+            if (!trim($line)) {
                 continue;
             }
 
-            $columns = \explode(' ', $line);
-            $rows[] = [$columns[0], $columns[1], $columns[2], $columns[3], \implode(' ', \array_slice($columns, 4))];
+            $columns = explode(' ', $line);
+            $rows[] = [$columns[0], $columns[1], $columns[2], $columns[3], implode(' ', array_slice($columns, 4))];
         }
 
         return $rows;
@@ -76,10 +83,10 @@ final class Dig extends ResolverAbstract
 
     private static function normalizeColumns(string $response): string
     {
-        $keysRemoved = \preg_replace('/;(.*)/m', ' ', \trim($response));
-        $tabsRemoved = \preg_replace('/(\t)/m', ' ', (string) $keysRemoved);
-        $breaksRemoved = \preg_replace('/\s\s/m', '', (string) $tabsRemoved);
-        return (string) \preg_replace('/(\(\s|(\s\)))/m', '', (string) $breaksRemoved);
+        $keysRemoved = preg_replace('/;(.*)/m', ' ', trim($response));
+        $tabsRemoved = preg_replace('/(\t)/m', ' ', (string) $keysRemoved);
+        $breaksRemoved = preg_replace('/\s\s/m', '', (string) $tabsRemoved);
+        return (string) preg_replace('/(\(\s|(\s\)))/m', '', (string) $breaksRemoved);
     }
 
     private static function isSupportedQueryType(DNSRecordType $type): bool

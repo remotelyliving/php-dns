@@ -16,6 +16,8 @@ use RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure;
 use RemotelyLiving\PHPDNS\Resolvers\GoogleDNS;
 use RemotelyLiving\PHPDNS\Resolvers\ResolverAbstract;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
+use Throwable;
+use function json_decode;
 
 // @codingStandardsIgnoreFile
 class GoogleDNSTest extends BaseTestAbstract
@@ -80,7 +82,7 @@ class GoogleDNSTest extends BaseTestAbstract
      * @test
      * @dataProvider httpExceptionProvider
      */
-    public function getsRecordsAndThrowsQueryExceptionOnFailures(\Throwable $e)
+    public function getsRecordsAndThrowsQueryExceptionOnFailures(Throwable $e)
     {
         $this->expectException(QueryFailure::class);
 
@@ -128,7 +130,7 @@ class GoogleDNSTest extends BaseTestAbstract
     {
         $json = '{"Status":0,"TC":false,"RD":true,"RA":true,"AD":true,"CD":false,"Question":[{"name":"example.com","type":28}],"Answer":[{"name":"facebook.com.","type":28,"TTL":1726,"data":"2606:2800:220:1:248:1893:25c8:1946"}]}';
 
-        $decoded = \json_decode($json, true);
+        $decoded = json_decode($json, true);
         $decoded['Answer'][0]['type'] = $type;
 
         return json_encode($decoded);

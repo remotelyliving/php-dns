@@ -2,12 +2,15 @@
 
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Entities;
 
+use Countable;
+use Iterator;
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Interfaces\Arrayable;
 use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
+use Traversable;
 
 class DNSRecordCollectionTest extends BaseTestAbstract
 {
@@ -105,9 +108,9 @@ class DNSRecordCollectionTest extends BaseTestAbstract
      */
     public function isCountableTraversableIteratable(): void
     {
-        $this->assertInstanceOf(\Traversable::class, $this->dnsRecordCollection);
-        $this->assertInstanceOf(\Countable::class, $this->dnsRecordCollection);
-        $this->assertInstanceOf(\Iterator::class, $this->dnsRecordCollection);
+        $this->assertInstanceOf(Traversable::class, $this->dnsRecordCollection);
+        $this->assertInstanceOf(Countable::class, $this->dnsRecordCollection);
+        $this->assertInstanceOf(Iterator::class, $this->dnsRecordCollection);
 
         foreach ($this->dnsRecordCollection as $record) {
             $this->assertInstanceOf(DNSRecord::class, $record);

@@ -7,7 +7,7 @@ use Psr\Log\NullLogger;
 
 trait Logger
 {
-    private ?\Psr\Log\LoggerInterface $logger = null;
+    private ?LoggerInterface $logger = null;
 
     public function setLogger(LoggerInterface $logger): void
     {

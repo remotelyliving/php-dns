@@ -2,9 +2,12 @@
 
 namespace RemotelyLiving\PHPDNS\Entities;
 
+use function serialize;
+use function unserialize;
+
 final class CNAMEData extends DataAbstract
 {
-    private \RemotelyLiving\PHPDNS\Entities\Hostname $hostname;
+    private Hostname $hostname;
 
     public function __construct(Hostname $hostname)
     {
@@ -30,7 +33,7 @@ final class CNAMEData extends DataAbstract
 
     public function serialize(): string
     {
-        return \serialize($this->toArray());
+        return serialize($this->toArray());
     }
 
     /**
@@ -38,7 +41,7 @@ final class CNAMEData extends DataAbstract
      */
     public function unserialize($serialized): void
     {
-        $unserialized = \unserialize($serialized);
+        $unserialized = unserialize($serialized);
         $this->hostname = new Hostname($unserialized['hostname']);
     }
 }

@@ -11,13 +11,13 @@ final class DNSQueried extends ObservableEventAbstract
 {
     public const NAME = 'dns.queried';
 
-    private \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver $resolver;
+    private Resolver $resolver;
 
-    private \RemotelyLiving\PHPDNS\Entities\Hostname $hostname;
+    private Hostname $hostname;
 
-    private \RemotelyLiving\PHPDNS\Entities\DNSRecordType $recordType;
+    private DNSRecordType $recordType;
 
-    private \RemotelyLiving\PHPDNS\Entities\DNSRecordCollection $recordCollection;
+    private DNSRecordCollection $recordCollection;
 
     public function __construct(
         Resolver $resolver,

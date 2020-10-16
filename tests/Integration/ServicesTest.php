@@ -4,6 +4,8 @@ namespace RemotelyLiving\PHPDNS\Tests\Integration;
 
 use RemotelyLiving\PHPDNS\Resolvers\Exceptions\ReverseLookupFailure;
 
+use const DNS_ALL;
+
 class ServicesTest extends BaseTestAbstract
 {
     /**
@@ -13,10 +15,10 @@ class ServicesTest extends BaseTestAbstract
     {
         $localDNS = $this->createLocalSystemDNS();
 
-        $records = $localDNS->getRecord('google.com', \DNS_ALL);
+        $records = $localDNS->getRecord('google.com', DNS_ALL);
         $this->assertNotEmpty($records);
 
-        $resultOfBadOperation = $localDNS->getRecord('l', \DNS_ALL);
+        $resultOfBadOperation = $localDNS->getRecord('l', DNS_ALL);
         $this->assertEquals([], $resultOfBadOperation);
     }
 

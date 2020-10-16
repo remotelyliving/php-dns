@@ -12,6 +12,10 @@ use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Mappers\GoogleDNS as GoogleDNSMapper;
 use RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure;
+use Throwable;
+
+use function http_build_query;
+use function json_decode;
 
 final class GoogleDNS extends ResolverAbstract
 {
@@ -28,7 +32,7 @@ final class GoogleDNS extends ResolverAbstract
         ],
     ];
 
-    private \GuzzleHttp\ClientInterface $http;
+    private ClientInterface $http;
 
     private GoogleDNSMapper $mapper;
 
@@ -81,12 +85,12 @@ final class GoogleDNS extends ResolverAbstract
     private function doApiQuery(array $query = []): array
     {
         try {
-            $response = $this->http->request('GET', '/resolve?' . \http_build_query($query), $this->options);
-        } catch (RequestException $e) {
+            $response = $this->http->request('GET', '/resolve?' . http_build_query($query), $this->options);
+        } catch (Throwable $e) {
             throw new QueryFailure("Unable to query GoogleDNS API", 0, $e);
         }
 
-        $result = (array) \json_decode((string)$response->getBody(), true);
+        $result = (array) json_decode((string)$response->getBody(), true);
 
         if (isset($result['Answer'])) {
             return $result['Answer'];

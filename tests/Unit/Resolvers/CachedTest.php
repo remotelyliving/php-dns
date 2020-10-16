@@ -2,6 +2,7 @@
 
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Resolvers;
 
+use DateTimeImmutable;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
@@ -65,7 +66,7 @@ class CachedTest extends BaseTestAbstract
     protected function setUp(): void
     {
         $this->timestamp = time();
-        $this->dateTimeImmutable = $this->createMock(\DateTimeImmutable::class);
+        $this->dateTimeImmutable = $this->createMock(DateTimeImmutable::class);
         $this->dateTimeImmutable->method('setTimeStamp')
             ->willReturn($this->dateTimeImmutable);
         $this->dateTimeImmutable->method('getTimeStamp')

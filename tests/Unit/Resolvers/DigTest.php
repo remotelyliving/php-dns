@@ -1,6 +1,7 @@
 <?php
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Resolvers;
 
+use InvalidArgumentException;
 use RemotelyLiving\PHPDNS\Entities;
 use RemotelyLiving\PHPDNS\Resolvers;
 use RemotelyLiving\PHPDNS\Factories;
@@ -99,7 +100,7 @@ class DigTest extends Tests\Unit\BaseTestAbstract
 
         $this->spatieDNS->method('getRecords')
             ->with(...Resolvers\Dig::SUPPORTED_QUERY_TYPES)
-            ->willThrowException(new \InvalidArgumentException('The message'));
+            ->willThrowException(new InvalidArgumentException('The message'));
 
         $this->dig->getRecords($this->hostname);
     }

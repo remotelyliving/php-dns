@@ -13,7 +13,7 @@ use RemotelyLiving\PHPDNS\Services\LocalSystemDNS as LocalDNSService;
 
 final class LocalSystem extends ResolverAbstract implements ReverseDNSQuery
 {
-    private \RemotelyLiving\PHPDNS\Services\Interfaces\LocalSystemDNS $systemDNS;
+    private LocalSystemDNS $systemDNS;
 
     private LocalMapper $mapper;
 

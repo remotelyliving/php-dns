@@ -15,6 +15,9 @@ use RemotelyLiving\PHPDNS\Resolvers\Interfaces;
 use RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+use function json_encode;
+use function shuffle;
+
 final class Chain extends ResolverAbstract implements Interfaces\Chain
 {
     public const STRATEGY_FIRST_TO_FIND = 0;
@@ -69,7 +72,7 @@ final class Chain extends ResolverAbstract implements Interfaces\Chain
     public function randomly(): Interfaces\Chain
     {
         $randomized = clone $this;
-        \shuffle($randomized->resolvers);
+        shuffle($randomized->resolvers);
 
         return $randomized;
     }
@@ -122,7 +125,7 @@ final class Chain extends ResolverAbstract implements Interfaces\Chain
             } catch (Exception $e) {
                 $this->getLogger()->error(
                     'Something went wrong in the chain of resolvers',
-                    ['exception' => \json_encode($e), 'resolver' => $resolver->getName()]
+                    ['exception' => json_encode($e), 'resolver' => $resolver->getName()]
                 );
                 continue;
             }

@@ -2,14 +2,19 @@
 
 namespace RemotelyLiving\PHPDNS\Observability\Traits;
 
+use LogicException;
+use ReflectionClass;
+use ReflectionMethod;
 use RemotelyLiving\PHPDNS\Observability\Events\ObservableEventAbstract;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+use function call_user_func_array;
+
 trait Dispatcher
 {
-    private ?\Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher = null;
+    private ?EventDispatcherInterface $dispatcher = null;
 
     public function setDispatcher(EventDispatcherInterface $dispatcher): void
     {
@@ -28,14 +33,14 @@ trait Dispatcher
 
     public function dispatch(ObservableEventAbstract $event): void
     {
-        \call_user_func_array([$this->getDispatcher(), 'dispatch'], $this->getOrderedDispatcherArguments($event));
+        call_user_func_array([$this->getDispatcher(), 'dispatch'], $this->getOrderedDispatcherArguments($event));
     }
 
     private function getOrderedDispatcherArguments(ObservableEventAbstract $event): array
     {
-        $reflection = new \ReflectionClass($this->getDispatcher());
+        $reflection = new ReflectionClass($this->getDispatcher());
 
-        foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+        foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             if ($method->getName() !== 'dispatch') {
                 continue;
             }
@@ -48,7 +53,7 @@ trait Dispatcher
             }
         }
 
-        throw new \LogicException('Could not determine argument order for dispatcher');
+        throw new LogicException('Could not determine argument order for dispatcher');
     }
 
     private function getDispatcher(): EventDispatcherInterface

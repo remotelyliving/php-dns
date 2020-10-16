@@ -4,6 +4,12 @@ namespace RemotelyLiving\PHPDNS\Entities;
 
 use RemotelyLiving\PHPDNS\Exceptions;
 
+use function preg_match;
+use function serialize;
+use function str_ireplace;
+use function trim;
+use function unserialize;
+
 final class CAAData extends DataAbstract
 {
     private int $flags;
@@ -52,7 +58,7 @@ final class CAAData extends DataAbstract
 
     public function serialize(): string
     {
-        return \serialize($this->toArray());
+        return serialize($this->toArray());
     }
 
     /**
@@ -60,7 +66,7 @@ final class CAAData extends DataAbstract
      */
     public function unserialize($serialized): void
     {
-        $unserialized = \unserialize($serialized);
+        $unserialized = unserialize($serialized);
         $this->flags = $unserialized['flags'];
         $this->tag = $unserialized['tag'];
         $this->value = $unserialized['value'];
@@ -68,9 +74,9 @@ final class CAAData extends DataAbstract
 
     private function normalizeValue(string $value): string
     {
-        $normalized = \trim(\str_ireplace('"', '', $value));
+        $normalized = trim(str_ireplace('"', '', $value));
 
-        if (\preg_match('/\s/m', $normalized)) {
+        if (preg_match('/\s/m', $normalized)) {
             throw new Exceptions\InvalidArgumentException("$value is not a valid CAA value");
         }
 

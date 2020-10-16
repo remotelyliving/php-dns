@@ -9,6 +9,12 @@ use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Resolvers\Traits\Time;
 use RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver;
 
+use function count;
+use function max;
+use function md5;
+use function min;
+use function sprintf;
+
 final class Cached extends ResolverAbstract
 {
     use Time;
@@ -16,9 +22,9 @@ final class Cached extends ResolverAbstract
     protected const DEFAULT_CACHE_TTL = 300;
     private const CACHE_KEY_TEMPLATE = '%s:%s:%s';
 
-    private \Psr\Cache\CacheItemPoolInterface $cache;
+    private CacheItemPoolInterface $cache;
 
-    private \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver $resolver;
+    private Resolver $resolver;
 
     /**
      * Bump this number on breaking changes to invalidate cache
@@ -72,7 +78,7 @@ final class Cached extends ResolverAbstract
 
     private function buildCacheKey(Hostname $hostname, DNSRecordType $recordType): string
     {
-        return \md5(\sprintf(self::CACHE_KEY_TEMPLATE, self::NAMESPACE, (string)$hostname, (string)$recordType));
+        return md5(sprintf(self::CACHE_KEY_TEMPLATE, self::NAMESPACE, (string)$hostname, (string)$recordType));
     }
 
     private function extractLowestTTL(DNSRecordCollection $recordCollection): int
@@ -89,7 +95,7 @@ final class Cached extends ResolverAbstract
             $ttls[] = $record->getTTL();
         }
 
-        return \count($ttls) ? \min($ttls) : self::DEFAULT_CACHE_TTL;
+        return count($ttls) ? min($ttls) : self::DEFAULT_CACHE_TTL;
     }
 
     /**
@@ -105,7 +111,7 @@ final class Cached extends ResolverAbstract
          */
         foreach ($records as $key => $record) {
             $records[$key] = $record
-                ->setTTL(\max($record->getTTL() - ($this->getTimeStamp() - (int)$results['timestamp']), 0));
+                ->setTTL(max($record->getTTL() - ($this->getTimeStamp() - (int)$results['timestamp']), 0));
         }
 
         return $records;

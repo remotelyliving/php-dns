@@ -7,7 +7,7 @@ use RemotelyLiving\PHPDNS\Observability\Performance\ProfileFactory;
 
 trait Profileable
 {
-    private ?\RemotelyLiving\PHPDNS\Observability\Performance\ProfileFactory $profileFactory = null;
+    private ?ProfileFactory $profileFactory = null;
 
     public function createProfile(string $transactionName): Profile
     {

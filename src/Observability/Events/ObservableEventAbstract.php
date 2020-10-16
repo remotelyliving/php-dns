@@ -2,11 +2,12 @@
 
 namespace RemotelyLiving\PHPDNS\Observability\Events;
 
+use JsonSerializable;
 use RemotelyLiving\PHPDNS\Entities\Interfaces\Arrayable;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 abstract class ObservableEventAbstract extends GenericEvent implements
-    \JsonSerializable,
+    JsonSerializable,
     Arrayable
 {
     abstract public static function getName(): string;
