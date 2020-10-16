@@ -6,6 +6,9 @@ use RemotelyLiving\PHPDNS\Entities\CAAData;
 use RemotelyLiving\PHPDNS\Exceptions;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
+use function serialize;
+use function unserialize;
+
 class CAADataTest extends BaseTestAbstract
 {
 
@@ -64,7 +67,7 @@ class CAADataTest extends BaseTestAbstract
     public function isSerializable(): void
     {
         $this->assertSerializable($this->CAAData);
-        $this->assertEquals($this->CAAData, \unserialize(\serialize($this->CAAData)));
+        $this->assertEquals($this->CAAData, unserialize(serialize($this->CAAData)));
     }
 
     /**

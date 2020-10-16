@@ -6,6 +6,9 @@ use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Entities\SRVData;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
+use function serialize;
+use function unserialize;
+
 class SRVDataTest extends BaseTestAbstract
 {
     /**
@@ -86,7 +89,7 @@ class SRVDataTest extends BaseTestAbstract
     public function isSerializable(): void
     {
         $this->assertSerializable($this->SRVData);
-        $this->assertEquals($this->SRVData, \unserialize(\serialize($this->SRVData)));
+        $this->assertEquals($this->SRVData, unserialize(serialize($this->SRVData)));
     }
 
     /**

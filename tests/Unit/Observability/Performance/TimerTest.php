@@ -2,6 +2,7 @@
 
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Observability\Performance;
 
+use DateTimeInterface;
 use RemotelyLiving\PHPDNS\Observability\Performance\Timer;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
@@ -28,6 +29,6 @@ class TimerTest extends BaseTestAbstract
         $this->assertGreaterThan(0, $this->timer->getMicroTime());
         $this->assertTrue(is_float($this->timer->getMicroTime()));
 
-        $this->assertInstanceOf(\DateTimeInterface::class, $this->timer->now());
+        $this->assertInstanceOf(DateTimeInterface::class, $this->timer->now());
     }
 }

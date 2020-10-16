@@ -7,6 +7,8 @@ use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Entities\IPAddress;
 
+use function str_ireplace;
+
 final class GoogleDNS extends MapperAbstract
 {
     /**
@@ -21,7 +23,7 @@ final class GoogleDNS extends MapperAbstract
             : null;
 
         $value = (isset($this->fields[self::DATA]) && !$IPAddress)
-            ? \str_ireplace('"', '', (string)$this->fields[self::DATA])
+            ? str_ireplace('"', '', (string)$this->fields[self::DATA])
             : null;
 
         return DNSRecord::createFromPrimitives(

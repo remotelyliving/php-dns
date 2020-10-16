@@ -2,9 +2,12 @@
 
 namespace RemotelyLiving\PHPDNS\Entities;
 
+use function serialize;
+use function unserialize;
+
 final class MXData extends DataAbstract
 {
-    private \RemotelyLiving\PHPDNS\Entities\Hostname $target;
+    private Hostname $target;
 
     private int $priority;
 
@@ -39,7 +42,7 @@ final class MXData extends DataAbstract
 
     public function serialize(): string
     {
-        return \serialize($this->toArray());
+        return serialize($this->toArray());
     }
 
     /**
@@ -47,7 +50,7 @@ final class MXData extends DataAbstract
      */
     public function unserialize($serialized): void
     {
-        $unserialized = \unserialize($serialized);
+        $unserialized = unserialize($serialized);
         $this->target = new Hostname($unserialized['target']);
         $this->priority = $unserialized['priority'];
     }

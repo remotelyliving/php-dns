@@ -2,9 +2,12 @@
 
 namespace RemotelyLiving\PHPDNS\Entities;
 
+use function serialize;
+use function unserialize;
+
 final class NSData extends DataAbstract
 {
-    private \RemotelyLiving\PHPDNS\Entities\Hostname $target;
+    private Hostname $target;
 
     public function __construct(Hostname $target)
     {
@@ -30,7 +33,7 @@ final class NSData extends DataAbstract
 
     public function serialize(): string
     {
-        return \serialize($this->toArray());
+        return serialize($this->toArray());
     }
 
     /**
@@ -38,7 +41,7 @@ final class NSData extends DataAbstract
      */
     public function unserialize($serialized): void
     {
-        $unserialized = \unserialize($serialized);
+        $unserialized = unserialize($serialized);
         $this->target = new Hostname($unserialized['target']);
     }
 }

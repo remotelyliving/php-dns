@@ -6,6 +6,9 @@ use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Entities\SOAData;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
+use function serialize;
+use function unserialize;
+
 class SOADataTest extends BaseTestAbstract
 {
     /**
@@ -119,7 +122,7 @@ class SOADataTest extends BaseTestAbstract
     public function isSerializable(): void
     {
         $this->assertSerializable($this->SOAData);
-        $this->assertEquals($this->SOAData, \unserialize(\serialize($this->SOAData)));
+        $this->assertEquals($this->SOAData, unserialize(serialize($this->SOAData)));
     }
 
     /**

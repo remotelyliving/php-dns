@@ -2,6 +2,7 @@
 
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Observability\Events;
 
+use JsonSerializable;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Entities\Interfaces\Arrayable;
@@ -82,7 +83,7 @@ class DNSQueryFailedTest extends BaseTestAbstract
         ];
 
         $this->assertInstanceOf(Arrayable::class, $this->DNSQueryFailed);
-        $this->assertInstanceOf(\JsonSerializable::class, $this->error);
+        $this->assertInstanceOf(JsonSerializable::class, $this->error);
         $this->assertEquals($expected, $this->DNSQueryFailed->toArray());
     }
 }

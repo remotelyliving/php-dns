@@ -4,6 +4,9 @@ namespace RemotelyLiving\PHPDNS\Entities;
 
 use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
 
+use function filter_var;
+use function trim;
+
 final class IPAddress extends EntityAbstract
 {
     private string $IPAddress;
@@ -13,7 +16,7 @@ final class IPAddress extends EntityAbstract
      */
     public function __construct(string $IPAddress)
     {
-        $IPAddress = \trim($IPAddress);
+        $IPAddress = trim($IPAddress);
 
         if (self::isValid($IPAddress) === false) {
             throw new InvalidArgumentException("{$IPAddress} is not a valid IP address");
@@ -29,7 +32,7 @@ final class IPAddress extends EntityAbstract
 
     public static function isValid(string $IPAddress): bool
     {
-        return (bool) \filter_var($IPAddress, FILTER_VALIDATE_IP);
+        return (bool) filter_var($IPAddress, FILTER_VALIDATE_IP);
     }
 
     public static function createFromString(string $IPAddress): IPAddress
@@ -49,11 +52,11 @@ final class IPAddress extends EntityAbstract
 
     public function isIPv6(): bool
     {
-        return (bool) \filter_var($this->IPAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
+        return (bool) filter_var($this->IPAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
     }
 
     public function isIPv4(): bool
     {
-        return (bool) \filter_var($this->IPAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+        return (bool) filter_var($this->IPAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
     }
 }

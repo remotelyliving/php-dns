@@ -5,6 +5,9 @@ namespace RemotelyLiving\PHPDNS\Tests\Unit\Entities;
 use RemotelyLiving\PHPDNS\Entities\TXTData;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
+use function serialize;
+use function unserialize;
+
 class TXTDataTest extends BaseTestAbstract
 {
     /**
@@ -55,7 +58,7 @@ class TXTDataTest extends BaseTestAbstract
     public function isSerializable(): void
     {
         $this->assertSerializable($this->TXTData);
-        $this->assertEquals($this->TXTData, \unserialize(\serialize($this->TXTData)));
+        $this->assertEquals($this->TXTData, unserialize(serialize($this->TXTData)));
     }
 
     /**

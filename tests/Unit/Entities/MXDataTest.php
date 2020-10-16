@@ -6,6 +6,9 @@ use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Entities\MXData;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
+use function serialize;
+use function unserialize;
+
 class MXDataTest extends BaseTestAbstract
 {
     /**
@@ -68,7 +71,7 @@ class MXDataTest extends BaseTestAbstract
     public function isSerializable(): void
     {
         $this->assertSerializable($this->MXData);
-        $this->assertEquals($this->MXData, \unserialize(\serialize($this->MXData)));
+        $this->assertEquals($this->MXData, unserialize(serialize($this->MXData)));
     }
 
     /**

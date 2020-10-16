@@ -2,6 +2,9 @@
 
 namespace RemotelyLiving\PHPDNS\Entities;
 
+use function serialize;
+use function unserialize;
+
 final class SRVData extends DataAbstract
 {
     private int $priority;
@@ -10,7 +13,7 @@ final class SRVData extends DataAbstract
 
     private int $port;
 
-    private \RemotelyLiving\PHPDNS\Entities\Hostname $target;
+    private Hostname $target;
 
     public function __construct(int $priority, int $weight, int $port, Hostname $target)
     {
@@ -57,7 +60,7 @@ final class SRVData extends DataAbstract
 
     public function serialize(): string
     {
-        return \serialize($this->toArray());
+        return serialize($this->toArray());
     }
 
     /**
@@ -65,7 +68,7 @@ final class SRVData extends DataAbstract
      */
     public function unserialize($serialized): void
     {
-        $unserialized = \unserialize($serialized);
+        $unserialized = unserialize($serialized);
         $this->priority = $unserialized['priority'];
         $this->weight = $unserialized['weight'];
         $this->port = $unserialized['port'];

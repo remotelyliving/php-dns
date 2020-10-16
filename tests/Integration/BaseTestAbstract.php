@@ -14,6 +14,7 @@ use RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver;
 use RemotelyLiving\PHPDNS\Resolvers\LocalSystem;
 use RemotelyLiving\PHPDNS\Resolvers\ResolverAbstract;
 use RemotelyLiving\PHPDNS\Services\LocalSystemDNS;
+use SplFileObject;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -66,7 +67,7 @@ abstract class BaseTestAbstract extends TestCase
 
     protected function createStdIOSubscriber(): EventSubscriberInterface
     {
-        return new STDIOSubscriber(new \SplFileObject('php://stdout'), new \SplFileObject('php://stderr'));
+        return new STDIOSubscriber(new SplFileObject('php://stdout'), new SplFileObject('php://stderr'));
     }
 
     protected function attachTestSubscribers(ResolverAbstract $resolver): void

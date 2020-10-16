@@ -2,11 +2,15 @@
 
 namespace RemotelyLiving\PHPDNS\Entities;
 
+use function serialize;
+use function unserialize;
+use function vsprintf;
+
 final class SOAData extends DataAbstract
 {
-    private \RemotelyLiving\PHPDNS\Entities\Hostname $mname;
+    private Hostname $mname;
 
-    private \RemotelyLiving\PHPDNS\Entities\Hostname $rname;
+    private Hostname $rname;
 
     private int $serial;
 
@@ -42,7 +46,7 @@ final class SOAData extends DataAbstract
 
     public function __toString(): string
     {
-        return \vsprintf(self::TEMPLATE, $this->toArray());
+        return vsprintf(self::TEMPLATE, $this->toArray());
     }
 
     /**
@@ -117,7 +121,7 @@ final class SOAData extends DataAbstract
 
     public function serialize(): string
     {
-        return \serialize($this->toArray());
+        return serialize($this->toArray());
     }
 
     /**
@@ -125,7 +129,7 @@ final class SOAData extends DataAbstract
      */
     public function unserialize($serialized): void
     {
-        $unserialized = \unserialize($serialized);
+        $unserialized = unserialize($serialized);
         $this->mname = new Hostname($unserialized['mname']);
         $this->rname = new Hostname($unserialized['rname']);
         $this->serial = $unserialized['serial'];

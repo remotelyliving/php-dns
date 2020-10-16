@@ -8,6 +8,7 @@ use RemotelyLiving\PHPDNS\Observability\Events\DNSQueryProfiled;
 use RemotelyLiving\PHPDNS\Observability\Events\ObservableEventAbstract;
 use RemotelyLiving\PHPDNS\Observability\Subscribers\STDIOSubscriber;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
+use SplFileObject;
 
 class STDIOSubscriberTest extends BaseTestAbstract
 {
@@ -40,12 +41,12 @@ class STDIOSubscriberTest extends BaseTestAbstract
     {
         parent::setUp();
 
-        $this->STDOut = $this->getMockBuilder(\SplFileObject::class)
+        $this->STDOut = $this->getMockBuilder(SplFileObject::class)
             ->setConstructorArgs(['php://memory'])
             ->setMethods(['fwrite'])
             ->getMock();
 
-        $this->STDErr = $this->getMockBuilder(\SplFileObject::class)
+        $this->STDErr = $this->getMockBuilder(SplFileObject::class)
             ->setConstructorArgs(['php://memory'])
             ->setMethods(['fwrite'])
             ->getMock();

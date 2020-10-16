@@ -6,6 +6,8 @@ use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\IPAddress;
 
+use function str_ireplace;
+
 final class CloudFlare extends MapperAbstract
 {
     /**
@@ -20,7 +22,7 @@ final class CloudFlare extends MapperAbstract
             : null;
 
         $value = (isset($this->fields[self::DATA]) && !$IPAddress)
-            ? \str_ireplace('"', '', (string)$this->fields[self::DATA])
+            ? str_ireplace('"', '', (string)$this->fields[self::DATA])
             : null;
 
         return DNSRecord::createFromPrimitives(

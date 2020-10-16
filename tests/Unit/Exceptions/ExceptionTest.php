@@ -2,6 +2,7 @@
 
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Exceptions;
 
+use JsonSerializable;
 use RemotelyLiving\PHPDNS\Exceptions\Exception;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
@@ -14,7 +15,7 @@ class ExceptionTest extends BaseTestAbstract
     {
         $exception = new Exception('The exception', 123);
 
-        $this->assertInstanceOf(\JsonSerializable::class, $exception);
+        $this->assertInstanceOf(JsonSerializable::class, $exception);
 
         $jsonReady = $exception->jsonSerialize();
 

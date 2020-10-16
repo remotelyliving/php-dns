@@ -2,23 +2,32 @@
 
 namespace RemotelyLiving\PHPDNS\Entities;
 
+use ArrayAccess;
+use ArrayIterator;
+use Countable;
+use Iterator;
 use RemotelyLiving\PHPDNS\Entities\Interfaces\Arrayable;
 use RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface;
 use RemotelyLiving\PHPDNS\Entities\Interfaces\Serializable;
 use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
 
+use function array_filter;
+use function array_shift;
+use function serialize;
+use function unserialize;
+
 final class DNSRecordCollection extends EntityAbstract implements
-    \ArrayAccess,
-    \Iterator,
-    \Countable,
+    ArrayAccess,
+    Iterator,
+    Countable,
     Arrayable,
     Serializable
 {
-    private \ArrayIterator $records;
+    private ArrayIterator $records;
 
     public function __construct(DNSRecordInterface ...$records)
     {
-        $this->records = new \ArrayIterator($records);
+        $this->records = new ArrayIterator($records);
     }
 
     public function toArray(): array
@@ -30,13 +39,13 @@ final class DNSRecordCollection extends EntityAbstract implements
     {
         $copy = $this->records->getArrayCopy();
 
-        return \array_shift($copy);
+        return array_shift($copy);
     }
 
     public function filteredByType(DNSRecordType $type): self
     {
         return new self(
-            ...\array_filter($this->records->getArrayCopy(), fn(DNSRecord $record) => $record->getType()->equals($type))
+            ...array_filter($this->records->getArrayCopy(), fn(DNSRecord $record) => $record->getType()->equals($type))
         );
     }
 
@@ -118,7 +127,7 @@ final class DNSRecordCollection extends EntityAbstract implements
 
     public function serialize(): string
     {
-        return \serialize($this->records->getArrayCopy());
+        return serialize($this->records->getArrayCopy());
     }
 
     /**
@@ -126,7 +135,7 @@ final class DNSRecordCollection extends EntityAbstract implements
      */
     public function unserialize($serialized): void
     {
-        $this->records = new \ArrayIterator(\unserialize($serialized));
+        $this->records = new ArrayIterator(unserialize($serialized));
     }
 
     public function jsonSerialize(): array
@@ -158,7 +167,7 @@ final class DNSRecordCollection extends EntityAbstract implements
         $records = $this->records->getArrayCopy();
 
         /** @var \RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface $record */
-        while ($record = \array_shift($records)) {
+        while ($record = array_shift($records)) {
             if ($eval($record, new self(...$records))) {
                 $filtered[] = $record;
             }

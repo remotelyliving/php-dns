@@ -2,6 +2,7 @@
 
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Observability\Events;
 
+use JsonSerializable;
 use RemotelyLiving\PHPDNS\Entities\Interfaces\Arrayable;
 use RemotelyLiving\PHPDNS\Observability\Events\ObservableEventAbstract;
 use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
@@ -53,7 +54,7 @@ class ObservableEventAbstractTest extends BaseTestAbstract
      */
     public function isJsonSerializable(): void
     {
-        $this->assertInstanceOf(\JsonSerializable::class, $this->event);
+        $this->assertInstanceOf(JsonSerializable::class, $this->event);
         $this->assertEquals(['the name' => ['beep' => 'boop']], $this->event->jsonSerialize());
     }
 }
