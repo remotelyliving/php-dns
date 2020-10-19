@@ -196,7 +196,7 @@ class ResolversTest extends BaseTestAbstract
         $resolver = $this->createCachedResolver($cache);
         $resolver->flush();
 
-        $cacheKey = md5('php-dns-v4:facebook.com.:A');
+        $cacheKey = md5('php-dns-v4.0.1:facebook.com.:A');
 
         $this->assertFalse($cache->getItem($cacheKey)->isHit());
 

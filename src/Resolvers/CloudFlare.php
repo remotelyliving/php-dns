@@ -6,7 +6,7 @@ use Generator;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Promise\EachPromise;
-use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\Hostname;
@@ -71,7 +71,7 @@ final class CloudFlare extends ResolverAbstract
         $results = [];
         $eachPromise = new EachPromise($this->generateEachTypeQuery($hostname), [
             'concurrency' => 4,
-            'fulfilled' => function (Response $response) use (&$results) {
+            'fulfilled' => function (ResponseInterface $response) use (&$results) {
                 $results = array_merge(
                     $results,
                     $this->parseResult((array) json_decode((string)$response->getBody(), true))
