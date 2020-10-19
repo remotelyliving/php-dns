@@ -44,9 +44,8 @@ final class DNSRecordCollection extends EntityAbstract implements
 
     public function filteredByType(DNSRecordType $type): self
     {
-        return new self(
-            ...array_filter($this->records->getArrayCopy(), fn(DNSRecordInterface $record) => $record->getType()->equals($type))
-        );
+        $fn = fn(DNSRecordInterface $record) => $record->getType()->equals($type);
+        return new self(...array_filter($this->records->getArrayCopy(), $fn));
     }
 
     public function has(DNSRecordInterface $lookupRecord): bool

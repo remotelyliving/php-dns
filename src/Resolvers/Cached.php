@@ -29,7 +29,7 @@ final class Cached extends ResolverAbstract
     /**
      * Bump this number on breaking changes to invalidate cache
      */
-    private const NAMESPACE = 'php-dns-v4';
+    private const NAMESPACE = 'php-dns-v4.0.1';
 
     private ?int $ttlSeconds;
 
