@@ -23,6 +23,16 @@ class DigResponses
 EOT;
     }
 
+    public static function ARecordsWithTabs(Hostname $hostname): string
+    {
+        return <<<EOT
+{$hostname}		300 IN A 77.88.55.55
+{$hostname}		300 IN A 77.88.55.60
+{$hostname}		300 IN A 5.255.255.55
+{$hostname}		300 IN A 5.255.255.60
+EOT;
+    }
+
     public static function anyRecords(Hostname $hostname): string
     {
         return <<<EOT

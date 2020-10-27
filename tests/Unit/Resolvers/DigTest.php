@@ -73,6 +73,19 @@ class DigTest extends Tests\Unit\BaseTestAbstract
         }
     }
 
+    public function testParsesRecordsWithExtraTabsInFormatting(): void
+    {
+        $this->spatieDNS->method('getRecords')
+            ->with(Entities\DNSRecordType::TYPE_A)
+            ->willReturn(Tests\Fixtures\DigResponses::ARecordsWithTabs($this->hostname));
+
+        $records = $this->dig->getARecords((string) $this->hostname);
+        $this->assertCount(4, $records);
+        foreach ($records as $record) {
+            $this->assertTrue($record->getType()->equals(Entities\DNSRecordType::createA()));
+        }
+    }
+
     public function testReturnsEmptyCollectionForUnsupportedQueryType(): void
     {
         $this->assertFalse(in_array(Entities\DNSRecordType::TYPE_PTR, Resolvers\Dig::SUPPORTED_QUERY_TYPES));
