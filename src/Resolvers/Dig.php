@@ -84,7 +84,7 @@ final class Dig extends ResolverAbstract
     private static function normalizeColumns(string $response): string
     {
         $keysRemoved = preg_replace('/;(.*)/m', ' ', trim($response));
-        $tabsRemoved = preg_replace('/(\t)/m', ' ', (string) $keysRemoved);
+        $tabsRemoved = preg_replace('/(\t+)/m', ' ', (string) $keysRemoved);
         $breaksRemoved = preg_replace('/\s\s/m', '', (string) $tabsRemoved);
         return (string) preg_replace('/(\(\s|(\s\)))/m', '', (string) $breaksRemoved);
     }
