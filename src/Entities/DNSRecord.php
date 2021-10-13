@@ -95,7 +95,7 @@ final class DNSRecord extends EntityAbstract implements DNSRecordInterface
         return $this->data;
     }
 
-    public function setTTL(int $ttl): self
+    public function setTTL(int $ttl): DNSRecordInterface
     {
         $this->TTL = $ttl;
         return $this;

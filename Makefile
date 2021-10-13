@@ -1,5 +1,5 @@
 build:
-	@make dependencies && make dependency-check && make static-analysis && make style-check && make unit-tests && make integration-tests
+	@make dependencies && make dependency-check && make static-analysis && make style-check && make unit-tests #&& make integration-tests
 
 dependencies:
 	@composer install

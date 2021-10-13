@@ -4,10 +4,11 @@ namespace RemotelyLiving\PHPDNS\Mappers;
 
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
+use RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface;
 
 final class Dig extends MapperAbstract
 {
-    public function toDNSRecord(): DNSRecord
+    public function toDNSRecord(): DNSRecordInterface
     {
         $type = new DNSRecordType($this->fields[3]);
         if ($type->isA(DNSRecordType::TYPE_A) || $type->isA(DNSRecordType::TYPE_AAAA)) {
