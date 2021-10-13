@@ -2,3 +2,6 @@ composer.phar
 /vendor/
 /coverage/
 /.idea/
+.DS_Store
+.churn.cache
+composer.lock

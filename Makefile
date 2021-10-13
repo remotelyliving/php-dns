@@ -19,6 +19,9 @@ style-check:
 dependency-check:
 	@vendor/bin/composer-require-checker check -vvv ./composer.json
 
+churn-report:
+	@vendor/bin/churn run
+
 static-analysis:
 	@vendor/bin/phpstan analyze --level=max ./src && ./vendor/bin/psalm --show-info=false
 

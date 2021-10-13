@@ -19,7 +19,7 @@ use RemotelyLiving\PHPDNS\Resolvers\ResolverAbstract;
 
 class ResolversTest extends BaseTestAbstract
 {
-    private const MAX_HAS_RECORD_WAIT_SECONDS = 3;
+    private const MAX_HAS_RECORD_WAIT_SECONDS = 0;
 
     /**
      * @var \RemotelyLiving\PHPDNS\Entities\Hostname
