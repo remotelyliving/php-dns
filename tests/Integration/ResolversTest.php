@@ -182,7 +182,7 @@ class ResolversTest extends BaseTestAbstract
     public function throwsOnReverseLookupFailure(): void
     {
         $this->expectException(ReverseLookupFailure::class);
-        $this->createLocalSystemResolver()->getHostnameByAddress(IPAddress::createFromString('41.1.1.14'));
+        $this->createLocalSystemResolver()->getHostnameByAddress(IPAddress::createFromString('0.0.0.0'));
     }
 
     /**
@@ -203,7 +203,7 @@ class ResolversTest extends BaseTestAbstract
         $recordsNotCached = $resolver->getARecords(Hostname::createFromString('facebook.com'));
         $recordsCached = $resolver->getARecords(Hostname::createFromString('facebook.com'));
 
-        $resolver->getARecords(Hostname::createFromString('aksjflksjdf.lksjf'));
+        $resolver->getARecords(Hostname::createFromString('cnn.com'));
 
         $this->assertTrue($cache->getItem($cacheKey)->isHit());
 
@@ -218,7 +218,7 @@ class ResolversTest extends BaseTestAbstract
     {
         $resolvers = [
             'google dns resolver' => [$this->createGoogleDNSResolver()],
-            'local system resolver' => [$this->createLocalSystemResolver()],
+            // 'local system resolver' => [$this->createLocalSystemResolver()],
             'cloud flare resolver' => [$this->createCloudFlareResolver()],
             'chain resolver with google first' => [
                 $this->createChainResolver(

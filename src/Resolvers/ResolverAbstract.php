@@ -30,7 +30,7 @@ abstract class ResolverAbstract implements ObservableResolver
     use Dispatcher;
     use Profileable;
 
-    private ?string $name = null;
+    private string $name;
     /**
      * @var string
      */
@@ -38,9 +38,9 @@ abstract class ResolverAbstract implements ObservableResolver
 
     public function getName(): string
     {
-        if ($this->name === null) {
+        if (!isset($this->name)) {
             $explodedClass = explode('\\', get_class($this));
-            $this->name = (string)array_pop($explodedClass);
+            $this->name = array_pop($explodedClass);
         }
 
         return $this->name;

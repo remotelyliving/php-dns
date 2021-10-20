@@ -97,7 +97,7 @@ final class DNSRecordType extends EntityAbstract
 
     public function toInt(): int
     {
-        return (int) array_flip(self::CODE_TYPE_MAP)[$this->type];
+        return array_flip(self::CODE_TYPE_MAP)[$this->type];
     }
 
     public function isA(string $type): bool

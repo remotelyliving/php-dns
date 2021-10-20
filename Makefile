@@ -10,7 +10,10 @@ unit-tests:
 integration-tests:
 	@vendor/bin/phpunit --bootstrap=./tests/bootstrap.php --testsuite Integration
 
-test-coverage:
+test-coverage-ci:
+	@mkdir -p ./build/logs && ./vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover ./build/logs/clover.xml && php vendor/bin/php-coveralls --root_dir=. -v
+
+test-coverage-html:
 	@vendor/bin/phpunit --coverage-html ./coverage
 
 style-check:
@@ -18,6 +21,9 @@ style-check:
 
 dependency-check:
 	@vendor/bin/composer-require-checker check -vvv ./composer.json
+
+churn-report:
+	@vendor/bin/churn run
 
 static-analysis:
 	@vendor/bin/phpstan analyze --level=max ./src && ./vendor/bin/psalm --show-info=false
