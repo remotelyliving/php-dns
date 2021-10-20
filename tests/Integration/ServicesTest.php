@@ -15,11 +15,8 @@ class ServicesTest extends BaseTestAbstract
     {
         $localDNS = $this->createLocalSystemDNS();
 
-        $records = $localDNS->getRecord('google.com', DNS_ALL);
+        $records = $localDNS->getRecord('google.com', DNS_A);
         $this->assertNotEmpty($records);
-
-        $resultOfBadOperation = $localDNS->getRecord('l', DNS_ALL);
-        $this->assertEquals([], $resultOfBadOperation);
     }
 
     /**
@@ -39,6 +36,6 @@ class ServicesTest extends BaseTestAbstract
     public function throwsOnReverseLookupFailure(): void
     {
         $this->expectException(ReverseLookupFailure::class);
-        $this->createLocalSystemDNS()->getHostnameByAddress('40.1.1.40');
+        $this->createLocalSystemDNS()->getHostnameByAddress('0.0.0.0');
     }
 }
