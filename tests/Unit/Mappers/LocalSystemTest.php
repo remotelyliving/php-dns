@@ -95,6 +95,14 @@ class LocalSystemTest extends BaseTestAbstract
             'class' => 'IN',
             'weight' => 200,
             'port' => 9999,
+        ],
+        [
+            'host' => '8.8.8.8.in-addr.arpa',
+            'class' => 'IN',
+            'ttl' => 15248,
+            'type' => 'PTR',
+            'target' => 'dns.google'
+
         ]
     ];
 

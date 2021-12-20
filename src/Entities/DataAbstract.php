@@ -69,6 +69,10 @@ abstract class DataAbstract implements Arrayable, Serializable
             );
         }
 
+        if ($recordType->isA(DNSRecordType::TYPE_PTR)) {
+            return new PTRData(new Hostname($data));
+        }
+
         throw new InvalidArgumentException("{$data} could not be created with type {$recordType}");
     }
 
