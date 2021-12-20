@@ -63,18 +63,6 @@ class GoogleDNSTest extends BaseTestAbstract
         );
 
         $mappedRecord = $this->mapper->mapFields([
-            'type' => 16,
-            'TTL' => 365,
-            'name' => 'facebook.com.',
-            'data' => '"txtval"',
-        ])->toDNSRecord();
-
-        $this->assertEquals(
-            DNSRecord::createFromPrimitives('TXT', 'facebook.com', 365, null, 'IN', 'txtval'),
-            $mappedRecord
-        );
-
-        $mappedRecord = $this->mapper->mapFields([
             'type' => 12,
             'TTL' => 18930,
             'name' => '8.8.8.8.in-addr.arpa.',
