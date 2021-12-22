@@ -26,7 +26,7 @@ churn-report:
 	@vendor/bin/churn run
 
 static-analysis:
-	@vendor/bin/phpstan analyze --level=max ./src && ./vendor/bin/psalm --show-info=false
+	@vendor/bin/phpstan analyze --level=8 ./src && ./vendor/bin/psalm --show-info=false
 
 style-fix:
 	@vendor/bin/phpcbf --standard=PSR12 ./src ./tests

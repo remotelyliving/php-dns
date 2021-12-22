@@ -41,6 +41,7 @@ final class CNAMEData extends DataAbstract
      */
     public function unserialize($serialized): void
     {
+        /** @var array{'hostname': string} $unserialized */
         $unserialized = unserialize($serialized);
         $this->hostname = new Hostname($unserialized['hostname']);
     }
