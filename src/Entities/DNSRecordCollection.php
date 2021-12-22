@@ -87,17 +87,27 @@ final class DNSRecordCollection extends EntityAbstract implements
         $this->records->rewind();
     }
 
+    /**
+     * @param mixed $offset
+     * @return bool
+     */
     public function offsetExists($offset): bool
     {
         return $this->records->offsetExists($offset);
     }
 
+    /**
+     * @param mixed $offset
+     * @return \RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface
+     */
     public function offsetGet($offset): DNSRecordInterface
     {
         return $this->records->offsetGet($offset);
     }
 
     /**
+     * @param mixed $offset
+     * @param mixed $value
      * @throws \RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException
      */
     public function offsetSet($offset, $value): void
@@ -109,6 +119,9 @@ final class DNSRecordCollection extends EntityAbstract implements
         $this->records->offsetSet($offset, /** @scrutinizer ignore-type */ $value);
     }
 
+    /**
+     * @param mixed $offset
+     */
     public function offsetUnset($offset): void
     {
         $this->records->offsetUnset($offset);
@@ -165,7 +178,6 @@ final class DNSRecordCollection extends EntityAbstract implements
         $filtered = new self();
         $records = $this->records->getArrayCopy();
 
-        /** @var \RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface $record */
         while ($record = array_shift($records)) {
             if ($eval($record, new self(...$records))) {
                 $filtered[] = $record;

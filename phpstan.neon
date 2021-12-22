@@ -2,32 +2,3 @@ parameters:
 	checkMissingIterableValueType: false
 	checkGenericClassInNonGenericObjectType: false
 	ignoreErrors:
-		-
-			message: "#^Method RemotelyLiving\\\\PHPDNS\\\\Entities\\\\DNSRecordCollection\\:\\:offsetExists\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: src/Entities/DNSRecordCollection.php
-
-		-
-			message: "#^Method RemotelyLiving\\\\PHPDNS\\\\Entities\\\\DNSRecordCollection\\:\\:offsetGet\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: src/Entities/DNSRecordCollection.php
-
-		-
-			message: "#^Method RemotelyLiving\\\\PHPDNS\\\\Entities\\\\DNSRecordCollection\\:\\:offsetSet\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: src/Entities/DNSRecordCollection.php
-
-		-
-			message: "#^Method RemotelyLiving\\\\PHPDNS\\\\Entities\\\\DNSRecordCollection\\:\\:offsetSet\\(\\) has parameter \\$value with no typehint specified\\.$#"
-			count: 1
-			path: src/Entities/DNSRecordCollection.php
-
-		-
-			message: "#^Method RemotelyLiving\\\\PHPDNS\\\\Entities\\\\DNSRecordCollection\\:\\:offsetUnset\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: src/Entities/DNSRecordCollection.php
-
-		-
-			message: "#^Variable \\$record in PHPDoc tag @var does not exist\\.$#"
-			count: 1
-			path: src/Entities/DNSRecordCollection.php

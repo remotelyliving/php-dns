@@ -7,5 +7,4 @@ use RemotelyLiving\PHPDNS\Observability\Interfaces\Observable;
 
 interface ObservableResolver extends Resolver, Observable, LoggerAwareInterface
 {
-
 }
