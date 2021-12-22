@@ -11,7 +11,6 @@ use function unserialize;
 
 class CAADataTest extends BaseTestAbstract
 {
-
     private $flags = 0;
 
     private $tag = 'issue';

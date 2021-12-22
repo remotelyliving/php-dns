@@ -6,5 +6,4 @@ use RemotelyLiving\PHPDNS\Exceptions\Exception;
 
 class QueryFailure extends Exception
 {
-
 }
