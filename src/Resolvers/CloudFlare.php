@@ -38,26 +38,23 @@ final class CloudFlare extends ResolverAbstract
     private CloudFlareMapper $mapper;
 
     /**
-     * @var array<string, mixed>
+     * @param array<string, mixed> $options
      */
-    private array $options;
-
     public function __construct(
         ClientInterface $http = null,
         CloudFlareMapper $mapper = null,
-        array $options = self::DEFAULT_OPTIONS
+        private array $options = self::DEFAULT_OPTIONS
     ) {
         $this->http = $http ?? new Client();
         $this->mapper = $mapper ?? new CloudFlareMapper();
-        $this->options = $options;
     }
 
     protected function doQuery(Hostname $hostname, DNSRecordType $recordType): DNSRecordCollection
     {
         try {
-            return (!$recordType->isA(DNSRecordType::TYPE_ANY))
-                ? $this->doApiQuery($hostname, $recordType)
-                : $this->doAnyApiQuery($hostname);
+            return ($recordType->isA(DNSRecordType::TYPE_ANY))
+                ? $this->doAnyApiQuery($hostname)
+                : $this->doApiQuery($hostname, $recordType);
         } catch (Throwable $e) {
             throw new QueryFailure("Unable to query CloudFlare API", 0, $e);
         }
@@ -107,7 +104,9 @@ final class CloudFlare extends ResolverAbstract
         $url = '/dns-query?' . http_build_query(['name' => (string)$hostname, 'type' => (string)$type]);
         $decoded = (array)json_decode(
             (string)$this->http->requestAsync('GET', $url, $this->options)->wait(true)->getBody(),
-            true
+            true,
+            512,
+            JSON_THROW_ON_ERROR
         );
 
         return $this->mapResults($this->mapper, $this->parseResult($decoded));

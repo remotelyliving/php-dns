@@ -10,15 +10,9 @@ use function unserialize;
 
 class TXTDataTest extends BaseTestAbstract
 {
-    /**
-     * @var string
-     */
-    private $value = 'boop';
+    private string $value = 'boop';
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\TXTData
-     */
-    private $TXTData;
+    private \RemotelyLiving\PHPDNS\Entities\TXTData $TXTData;
 
     protected function setUp(): void
     {

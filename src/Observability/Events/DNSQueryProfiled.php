@@ -9,12 +9,9 @@ final class DNSQueryProfiled extends ObservableEventAbstract
 {
     public const NAME = 'dns.query.profiled';
 
-    private ProfileInterface $profile;
-
-    public function __construct(ProfileInterface $profile)
+    public function __construct(private ProfileInterface $profile)
     {
         parent::__construct();
-        $this->profile = $profile;
     }
 
     public function getProfile(): ProfileInterface

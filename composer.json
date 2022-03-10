@@ -32,7 +32,8 @@
         "symfony/cache": "^4.3",
         "vimeo/psalm": "^4.10",
         "rector/rector": "^0.12.8",
-        "bmitch/churn-php": "^1.5"
+        "bmitch/churn-php": "^1.5",
+        "brianium/paratest": "^6.4"
     },
     "autoload": {
         "psr-4": {

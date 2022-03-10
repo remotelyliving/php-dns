@@ -9,36 +9,19 @@ use function unserialize;
 
 final class DNSRecord extends EntityAbstract implements DNSRecordInterface
 {
-    private DNSRecordType $recordType;
-
-    private Hostname $hostname;
-
-    private int $TTL;
-
-    private ?IPAddress $IPAddress;
-
-    private string $class;
-
-    private ?DataAbstract $data;
     /**
      * @var string
      */
     private const DATA = 'data';
 
     public function __construct(
-        DNSRecordType $recordType,
-        Hostname $hostname,
-        int $ttl,
-        IPAddress $IPAddress = null,
-        string $class = 'IN',
-        DataAbstract $data = null
+        private DNSRecordType $recordType,
+        private Hostname $hostname,
+        private int $TTL,
+        private ?IPAddress $IPAddress = null,
+        private string $class = 'IN',
+        private ?DataAbstract $data = null
     ) {
-        $this->recordType = $recordType;
-        $this->hostname = $hostname;
-        $this->TTL = $ttl;
-        $this->IPAddress = $IPAddress;
-        $this->class = $class;
-        $this->data = $data;
     }
 
     public static function createFromPrimitives(
@@ -117,11 +100,11 @@ final class DNSRecord extends EntityAbstract implements DNSRecordInterface
             'class' => $this->class,
         ];
 
-        if ($this->IPAddress) {
+        if ($this->IPAddress !== null) {
             $formatted['IPAddress'] = (string)$this->IPAddress;
         }
 
-        if ($this->data) {
+        if ($this->data !== null) {
             $formatted[self::DATA] = (string)$this->data;
         }
 

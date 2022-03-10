@@ -6,11 +6,8 @@ use RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface;
 
 abstract class MapperAbstract implements MapperInterface
 {
-    protected array $fields = [];
-
-    final public function __construct(array $fields = [])
+    final public function __construct(protected array $fields = [])
     {
-        $this->fields = $fields;
     }
 
     public function mapFields(array $fields): MapperInterface

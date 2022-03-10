@@ -10,20 +10,8 @@ use RemotelyLiving\PHPDNS\Resolvers\ResolverAbstract;
 
 class TestResolver extends ResolverAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecordCollection
-     */
-    private $recordCollection;
-
-    /**
-     * @var \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
-     */
-    private $error;
-
-    public function __construct(DNSRecordCollection $recordCollection = null, QueryFailure $error = null)
+    public function __construct(private ?DNSRecordCollection $recordCollection, private ?QueryFailure $error)
     {
-        $this->recordCollection = $recordCollection;
-        $this->error = $error;
     }
 
     protected function doQuery(Hostname $hostname, DNSRecordType $recordType): DNSRecordCollection

@@ -9,20 +9,11 @@ use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
 class ProfileTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Observability\Performance\Interfaces\Time
-     */
-    private $time;
+    private \RemotelyLiving\PHPDNS\Observability\Performance\Interfaces\Time $time;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Observability\Performance\ProfileFactory
-     */
-    private $factory;
+    private \RemotelyLiving\PHPDNS\Observability\Performance\ProfileFactory $factory;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Observability\Performance\Profile
-     */
-    private $profile;
+    private \RemotelyLiving\PHPDNS\Observability\Performance\Profile $profile;
 
     protected function setUp(): void
     {

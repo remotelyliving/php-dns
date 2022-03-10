@@ -15,20 +15,11 @@ use RemotelyLiving\PHPDNS\Mappers\LocalSystem as LocalSystemMapper;
 // @codingStandardsIgnoreFile
 class LocalSystemTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Services\Interfaces\LocalSystemDNS
-     */
-    private $dnsClient;
+    private \RemotelyLiving\PHPDNS\Services\Interfaces\LocalSystemDNS $dnsClient;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Mappers\LocalSystem
-     */
-    private $localSystemMapper;
+    private \RemotelyLiving\PHPDNS\Mappers\LocalSystem $localSystemMapper;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Resolvers\LocalSystem
-     */
-    private $localSystem;
+    private \RemotelyLiving\PHPDNS\Resolvers\LocalSystem $localSystem;
 
     protected function setUp() : void
     {

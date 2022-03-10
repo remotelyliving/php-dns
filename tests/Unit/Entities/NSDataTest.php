@@ -11,15 +11,9 @@ use function unserialize;
 
 class NSDataTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $target;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $target;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\NSData
-     */
-    private $NSData;
+    private \RemotelyLiving\PHPDNS\Entities\NSData $NSData;
 
     protected function setUp(): void
     {

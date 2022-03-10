@@ -17,20 +17,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ChainTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver
-     */
-    private $resolver1;
+    private \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver $resolver1;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver
-     */
-    private $resolver2;
+    private \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver $resolver2;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Resolvers\Chain
-     */
-    private $chainResolver;
+    private \RemotelyLiving\PHPDNS\Resolvers\Chain $chainResolver;
 
     protected function setUp(): void
     {

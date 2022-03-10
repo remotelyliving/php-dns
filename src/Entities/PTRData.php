@@ -5,13 +5,10 @@ namespace RemotelyLiving\PHPDNS\Entities;
 use function serialize;
 use function unserialize;
 
-final class PTRData extends DataAbstract
+final class PTRData extends DataAbstract implements \Stringable
 {
-    private Hostname $hostname;
-
-    public function __construct(Hostname $hostname)
+    public function __construct(private Hostname $hostname)
     {
-        $this->hostname = $hostname;
     }
 
     public function __toString(): string

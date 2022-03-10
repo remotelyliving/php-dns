@@ -36,23 +36,17 @@ final class GoogleDNS extends ResolverAbstract
 
     private GoogleDNSMapper $mapper;
 
-    private int $consensusAttempts;
-
     /**
-     * @var array<string, mixed>
+     * @param array<string, mixed> $options
      */
-    private array $options;
-
     public function __construct(
         ClientInterface $http = null,
         GoogleDNSMapper $mapper = null,
-        int $consensusAttempts = 3,
-        array $options = self::DEFAULT_OPTIONS
+        private int $consensusAttempts = 3,
+        private array $options = self::DEFAULT_OPTIONS
     ) {
         $this->http = $http ?? new Client();
         $this->mapper = $mapper ?? new GoogleDNSMapper();
-        $this->consensusAttempts = $consensusAttempts;
-        $this->options = $options;
     }
 
     /**
@@ -67,7 +61,7 @@ final class GoogleDNS extends ResolverAbstract
                 ->has($record);
 
             ++$attempts;
-        } while ($hasRecord === false && $attempts < $this->consensusAttempts);
+        } while (!$hasRecord && $attempts < $this->consensusAttempts);
 
         return $hasRecord;
     }

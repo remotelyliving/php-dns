@@ -13,30 +13,15 @@ use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
 class DNSQueryFailedTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver
-     */
-    private $resolver;
+    private \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver $resolver;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $hostname;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $hostname;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecordType
-     */
-    private $recordType;
+    private \RemotelyLiving\PHPDNS\Entities\DNSRecordType $recordType;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Exceptions\Exception
-     */
-    private $error;
+    private \RemotelyLiving\PHPDNS\Exceptions\Exception $error;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Observability\Events\DNSQueryFailed
-     */
-    private $DNSQueryFailed;
+    private \RemotelyLiving\PHPDNS\Observability\Events\DNSQueryFailed $DNSQueryFailed;
 
     protected function setUp(): void
     {

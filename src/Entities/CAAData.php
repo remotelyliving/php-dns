@@ -10,18 +10,12 @@ use function str_ireplace;
 use function trim;
 use function unserialize;
 
-final class CAAData extends DataAbstract
+final class CAAData extends DataAbstract implements \Stringable
 {
-    private int $flags;
-
-    private string $tag;
-
     private ?string $value;
 
-    public function __construct(int $flags, string $tag, string $value = null)
+    public function __construct(private int $flags, private string $tag, string $value = null)
     {
-        $this->flags = $flags;
-        $this->tag = $tag;
         $this->value = ($value)
             ? $this->normalizeValue($value)
             : null;

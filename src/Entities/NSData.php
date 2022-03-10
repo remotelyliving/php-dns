@@ -5,13 +5,10 @@ namespace RemotelyLiving\PHPDNS\Entities;
 use function serialize;
 use function unserialize;
 
-final class NSData extends DataAbstract
+final class NSData extends DataAbstract implements \Stringable
 {
-    private Hostname $target;
-
-    public function __construct(Hostname $target)
+    public function __construct(private Hostname $target)
     {
-        $this->target = $target;
     }
 
     public function __toString(): string

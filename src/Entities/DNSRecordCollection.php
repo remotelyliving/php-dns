@@ -69,10 +69,7 @@ final class DNSRecordCollection extends EntityAbstract implements
         $this->records->next();
     }
 
-    /**
-     * @return int|string|bool
-     */
-    public function key()
+    public function key(): bool|int|string|null
     {
         return $this->records->key();
     }
@@ -89,7 +86,6 @@ final class DNSRecordCollection extends EntityAbstract implements
 
     /**
      * @param mixed $offset
-     * @return bool
      */
     public function offsetExists($offset): bool
     {
@@ -98,7 +94,6 @@ final class DNSRecordCollection extends EntityAbstract implements
 
     /**
      * @param mixed $offset
-     * @return \RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface
      */
     public function offsetGet($offset): DNSRecordInterface
     {

@@ -5,16 +5,10 @@ namespace RemotelyLiving\PHPDNS\Entities;
 use function serialize;
 use function unserialize;
 
-final class MXData extends DataAbstract
+final class MXData extends DataAbstract implements \Stringable
 {
-    private Hostname $target;
-
-    private int $priority;
-
-    public function __construct(Hostname $target, int $priority = 0)
+    public function __construct(private Hostname $target, private int $priority = 0)
     {
-        $this->target = $target;
-        $this->priority = $priority;
     }
 
     public function __toString(): string

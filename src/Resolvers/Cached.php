@@ -22,24 +22,18 @@ final class Cached extends ResolverAbstract
     protected const DEFAULT_CACHE_TTL = 300;
     private const CACHE_KEY_TEMPLATE = '%s:%s:%s';
 
-    private CacheItemPoolInterface $cache;
-
-    private Resolver $resolver;
-
     /**
      * Bump this number on breaking changes to invalidate cache
      */
     private const NAMESPACE = 'php-dns-v4.0.1';
 
-    private ?int $ttlSeconds;
-
     private bool $shouldCacheEmptyResults = true;
 
-    public function __construct(CacheItemPoolInterface $cache, Resolver $resolver, int $ttlSeconds = null)
-    {
-        $this->cache = $cache;
-        $this->resolver = $resolver;
-        $this->ttlSeconds = $ttlSeconds;
+    public function __construct(
+        private CacheItemPoolInterface $cache,
+        private Resolver $resolver,
+        private ?int $ttlSeconds = null
+    ) {
     }
 
     public function flush(): void
@@ -64,7 +58,7 @@ final class Cached extends ResolverAbstract
         }
 
         $dnsRecords = $this->resolver->getRecords((string)$hostname, (string)$recordType);
-        if ($dnsRecords->isEmpty() && $this->shouldCacheEmptyResults === false) {
+        if ($dnsRecords->isEmpty() && !$this->shouldCacheEmptyResults) {
             return $dnsRecords;
         }
 

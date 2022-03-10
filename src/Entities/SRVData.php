@@ -5,22 +5,10 @@ namespace RemotelyLiving\PHPDNS\Entities;
 use function serialize;
 use function unserialize;
 
-final class SRVData extends DataAbstract
+final class SRVData extends DataAbstract implements \Stringable
 {
-    private int $priority;
-
-    private int $weight;
-
-    private int $port;
-
-    private Hostname $target;
-
-    public function __construct(int $priority, int $weight, int $port, Hostname $target)
+    public function __construct(private int $priority, private int $weight, private int $port, private Hostname $target)
     {
-        $this->priority = $priority;
-        $this->weight = $weight;
-        $this->port = $port;
-        $this->target = $target;
     }
 
     public function __toString(): string

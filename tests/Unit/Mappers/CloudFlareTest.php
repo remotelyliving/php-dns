@@ -8,10 +8,7 @@ use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
 class CloudFlareTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Mappers\CloudFlare
-     */
-    private $mapper;
+    private \RemotelyLiving\PHPDNS\Mappers\CloudFlare $mapper;
 
     private const CLOUD_FLARE_DNS_FORMAT = [
         [

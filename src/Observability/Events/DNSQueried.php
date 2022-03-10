@@ -11,24 +11,15 @@ final class DNSQueried extends ObservableEventAbstract
 {
     public const NAME = 'dns.queried';
 
-    private Resolver $resolver;
-
-    private Hostname $hostname;
-
-    private DNSRecordType $recordType;
-
     private DNSRecordCollection $recordCollection;
 
     public function __construct(
-        Resolver $resolver,
-        Hostname $hostname,
-        DNSRecordType $recordType,
+        private Resolver $resolver,
+        private Hostname $hostname,
+        private DNSRecordType $recordType,
         DNSRecordCollection $recordCollection = null
     ) {
         parent::__construct();
-        $this->resolver = $resolver;
-        $this->hostname = $hostname;
-        $this->recordType = $recordType;
         $this->recordCollection = $recordCollection ?? new DNSRecordCollection();
     }
 
@@ -73,7 +64,7 @@ final class DNSQueried extends ObservableEventAbstract
         $formatted = [];
 
         foreach ($recordCollection as $record) {
-            if ($record) {
+            if ($record !== null) {
                 $formatted[] = $record->toArray();
             }
         }

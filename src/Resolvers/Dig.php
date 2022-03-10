@@ -43,7 +43,7 @@ final class Dig extends ResolverAbstract
     ) {
         $this->dig = $dig ?? new Dns();
 
-        if ($nameserver) {
+        if ($nameserver !== null) {
             $this->dig = $this->dig->useNameserver((string) $nameserver);
         }
 

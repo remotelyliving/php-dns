@@ -14,30 +14,15 @@ use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
 class DNSQueriedTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver
-     */
-    private $resolver;
+    private \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver $resolver;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $hostname;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $hostname;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecordType
-     */
-    private $recordType;
+    private \RemotelyLiving\PHPDNS\Entities\DNSRecordType $recordType;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecordCollection
-     */
-    private $recordCollection;
+    private \RemotelyLiving\PHPDNS\Entities\DNSRecordCollection $recordCollection;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Observability\Events\DNSQueried
-     */
-    private $DNSQueried;
+    private \RemotelyLiving\PHPDNS\Observability\Events\DNSQueried $DNSQueried;
 
     protected function setUp(): void
     {

@@ -125,7 +125,7 @@ final class Chain extends ResolverAbstract implements Interfaces\Chain
             } catch (Exception $e) {
                 $this->getLogger()->error(
                     'Something went wrong in the chain of resolvers',
-                    ['exception' => json_encode($e), 'resolver' => $resolver->getName()]
+                    ['exception' => json_encode($e, JSON_THROW_ON_ERROR), 'resolver' => $resolver->getName()]
                 );
                 continue;
             }

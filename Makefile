@@ -5,16 +5,16 @@ dependencies:
 	@composer install
 
 unit-tests:
-	@vendor/bin/phpunit --bootstrap=./tests/bootstrap.php --testsuite Unit
+	@vendor/bin/paratest -p8 --runner=WrapperRunner --bootstrap=./tests/bootstrap.php --testsuite Unit
 
 integration-tests:
-	@vendor/bin/phpunit --bootstrap=./tests/bootstrap.php --testsuite Integration
+	@vendor/bin/paratest -p8 --runner=WrapperRunner --bootstrap=./tests/bootstrap.php --testsuite Integration
 
 test-coverage-ci:
 	@mkdir -p ./build/logs && ./vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover ./build/logs/clover.xml && php vendor/bin/php-coveralls --root_dir=. -v
 
 test-coverage-html:
-	@vendor/bin/phpunit --coverage-html ./coverage
+	@vendor/bin/paratest -p8 --runner=WrapperRunner --bootstrap=./tests/bootstrap.php --coverage-html ./coverage
 
 style-check:
 	@vendor/bin/phpcs --standard=PSR12 ./src/* ./tests/*
@@ -32,4 +32,4 @@ style-fix:
 	@vendor/bin/phpcbf --standard=PSR12 ./src ./tests
 
 repl:
-	@vendor/bin/psysh ./bootstrap/repl.php
+	@vendor/bin/psysh bootstrap/repl.php

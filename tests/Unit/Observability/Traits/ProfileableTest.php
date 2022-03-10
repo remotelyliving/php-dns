@@ -9,15 +9,9 @@ use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
 class ProfileableTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Observability\Performance\Profile
-     */
-    private $profile;
+    private \RemotelyLiving\PHPDNS\Observability\Performance\Profile $profile;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Observability\Performance\ProfileFactory
-     */
-    private $profileFactory;
+    private \RemotelyLiving\PHPDNS\Observability\Performance\ProfileFactory $profileFactory;
 
     private $profileableClass;
 

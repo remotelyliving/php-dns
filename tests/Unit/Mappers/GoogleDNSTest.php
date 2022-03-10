@@ -8,10 +8,7 @@ use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
 class GoogleDNSTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Mappers\GoogleDNS
-     */
-    private $mapper;
+    private \RemotelyLiving\PHPDNS\Mappers\GoogleDNS $mapper;
 
     private const GOOGLE_DNS_FORMAT = [
         [

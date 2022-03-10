@@ -11,15 +11,9 @@ use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
 class DNSRecordTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecord
-     */
-    private $DNSARecord;
+    private \RemotelyLiving\PHPDNS\Entities\DNSRecord $DNSARecord;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecord
-     */
-    private $DNSTXTRecord;
+    private \RemotelyLiving\PHPDNS\Entities\DNSRecord $DNSTXTRecord;
 
     protected function setUp(): void
     {

@@ -10,15 +10,9 @@ use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
 class DNSQueryProfiledTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Observability\Performance\Profile
-     */
-    private $profile;
+    private ProfileInterface $profile;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Observability\Events\DNSQueryProfiled
-     */
-    private $DNSQueryProfiled;
+    private DNSQueryProfiled $DNSQueryProfiled;
 
     protected function setUp(): void
     {

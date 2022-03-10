@@ -5,13 +5,10 @@ namespace RemotelyLiving\PHPDNS\Entities;
 use function serialize;
 use function unserialize;
 
-final class TXTData extends DataAbstract
+final class TXTData extends DataAbstract implements \Stringable
 {
-    private string $value;
-
-    public function __construct(string $value)
+    public function __construct(private string $value)
     {
-        $this->value = $value;
     }
 
     public function __toString(): string

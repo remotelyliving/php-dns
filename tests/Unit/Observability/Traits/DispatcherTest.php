@@ -11,25 +11,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class DispatcherTest extends BaseTestAbstract
 {
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $dispatcher;
+    private \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher;
 
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventSubscriberInterface
-     */
-    private $subscriber;
+    private \Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Observability\Events\ObservableEventAbstract
-     */
-    private $event;
+    private \RemotelyLiving\PHPDNS\Observability\Events\ObservableEventAbstract $event;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Observability\Interfaces\Observable
-     */
-    private $observableClass;
+    private \RemotelyLiving\PHPDNS\Observability\Interfaces\Observable $observableClass;
 
     protected function setUp(): void
     {

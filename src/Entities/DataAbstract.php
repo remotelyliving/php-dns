@@ -10,7 +10,7 @@ use function count;
 use function explode;
 use function trim;
 
-abstract class DataAbstract implements Arrayable, Serializable
+abstract class DataAbstract implements Arrayable, Serializable, \Stringable
 {
     abstract public function __toString(): string;
 

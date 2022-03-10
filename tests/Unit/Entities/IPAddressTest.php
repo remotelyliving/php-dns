@@ -8,10 +8,7 @@ use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
 class IPAddressTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\IPAddress
-     */
-    private $IPAddress;
+    private \RemotelyLiving\PHPDNS\Entities\IPAddress $IPAddress;
 
     protected function setUp(): void
     {

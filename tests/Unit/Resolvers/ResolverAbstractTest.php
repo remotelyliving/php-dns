@@ -18,25 +18,13 @@ use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 // @codingStandardsIgnoreFile
 class ResolverAbstractTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Resolvers\ResolverAbstract
-     */
-    private $resolver;
+    private \RemotelyLiving\PHPDNS\Resolvers\ResolverAbstract $resolver;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
+    private \Psr\Log\LoggerInterface $logger;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure|null
-     */
-    private $error = null;
+    private ?\RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure $error = null;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecordCollection|null
-     */
-    private $collection = null;
+    private ?\RemotelyLiving\PHPDNS\Entities\DNSRecordCollection $collection = null;
 
     protected function setUp() : void
     {
@@ -179,7 +167,7 @@ class ResolverAbstractTest extends BaseTestAbstract
 
         try {
             $resolver->getRecords(Hostname::createFromString('facebook.com'));
-        } catch (QueryFailure $e) {}
+        } catch (QueryFailure) {}
 
         $this->assertInstanceOf(DNSQueryProfiled::class, $perProfiled);
         $this->assertInstanceOf(DNSQueryFailed::class, $dnsQueryFailed);

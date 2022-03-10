@@ -9,10 +9,7 @@ use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
 class ObservableEventAbstractTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Observability\Events\ObservableEventAbstract
-     */
-    private $event;
+    private \RemotelyLiving\PHPDNS\Observability\Events\ObservableEventAbstract $event;
 
     protected function setUp(): void
     {
