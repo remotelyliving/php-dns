@@ -40,7 +40,7 @@ abstract class ResolverAbstract implements ObservableResolver
     {
         if (!isset($this->name)) {
             $explodedClass = explode('\\', get_class($this));
-            $this->name = array_pop($explodedClass);
+            $this->name = (string) array_pop($explodedClass);
         }
 
         return $this->name;

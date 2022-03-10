@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <psalm
-    totallyTyped="false"
     resolveFromConfigFile="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
@@ -51,7 +50,7 @@
 
         <InvalidStringClass errorLevel="info" />
         <TypeDoesNotContainType errorLevel="info" />
-
+        <RedundantCast errorLevel="suppress" />
         <TooManyArguments>
             <errorLevel type="suppress">
                 <referencedFunction name="Symfony\Component\EventDispatcher\EventDispatcherInterface::dispatch" />
