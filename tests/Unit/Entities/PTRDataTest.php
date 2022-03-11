@@ -8,15 +8,9 @@ use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
 class PTRDataTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $hostname;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $hostname;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\PTRData
-     */
-    private $PTRData;
+    private \RemotelyLiving\PHPDNS\Entities\PTRData $PTRData;
 
     protected function setUp(): void
     {

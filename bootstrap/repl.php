@@ -5,7 +5,6 @@ use RemotelyLiving\PHPDNS\Entities\Hostname;
 use RemotelyLiving\PHPDNS\Entities\DNSRecord;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
 use RemotelyLiving\PHPDNS\Entities\DNSRecordCollection;
-use RemotelyLiving\PHPDNS\Factories\SpatieDNS;
 use RemotelyLiving\PHPDNS\Mappers\Dig;
 use RemotelyLiving\PHPDNS\Observability\Subscribers\STDIOSubscriber;
 use RemotelyLiving\PHPDNS\Resolvers\Cached;
@@ -13,6 +12,7 @@ use RemotelyLiving\PHPDNS\Resolvers\Chain;
 use RemotelyLiving\PHPDNS\Resolvers\CloudFlare;
 use RemotelyLiving\PHPDNS\Resolvers\GoogleDNS;
 use RemotelyLiving\PHPDNS\Resolvers\LocalSystem;
+use Spatie\Dns\Dns;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class_alias(Hostname::class, 'Hostname');
@@ -33,7 +33,7 @@ $googleDNSResolver->addSubscriber($IOSubscriber);
 $cloudFlareResolver = new CloudFlare();
 $cloudFlareResolver->addSubscriber($IOSubscriber);
 
-$digResolver = new \RemotelyLiving\PHPDNS\Resolvers\Dig(new SpatieDNS(), new Dig());
+$digResolver = new \RemotelyLiving\PHPDNS\Resolvers\Dig(new Dns(), new Dig());
 $digResolver->addSubscriber($IOSubscriber);
 
 $chainResolver = new Chain($cloudFlareResolver, $googleDNSResolver, $localSystemResolver);

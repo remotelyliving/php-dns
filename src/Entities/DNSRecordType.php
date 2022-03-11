@@ -8,7 +8,7 @@ use function array_flip;
 use function in_array;
 use function strtoupper;
 
-final class DNSRecordType extends EntityAbstract
+final class DNSRecordType extends EntityAbstract implements \Stringable
 {
     public const TYPE_A = 'A';
     public const TYPE_CNAME = 'CNAME';

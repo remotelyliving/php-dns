@@ -9,10 +9,7 @@ use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
 class LocalSystemTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Mappers\LocalSystem
-     */
-    private $mapper;
+    private \RemotelyLiving\PHPDNS\Mappers\LocalSystem $mapper;
 
     private const LOCAL_DNS_FORMAT = [
         [

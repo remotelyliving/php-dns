@@ -7,7 +7,7 @@ use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
 use function filter_var;
 use function trim;
 
-final class IPAddress extends EntityAbstract
+final class IPAddress extends EntityAbstract implements \Stringable
 {
     private string $IPAddress;
 
@@ -18,7 +18,7 @@ final class IPAddress extends EntityAbstract
     {
         $IPAddress = trim($IPAddress);
 
-        if (self::isValid($IPAddress) === false) {
+        if (!self::isValid($IPAddress)) {
             throw new InvalidArgumentException("{$IPAddress} is not a valid IP address");
         }
 

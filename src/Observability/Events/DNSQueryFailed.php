@@ -11,22 +11,13 @@ final class DNSQueryFailed extends ObservableEventAbstract
 {
     public const NAME = 'dns.query.failed';
 
-    private Resolver $resolver;
-
-    private Hostname $hostname;
-
-    private DNSRecordType $recordType;
-
-    private Exception $error;
-
-    public function __construct(Resolver $resolver, Hostname $hostname, DNSRecordType $recordType, Exception $error)
-    {
+    public function __construct(
+        private Resolver $resolver,
+        private Hostname $hostname,
+        private DNSRecordType $recordType,
+        private Exception $error
+    ) {
         parent::__construct();
-
-        $this->resolver = $resolver;
-        $this->hostname = $hostname;
-        $this->recordType = $recordType;
-        $this->error = $error;
     }
 
     public function getResolver(): Resolver

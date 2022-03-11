@@ -11,16 +11,13 @@ use function unserialize;
 
 class CAADataTest extends BaseTestAbstract
 {
-    private $flags = 0;
+    private int $flags = 0;
 
-    private $tag = 'issue';
+    private string $tag = 'issue';
 
-    private $value = '";"';
+    private string $value = '";"';
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\CAAData
-     */
-    private $CAAData;
+    private \RemotelyLiving\PHPDNS\Entities\CAAData $CAAData;
 
     protected function setUp(): void
     {

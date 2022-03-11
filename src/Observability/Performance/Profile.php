@@ -9,8 +9,6 @@ use function memory_get_peak_usage;
 
 final class Profile implements ProfileInterface
 {
-    private string $transactionName;
-
     private float $startTime = 0.0;
 
     private float $stopTime = 0.0;
@@ -19,9 +17,8 @@ final class Profile implements ProfileInterface
 
     private Time $time;
 
-    public function __construct(string $transactionName, Time $time = null)
+    public function __construct(private string $transactionName, Time $time = null)
     {
-        $this->transactionName = $transactionName;
         $this->time = $time ?? new Timer();
     }
 

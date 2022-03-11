@@ -29,15 +29,9 @@ use function json_decode;
 // @codingStandardsIgnoreFile
 class CloudFlareTest extends BaseTestAbstract
 {
-    /**
-     * @var \GuzzleHttp\ClientInterface
-     */
-    private $httpClient;
+    private \GuzzleHttp\ClientInterface $httpClient;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Resolvers\CloudFlare
-     */
-    private $cloudFlare;
+    private \RemotelyLiving\PHPDNS\Resolvers\CloudFlare $cloudFlare;
 
     protected function setUp() : void
     {
@@ -200,7 +194,7 @@ class CloudFlareTest extends BaseTestAbstract
         $decoded = json_decode($json, true);
         $decoded['Answer'][0]['type'] = $type;
 
-        return json_encode($decoded);
+        return json_encode($decoded, JSON_THROW_ON_ERROR);
     }
 
     public static function getEmptyResponse(): string

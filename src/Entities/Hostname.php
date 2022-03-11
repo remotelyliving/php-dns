@@ -11,7 +11,7 @@ use function mb_strtolower;
 use function substr;
 use function trim;
 
-final class Hostname extends EntityAbstract
+final class Hostname extends EntityAbstract implements \Stringable
 {
     private string $hostname;
 
@@ -73,7 +73,7 @@ final class Hostname extends EntityAbstract
     {
         $hostname = self::punyCode(mb_strtolower(trim($hostname)));
 
-        if (substr($hostname, -1) !== '.') {
+        if (!str_ends_with($hostname, '.')) {
             return "{$hostname}.";
         }
 

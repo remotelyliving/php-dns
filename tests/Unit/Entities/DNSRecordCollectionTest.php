@@ -14,20 +14,11 @@ use Traversable;
 
 class DNSRecordCollectionTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecord
-     */
-    private $dnsRecord1;
+    private \RemotelyLiving\PHPDNS\Entities\DNSRecord $dnsRecord1;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecord
-     */
-    private $dnsRecord2;
+    private \RemotelyLiving\PHPDNS\Entities\DNSRecord $dnsRecord2;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecordCollection
-     */
-    private $dnsRecordCollection;
+    private \RemotelyLiving\PHPDNS\Entities\DNSRecordCollection $dnsRecordCollection;
 
     protected function setUp(): void
     {

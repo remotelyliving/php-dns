@@ -1,120 +1,85 @@
 <?php
+
 namespace RemotelyLiving\PHPDNS\Tests\Unit\Resolvers;
 
-use InvalidArgumentException;
-use RemotelyLiving\PHPDNS\Entities;
-use RemotelyLiving\PHPDNS\Resolvers;
-use RemotelyLiving\PHPDNS\Factories;
-use RemotelyLiving\PHPDNS\Tests;
-use Spatie;
+use RemotelyLiving\PHPDNS\Entities\DNSRecord;
+use RemotelyLiving\PHPDNS\Entities\DNSRecordType;
+use RemotelyLiving\PHPDNS\Entities\Hostname;
+use RemotelyLiving\PHPDNS\Entities\IPAddress;
+use RemotelyLiving\PHPDNS\Mappers\Dig as DigMapper;
+use RemotelyLiving\PHPDNS\Mappers\MapperAbstract;
+use RemotelyLiving\PHPDNS\Resolvers\Dig;
+use RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure;
+use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
+use Spatie\Dns\Dns;
+use Spatie\Dns\Records\A;
+use Spatie\Dns\Records\Record;
 
-// @codingStandardsIgnoreFile
-class DigTest extends Tests\Unit\BaseTestAbstract
+class DigTest extends BaseTestAbstract
 {
-    /**
-     * @var  RemotelyLiving\PHPDNS\Entities\Hostname;
-     */
-    private $hostname;
+    private Dns $dig;
+    private MapperAbstract $mapper;
+    private Hostname $nameserver;
+    private Hostname $hostname;
+    private Record $record;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\RemotelyLiving\PHPDNS\Factories\SpatieDNS
-     */
-    private $spatieDNSFactory;
+    private Dig $resolver;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Spatie\Dns\Dns
-     */
-    private $spatieDNS;
-
-    /**
-     * @var \RemotelyLiving\PHPDNS\Resolvers\Dig
-     */
-    private $dig;
-
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        exec('dig', $output, $exit_code);
+        $this->dig = $this->createPartialMock(Dns::class, ['getRecords']);
+        $this->mapper = new DigMapper();
+        $this->nameserver = Hostname::createFromString('example.com');
+        $this->hostname = Hostname::createFromString('facebook.com');
+        $this->resolver = new Dig($this->dig, $this->mapper, $this->nameserver);
+        $this->record = A::make([
+            'host' => 'facebook.com',
+            'ttl' => 123,
+            'class' => 'IN',
+            'type' => 'A',
+            'ip' => '192.168.1.1'
+        ]);
 
-        if ($exit_code !== 0) {
-            $this->markTestSkipped('dig is required to run Dig resolver tests');
-        }
-
-        $this->hostname = Entities\Hostname::createFromString('christianthomas.me');
-        $this->spatieDNS = $this->createMock(Spatie\Dns\Dns::class);
-        $this->spatieDNSFactory = $this->createMock(Factories\SpatieDNS::class);
-        $this->spatieDNSFactory->method('createResolver')
-            ->with($this->hostname)
-            ->willReturn($this->spatieDNS);
-
-        $this->dig = new Resolvers\Dig($this->spatieDNSFactory);
-        $this->assertInstanceOf(Resolvers\ResolverAbstract::class, $this->dig);
+        $this->assertSame('example.com.', $this->dig->getNameserver());
     }
 
-    public function testDoesQueryForAnyRecords() : void
+    public function testQuerysSupportedRecord(): void
     {
-        $this->spatieDNS->method('getRecords')
-            ->with(...Resolvers\Dig::SUPPORTED_QUERY_TYPES)
-            ->willReturn(Tests\Fixtures\DigResponses::anyRecords($this->hostname));
 
-        $records = $this->dig->getRecords((string) $this->hostname);
-        $this->assertCount(13, $records);
-    }
+        $this->dig->method('getRecords')
+            ->with('facebook.com.', 'A')
+            ->willReturn([$this->record]);
 
-    public function testDoesQueryForSpecificRecords(): void
-    {
-        $this->spatieDNS->method('getRecords')
-            ->with(Entities\DNSRecordType::TYPE_A)
-            ->willReturn(Tests\Fixtures\DigResponses::ARecords($this->hostname));
-
-        $records = $this->dig->getARecords((string) $this->hostname);
-        $this->assertCount(4, $records);
-        foreach ($records as $record) {
-            $this->assertTrue($record->getType()->equals(Entities\DNSRecordType::createA()));
-        }
-    }
-
-    public function testParsesRecordsWithExtraTabsInFormatting(): void
-    {
-        $this->spatieDNS->method('getRecords')
-            ->with(Entities\DNSRecordType::TYPE_A)
-            ->willReturn(Tests\Fixtures\DigResponses::ARecordsWithTabs($this->hostname));
-
-        $records = $this->dig->getARecords((string) $this->hostname);
-        $this->assertCount(4, $records);
-        foreach ($records as $record) {
-            $this->assertTrue($record->getType()->equals(Entities\DNSRecordType::createA()));
-        }
-    }
-
-    public function testReturnsEmptyCollectionForUnsupportedQueryType(): void
-    {
-        $this->assertFalse(in_array(Entities\DNSRecordType::TYPE_PTR, Resolvers\Dig::SUPPORTED_QUERY_TYPES));
-        $this->assertTrue(
-            $this->dig->getRecords($this->hostname, Entities\DNSRecordType::TYPE_PTR)->isEmpty()
+        $expectedRecord = new DNSRecord(
+            DNSRecordType::createA(),
+            $this->hostname,
+            123,
+            IPAddress::createFromString('192.168.1.1')
         );
+
+        $actual = $this->resolver->getRecords((string) $this->hostname, DNSRecordType::TYPE_A)[0];
+        $this->assertTrue($expectedRecord->equals($actual));
     }
 
-    public function testHandlesEmptyResponse(): void
+    public function testReturnsEmptyOnUnsupportedRecord(): void
     {
-        $this->spatieDNS->method('getRecords')
-            ->with(...Resolvers\Dig::SUPPORTED_QUERY_TYPES)
-            ->willReturn(Tests\Fixtures\DigResponses::empty());
 
-        $this->assertFalse(in_array(Entities\DNSRecordType::TYPE_PTR, Resolvers\Dig::SUPPORTED_QUERY_TYPES));
-        $this->assertTrue(
-            $this->dig->getRecords($this->hostname)->isEmpty()
-        );
+        $this->dig->expects($this->never())
+            ->method('getRecords');
+
+        $this->assertTrue($this->resolver->getRecords((string) $this->hostname, DNSRecordType::TYPE_PTR)->isEmpty());
     }
 
-    public function testHandlesSpatieExceptionAndRethrowsAsQueryFailure(): void
+    public function testRecastsASpatieFailureAsQueryFailure(): void
     {
-        $this->expectException(Resolvers\Exceptions\QueryFailure::class);
-        $this->expectExceptionMessage('The message');
 
-        $this->spatieDNS->method('getRecords')
-            ->with(...Resolvers\Dig::SUPPORTED_QUERY_TYPES)
-            ->willThrowException(new InvalidArgumentException('The message'));
+        $this->dig->method('getRecords')
+            ->with('facebook.com.', 'A')
+            ->willThrowException(new \DomainException('yo'));
 
-        $this->dig->getRecords($this->hostname);
+        $this->expectException(QueryFailure::class);
+        $this->expectExceptionMessage('yo');
+
+        $this->resolver->getRecords((string) $this->hostname, DNSRecordType::TYPE_A);
     }
 }

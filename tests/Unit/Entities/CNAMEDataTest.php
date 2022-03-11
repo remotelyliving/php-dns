@@ -11,15 +11,9 @@ use function unserialize;
 
 class CNAMEDataTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $hostname;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $hostname;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\CNAMEData
-     */
-    private $CNAMEData;
+    private \RemotelyLiving\PHPDNS\Entities\CNAMEData $CNAMEData;
 
     protected function setUp(): void
     {

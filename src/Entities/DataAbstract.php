@@ -10,11 +10,16 @@ use function count;
 use function explode;
 use function trim;
 
-abstract class DataAbstract implements Arrayable, Serializable
+abstract class DataAbstract implements Arrayable, Serializable, \Stringable
 {
     abstract public function __toString(): string;
 
     abstract public function toArray(): array;
+
+    public function __serialize(): array
+    {
+        return $this->toArray();
+    }
 
     public function equals(DataAbstract $dataAbstract): bool
     {
@@ -81,6 +86,9 @@ abstract class DataAbstract implements Arrayable, Serializable
         return $this->toArray();
     }
 
+    protected function init(): void
+    {
+    }
     private static function parseDataToArray(string $data): array
     {
         return explode(' ', $data);

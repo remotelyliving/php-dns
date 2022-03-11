@@ -11,30 +11,15 @@ use function unserialize;
 
 class SRVDataTest extends BaseTestAbstract
 {
-    /**
-     * @var int
-     */
-    private $priority = 100;
+    private int $priority = 100;
 
-    /**
-     * @var int
-     */
-    private $weight = 200;
+    private int $weight = 200;
 
-    /**
-     * @var int
-     */
-    private $port = 9090;
+    private int $port = 9090;
 
-    /**
-     * @var string
-     */
-    private $target = 'target.co.';
+    private string $target = 'target.co.';
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\SRVData
-     */
-    private $SRVData;
+    private \RemotelyLiving\PHPDNS\Entities\SRVData $SRVData;
 
     protected function setUp(): void
     {

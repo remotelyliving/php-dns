@@ -12,30 +12,15 @@ use SplFileObject;
 
 class STDIOSubscriberTest extends BaseTestAbstract
 {
-    /**
-     * @var \SplFileObject
-     */
-    private $STDOut;
+    private \SplFileObject $STDOut;
 
-    /**
-     * @var \SplFileObject
-     */
-    private $STDErr;
+    private \SplFileObject $STDErr;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Observability\Events\ObservableEventAbstract
-     */
-    private $event;
+    private \RemotelyLiving\PHPDNS\Observability\Events\ObservableEventAbstract $event;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Observability\Subscribers\STDIOSubscriber
-     */
-    private $subscriber;
+    private \RemotelyLiving\PHPDNS\Observability\Subscribers\STDIOSubscriber $subscriber;
 
-    /**
-     * @var string
-     */
-    private $expectedOut;
+    private string $expectedOut;
 
     protected function setUp(): void
     {

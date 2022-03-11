@@ -9,36 +9,19 @@ use function unserialize;
 
 final class DNSRecord extends EntityAbstract implements DNSRecordInterface
 {
-    private DNSRecordType $recordType;
-
-    private Hostname $hostname;
-
-    private int $TTL;
-
-    private ?IPAddress $IPAddress;
-
-    private string $class;
-
-    private ?DataAbstract $data;
     /**
      * @var string
      */
     private const DATA = 'data';
 
     public function __construct(
-        DNSRecordType $recordType,
-        Hostname $hostname,
-        int $ttl,
-        IPAddress $IPAddress = null,
-        string $class = 'IN',
-        DataAbstract $data = null
+        private DNSRecordType $recordType,
+        private Hostname $hostname,
+        private int $TTL,
+        private ?IPAddress $IPAddress = null,
+        private string $class = 'IN',
+        private ?DataAbstract $data = null
     ) {
-        $this->recordType = $recordType;
-        $this->hostname = $hostname;
-        $this->TTL = $ttl;
-        $this->IPAddress = $IPAddress;
-        $this->class = $class;
-        $this->data = $data;
     }
 
     public static function createFromPrimitives(
@@ -95,6 +78,13 @@ final class DNSRecord extends EntityAbstract implements DNSRecordInterface
         return $this->data;
     }
 
+    public function setData(DataAbstract $data): self
+    {
+
+        $this->data = $data;
+        return $this;
+    }
+
     public function setTTL(int $ttl): DNSRecordInterface
     {
         $this->TTL = $ttl;
@@ -110,11 +100,11 @@ final class DNSRecord extends EntityAbstract implements DNSRecordInterface
             'class' => $this->class,
         ];
 
-        if ($this->IPAddress) {
+        if ($this->IPAddress !== null) {
             $formatted['IPAddress'] = (string)$this->IPAddress;
         }
 
-        if ($this->data) {
+        if ($this->data !== null) {
             $formatted[self::DATA] = (string)$this->data;
         }
 
@@ -129,18 +119,13 @@ final class DNSRecord extends EntityAbstract implements DNSRecordInterface
             && (string)$this->IPAddress === (string)$record->getIPAddress(); // could be null
     }
 
-    public function serialize(): string
+    public function __serialize(): array
     {
-        return serialize($this->toArray());
+        return $this->toArray();
     }
 
-    /**
-     * @param string $serialized
-     */
-    public function unserialize($serialized): void
+    public function __unserialize(array $unserialized): void
     {
-        $unserialized = unserialize($serialized);
-
         $rawIPAddres = $unserialized['IPAddress'] ?? null;
         $this->recordType = DNSRecordType::createFromString($unserialized['type']);
         $this->hostname = Hostname::createFromString($unserialized['hostname']);
@@ -148,8 +133,8 @@ final class DNSRecord extends EntityAbstract implements DNSRecordInterface
         $this->IPAddress = $rawIPAddres ? IPAddress::createFromString($rawIPAddres) : null;
         $this->class = $unserialized['class'];
         $this->data = (isset($unserialized[self::DATA]))
-         ? DataAbstract::createFromTypeAndString($this->recordType, $unserialized[self::DATA])
-         : null;
+            ? DataAbstract::createFromTypeAndString($this->recordType, $unserialized[self::DATA])
+            : null;
     }
 
     public function jsonSerialize(): array

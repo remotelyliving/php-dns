@@ -11,20 +11,11 @@ use function unserialize;
 
 class MXDataTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $target;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $target;
 
-    /**
-     * @var int
-     */
-    private $priority = 60;
+    private int $priority = 60;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\MXData
-     */
-    private $MXData;
+    private \RemotelyLiving\PHPDNS\Entities\MXData $MXData;
 
     protected function setUp(): void
     {

@@ -4,11 +4,11 @@ namespace RemotelyLiving\PHPDNS\Entities\Interfaces;
 
 use JsonSerializable;
 
-interface Serializable extends \Serializable, JsonSerializable
+interface Serializable extends JsonSerializable
 {
-    public function serialize(): string;
+    public function __serialize(): array;
 
-    public function unserialize($serialized): void;
+    public function __unserialize(array $data): void;
 
     public function jsonSerialize(): array;
 }

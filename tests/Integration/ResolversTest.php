@@ -21,10 +21,7 @@ class ResolversTest extends BaseTestAbstract
 {
     private const MAX_HAS_RECORD_WAIT_SECONDS = 3;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $hostname;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $hostname;
 
     protected function setUp(): void
     {
@@ -63,7 +60,7 @@ class ResolversTest extends BaseTestAbstract
                         break;
                     }
                     $hasRecord = $resolver->hasRecord($collection->pickFirst());
-                } while ($hasRecord === false);
+                } while (!$hasRecord);
 
                 if ($collection[0]->getType()->equals(DNSRecordType::createTXT())) {
                     $this->assertInstanceOf(TXTData::class, $collection[0]->getData());
@@ -124,7 +121,7 @@ class ResolversTest extends BaseTestAbstract
                         break;
                     }
                     $hasRecord = $resolver->hasRecord($collection->pickFirst());
-                } while ($hasRecord === false);
+                } while (!$hasRecord);
 
                 if ($collection[0]->getType()->equals(DNSRecordType::createTXT())) {
                     $this->assertInstanceOf(TXTData::class, $collection[0]->getData());

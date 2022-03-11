@@ -9,21 +9,15 @@ use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
 class DataAbstractTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DataAbstract
-     */
-    private $dataAbstract1;
+    private \RemotelyLiving\PHPDNS\Entities\DataAbstract $dataAbstract1;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DataAbstract
-     */
-    private $dataAbstract2;
+    private \RemotelyLiving\PHPDNS\Entities\DataAbstract $dataAbstract2;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->dataAbstract1 = new class extends DataAbstract {
+        $this->dataAbstract1 = new class extends DataAbstract implements \Stringable {
             public function __toString(): string
             {
                 return 'dataAbstract1';
@@ -34,17 +28,17 @@ class DataAbstractTest extends BaseTestAbstract
                 return [];
             }
 
-            public function serialize(): string
+            public function __serialize(): array
             {
-                return 'seralized';
+                return ['seralized'];
             }
 
-            public function unserialize($serialized): void
+            public function __unserialize(array $serialized): void
             {
             }
         };
 
-        $this->dataAbstract2 = new class extends DataAbstract {
+        $this->dataAbstract2 = new class extends DataAbstract implements \Stringable {
             public function __toString(): string
             {
                 return 'dataAbstract2';
@@ -55,12 +49,12 @@ class DataAbstractTest extends BaseTestAbstract
                 return [];
             }
 
-            public function serialize(): string
+            public function __serialize(): array
             {
-                return 'seralized';
+                return ['seralized'];
             }
 
-            public function unserialize($serialized): void
+            public function __unserialize(array $serialized): void
             {
             }
         };
@@ -93,23 +87,20 @@ class DataAbstractTest extends BaseTestAbstract
         $nsData = $this->dataAbstract1::createFromTypeAndString(DNSRecordType::createNS(), 'target.com');
         $this->assertSame('target.com.', (string)$nsData->getTarget());
 
-        /** @var \RemotelyLiving\PHPDNS\Entities\SOAData $soaData */
         $soaString = 'ns1.google.com. dns-admin.google.com. 224049761 900 800 1800 60';
         $soaData = $this->dataAbstract1::createFromTypeAndString(DNSRecordType::createSOA(), $soaString);
         $this->assertSame('ns1.google.com.', (string)$soaData->getMname());
         $this->assertSame('dns-admin.google.com.', (string)$soaData->getRname());
-        $this->assertSame(224049761, $soaData->getSerial());
+        $this->assertSame(224_049_761, $soaData->getSerial());
         $this->assertSame(900, $soaData->getRefresh());
         $this->assertSame(800, $soaData->getRetry());
         $this->assertSame(1800, $soaData->getExpire());
         $this->assertSame(60, $soaData->getMinTTL());
 
-        /** @var \RemotelyLiving\PHPDNS\Entities\CNAMEData $cnameData */
         $cnameString = 'herp.website';
         $cnameData = $this->dataAbstract1::createFromTypeAndString(DNSRecordType::createCNAME(), $cnameString);
         $this->assertSame('herp.website.', (string)$cnameData->getHostname());
 
-        /** @var \RemotelyLiving\PHPDNS\Entities\CAAData $caaData */
         $caaString = '0 issue "comodoca.com"';
         $caaData = $this->dataAbstract1::createFromTypeAndString(DNSRecordType::createCAA(), $caaString);
         $this->assertSame('comodoca.com', $caaData->getValue());

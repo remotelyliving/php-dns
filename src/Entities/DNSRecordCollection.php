@@ -13,8 +13,6 @@ use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
 
 use function array_filter;
 use function array_shift;
-use function serialize;
-use function unserialize;
 
 final class DNSRecordCollection extends EntityAbstract implements
     ArrayAccess,
@@ -69,10 +67,7 @@ final class DNSRecordCollection extends EntityAbstract implements
         $this->records->next();
     }
 
-    /**
-     * @return int|string|bool
-     */
-    public function key()
+    public function key(): bool|int|string|null
     {
         return $this->records->key();
     }
@@ -89,7 +84,6 @@ final class DNSRecordCollection extends EntityAbstract implements
 
     /**
      * @param mixed $offset
-     * @return bool
      */
     public function offsetExists($offset): bool
     {
@@ -98,7 +92,6 @@ final class DNSRecordCollection extends EntityAbstract implements
 
     /**
      * @param mixed $offset
-     * @return \RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface
      */
     public function offsetGet($offset): DNSRecordInterface
     {
@@ -137,17 +130,14 @@ final class DNSRecordCollection extends EntityAbstract implements
         return $this->count() === 0;
     }
 
-    public function serialize(): string
+    public function __serialize(): array
     {
-        return serialize($this->records->getArrayCopy());
+        return $this->records->getArrayCopy();
     }
 
-    /**
-     * @param string $serialized
-     */
-    public function unserialize($serialized): void
+    public function __unserialize(array $unserialized): void
     {
-        $this->records = new ArrayIterator(unserialize($serialized));
+        $this->records = new ArrayIterator($unserialized);
     }
 
     public function jsonSerialize(): array

@@ -11,45 +11,21 @@ use function unserialize;
 
 class SOADataTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $mname;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $mname;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\Hostname
-     */
-    private $rname;
+    private \RemotelyLiving\PHPDNS\Entities\Hostname $rname;
 
-    /**
-     * @var int
-     */
-    private $serial = 2342;
+    private int $serial = 2342;
 
-    /**
-     * @var int
-     */
-    private $refresh = 123;
+    private int $refresh = 123;
 
-    /**
-     * @var int
-     */
-    private $retry = 321;
+    private int $retry = 321;
 
-    /**
-     * @var int
-     */
-    private $expire = 3434;
+    private int $expire = 3434;
 
-    /**
-     * @var int
-     */
-    private $minTTL = 60;
+    private int $minTTL = 60;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\SOAData
-     */
-    private $SOAData;
+    private \RemotelyLiving\PHPDNS\Entities\SOAData $SOAData;
 
     protected function setUp(): void
     {

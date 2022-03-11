@@ -5,3 +5,4 @@ composer.phar
 .DS_Store
 .churn.cache
 composer.lock
+.phpunit.result.cache

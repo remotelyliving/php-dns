@@ -10,18 +10,12 @@ use function str_ireplace;
 use function trim;
 use function unserialize;
 
-final class CAAData extends DataAbstract
+final class CAAData extends DataAbstract implements \Stringable
 {
-    private int $flags;
-
-    private string $tag;
-
     private ?string $value;
 
-    public function __construct(int $flags, string $tag, string $value = null)
+    public function __construct(private int $flags, private string $tag, string $value = null)
     {
-        $this->flags = $flags;
-        $this->tag = $tag;
         $this->value = ($value)
             ? $this->normalizeValue($value)
             : null;
@@ -30,6 +24,13 @@ final class CAAData extends DataAbstract
     public function __toString(): string
     {
         return "{$this->flags} {$this->tag} \"{$this->value}\"";
+    }
+
+    public function __unserialize(array $unserialized): void
+    {
+        $this->flags = $unserialized['flags'];
+        $this->tag = $unserialized['tag'];
+        $this->value = $unserialized['value'];
     }
 
     public function getFlags(): int
@@ -54,22 +55,6 @@ final class CAAData extends DataAbstract
             'tag' => $this->tag,
             'value' => $this->value,
         ];
-    }
-
-    public function serialize(): string
-    {
-        return serialize($this->toArray());
-    }
-
-    /**
-     * @param string $serialized
-     */
-    public function unserialize($serialized): void
-    {
-        $unserialized = unserialize($serialized);
-        $this->flags = $unserialized['flags'];
-        $this->tag = $unserialized['tag'];
-        $this->value = $unserialized['value'];
     }
 
     private function normalizeValue(string $value): string

@@ -13,55 +13,28 @@ use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
 class CachedTest extends BaseTestAbstract
 {
-    /**
-     * @var \DateTimeImmutable
-     */
-    private $dateTimeImmutable;
+    private \DateTimeImmutable $dateTimeImmutable;
 
     /**
      * @var CacheItemPoolInterface;
      */
-    private $cache;
+    private \Psr\Cache\CacheItemPoolInterface $cache;
 
-    /**
-     * @var Resolver
-     */
-    private $resolver;
+    private \RemotelyLiving\PHPDNS\Resolvers\Interfaces\Resolver $resolver;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Resolvers\Cached
-     */
-    private $cachedResolver;
+    private \RemotelyLiving\PHPDNS\Resolvers\Cached $cachedResolver;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecord
-     */
-    private $DNSRecord1;
+    private \RemotelyLiving\PHPDNS\Entities\DNSRecord $DNSRecord1;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecord
-     */
-    private $DNSRecord2;
+    private \RemotelyLiving\PHPDNS\Entities\DNSRecord $DNSRecord2;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecord
-     */
-    private $DNSRecord3;
+    private \RemotelyLiving\PHPDNS\Entities\DNSRecord $DNSRecord3;
 
-    /**
-     * @var \RemotelyLiving\PHPDNS\Entities\DNSRecordCollection
-     */
-    private $DNSRecordCollection;
+    private \RemotelyLiving\PHPDNS\Entities\DNSRecordCollection $DNSRecordCollection;
 
-    /**
-     * @var CacheItemInterface
-     */
-    private $cacheItem;
+    private \Psr\Cache\CacheItemInterface $cacheItem;
 
-    /**
-     * @var int
-     */
-    private $timestamp;
+    private int $timestamp;
 
     protected function setUp(): void
     {
@@ -70,17 +43,13 @@ class CachedTest extends BaseTestAbstract
         $this->dateTimeImmutable->method('setTimeStamp')
             ->willReturn($this->dateTimeImmutable);
         $this->dateTimeImmutable->method('getTimeStamp')
-            ->willReturnCallback(function () {
-                return $this->timestamp;
-            });
+            ->willReturnCallback(fn() => $this->timestamp);
 
         $this->cacheItem = $this->createMock(CacheItemInterface::class);
         $this->cache = $this->createMock(CacheItemPoolInterface::class);
         $this->cache->method('getItem')
             ->with('a98e0fde8ccac017a92d99e669448572')
-            ->willReturnCallback(function () {
-                return $this->cacheItem;
-            });
+            ->willReturnCallback(fn() => $this->cacheItem);
 
         $this->resolver = $this->createMock(Resolver::class);
 
@@ -95,9 +64,7 @@ class CachedTest extends BaseTestAbstract
 
         $this->resolver->method('getRecords')
             ->with('example.com.', 'ANY')
-            ->willReturnCallback(function (): DNSRecordCollection {
-                return $this->DNSRecordCollection;
-            });
+            ->willReturnCallback(fn(): DNSRecordCollection => $this->DNSRecordCollection);
 
         $this->cachedResolver = new Cached($this->cache, $this->resolver);
         $this->cachedResolver->setDateTimeImmutable($this->dateTimeImmutable);

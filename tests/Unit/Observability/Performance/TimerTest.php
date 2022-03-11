@@ -8,10 +8,7 @@ use RemotelyLiving\PHPDNS\Tests\Unit\BaseTestAbstract;
 
 class TimerTest extends BaseTestAbstract
 {
-    /**
-     * @var \RemotelyLiving\PHPDNS\Observability\Performance\Timer
-     */
-    private $timer;
+    private \RemotelyLiving\PHPDNS\Observability\Performance\Timer $timer;
 
 
     protected function setUp(): void

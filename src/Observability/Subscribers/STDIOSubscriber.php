@@ -13,14 +13,8 @@ use function json_encode;
 
 final class STDIOSubscriber implements EventSubscriberInterface
 {
-    private SplFileObject $STDOUT;
-
-    private SplFileObject $STDERR;
-
-    public function __construct(SplFileObject $stdOut, SplFileObject $stdErr)
+    public function __construct(private SplFileObject $STDOUT, private SplFileObject $STDERR)
     {
-        $this->STDOUT = $stdOut;
-        $this->STDERR = $stdErr;
     }
 
     public static function getSubscribedEvents()

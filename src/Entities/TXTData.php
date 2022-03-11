@@ -2,16 +2,10 @@
 
 namespace RemotelyLiving\PHPDNS\Entities;
 
-use function serialize;
-use function unserialize;
-
-final class TXTData extends DataAbstract
+final class TXTData extends DataAbstract implements \Stringable
 {
-    private string $value;
-
-    public function __construct(string $value)
+    public function __construct(private string $value)
     {
-        $this->value = $value;
     }
 
     public function __toString(): string
@@ -31,17 +25,8 @@ final class TXTData extends DataAbstract
         ];
     }
 
-    public function serialize(): string
+    public function __unserialize(array $unserialized): void
     {
-        return serialize($this->toArray());
-    }
-
-    /**
-     * @param string $serialized
-     */
-    public function unserialize($serialized): void
-    {
-        $unserialized = unserialize($serialized);
         $this->value = $unserialized['value'];
     }
 }

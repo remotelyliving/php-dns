@@ -39,8 +39,8 @@ abstract class ResolverAbstract implements ObservableResolver
     public function getName(): string
     {
         if (!isset($this->name)) {
-            $explodedClass = explode('\\', get_class($this));
-            $this->name = array_pop($explodedClass);
+            $explodedClass = explode('\\', $this::class);
+            $this->name = (string) array_pop($explodedClass);
         }
 
         return $this->name;
@@ -102,7 +102,7 @@ abstract class ResolverAbstract implements ObservableResolver
             $this->dispatch($dnsQueryFailureEvent);
             $this->getLogger()->error(
                 'DNS query failed',
-                [self::EVENT => json_encode($dnsQueryFailureEvent), 'exception' => $e]
+                [self::EVENT => json_encode($dnsQueryFailureEvent, JSON_THROW_ON_ERROR), 'exception' => $e]
             );
 
             throw $e;
@@ -116,7 +116,7 @@ abstract class ResolverAbstract implements ObservableResolver
 
         $dnsQueriedEvent = new DNSQueried($this, $hostname, $recordType, $result);
         $this->dispatch($dnsQueriedEvent);
-        $this->getLogger()->info('DNS queried', [self::EVENT => json_encode($dnsQueriedEvent)]);
+        $this->getLogger()->info('DNS queried', [self::EVENT => json_encode($dnsQueriedEvent, JSON_THROW_ON_ERROR)]);
         return $result;
     }
 
@@ -126,7 +126,7 @@ abstract class ResolverAbstract implements ObservableResolver
         array_map(function (array $fields) use (&$collection, $mapper) {
             try {
                 $collection[] = $mapper->mapFields($fields)->toDNSRecord();
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException) {
                 $this->getLogger()->warning('Invalid fields passed to mapper', $fields);
             }
         }, $results);
