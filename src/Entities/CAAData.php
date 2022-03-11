@@ -26,6 +26,13 @@ final class CAAData extends DataAbstract implements \Stringable
         return "{$this->flags} {$this->tag} \"{$this->value}\"";
     }
 
+    public function __unserialize(array $unserialized): void
+    {
+        $this->flags = $unserialized['flags'];
+        $this->tag = $unserialized['tag'];
+        $this->value = $unserialized['value'];
+    }
+
     public function getFlags(): int
     {
         return $this->flags;
@@ -48,22 +55,6 @@ final class CAAData extends DataAbstract implements \Stringable
             'tag' => $this->tag,
             'value' => $this->value,
         ];
-    }
-
-    public function serialize(): string
-    {
-        return serialize($this->toArray());
-    }
-
-    /**
-     * @param string $serialized
-     */
-    public function unserialize($serialized): void
-    {
-        $unserialized = unserialize($serialized);
-        $this->flags = $unserialized['flags'];
-        $this->tag = $unserialized['tag'];
-        $this->value = $unserialized['value'];
     }
 
     private function normalizeValue(string $value): string

@@ -13,8 +13,6 @@ use RemotelyLiving\PHPDNS\Exceptions\InvalidArgumentException;
 
 use function array_filter;
 use function array_shift;
-use function serialize;
-use function unserialize;
 
 final class DNSRecordCollection extends EntityAbstract implements
     ArrayAccess,
@@ -132,17 +130,14 @@ final class DNSRecordCollection extends EntityAbstract implements
         return $this->count() === 0;
     }
 
-    public function serialize(): string
+    public function __serialize(): array
     {
-        return serialize($this->records->getArrayCopy());
+        return $this->records->getArrayCopy();
     }
 
-    /**
-     * @param string $serialized
-     */
-    public function unserialize($serialized): void
+    public function __unserialize(array $unserialized): void
     {
-        $this->records = new ArrayIterator(unserialize($serialized));
+        $this->records = new ArrayIterator($unserialized);
     }
 
     public function jsonSerialize(): array

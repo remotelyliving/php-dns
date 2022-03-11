@@ -34,17 +34,8 @@ final class MXData extends DataAbstract implements \Stringable
         ];
     }
 
-    public function serialize(): string
+    public function __unserialize(array $unserialized): void
     {
-        return serialize($this->toArray());
-    }
-
-    /**
-     * @param string $serialized
-     */
-    public function unserialize($serialized): void
-    {
-        $unserialized = unserialize($serialized);
         $this->target = new Hostname($unserialized['target']);
         $this->priority = $unserialized['priority'];
     }

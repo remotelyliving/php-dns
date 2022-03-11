@@ -45,14 +45,14 @@ trait Dispatcher
             if ($method->getName() !== 'dispatch') {
                 continue;
             }
-
-            // handle the reverse argument BC from symfony dispatcher 3.* to 4.*
+            // @codeCoverageIgnoreStart
             foreach ($method->getParameters() as $parameter) {
                 $args = ($parameter->getName() === 'event')
                     ? [$event, $event::getName()]
                     : [$event::getName(), $event];
                 break;
             }
+            // @codeCoverageIgnoreEnd
         }
 
         return $args;

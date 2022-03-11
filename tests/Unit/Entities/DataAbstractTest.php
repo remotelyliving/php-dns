@@ -28,12 +28,12 @@ class DataAbstractTest extends BaseTestAbstract
                 return [];
             }
 
-            public function serialize(): string
+            public function __serialize(): array
             {
-                return 'seralized';
+                return ['seralized'];
             }
 
-            public function unserialize($serialized): void
+            public function __unserialize(array $serialized): void
             {
             }
         };
@@ -49,12 +49,12 @@ class DataAbstractTest extends BaseTestAbstract
                 return [];
             }
 
-            public function serialize(): string
+            public function __serialize(): array
             {
-                return 'seralized';
+                return ['seralized'];
             }
 
-            public function unserialize($serialized): void
+            public function __unserialize(array $serialized): void
             {
             }
         };

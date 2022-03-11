@@ -46,17 +46,8 @@ final class SRVData extends DataAbstract implements \Stringable
         ];
     }
 
-    public function serialize(): string
+    public function __unserialize(array $unserialized): void
     {
-        return serialize($this->toArray());
-    }
-
-    /**
-     * @param string $serialized
-     */
-    public function unserialize($serialized): void
-    {
-        $unserialized = unserialize($serialized);
         $this->priority = $unserialized['priority'];
         $this->weight = $unserialized['weight'];
         $this->port = $unserialized['port'];

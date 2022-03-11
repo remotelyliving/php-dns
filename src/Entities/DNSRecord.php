@@ -119,18 +119,13 @@ final class DNSRecord extends EntityAbstract implements DNSRecordInterface
             && (string)$this->IPAddress === (string)$record->getIPAddress(); // could be null
     }
 
-    public function serialize(): string
+    public function __serialize(): array
     {
-        return serialize($this->toArray());
+        return $this->toArray();
     }
 
-    /**
-     * @param string $serialized
-     */
-    public function unserialize($serialized): void
+    public function __unserialize(array $unserialized): void
     {
-        $unserialized = unserialize($serialized);
-
         $rawIPAddres = $unserialized['IPAddress'] ?? null;
         $this->recordType = DNSRecordType::createFromString($unserialized['type']);
         $this->hostname = Hostname::createFromString($unserialized['hostname']);
@@ -138,8 +133,8 @@ final class DNSRecord extends EntityAbstract implements DNSRecordInterface
         $this->IPAddress = $rawIPAddres ? IPAddress::createFromString($rawIPAddres) : null;
         $this->class = $unserialized['class'];
         $this->data = (isset($unserialized[self::DATA]))
-         ? DataAbstract::createFromTypeAndString($this->recordType, $unserialized[self::DATA])
-         : null;
+            ? DataAbstract::createFromTypeAndString($this->recordType, $unserialized[self::DATA])
+            : null;
     }
 
     public function jsonSerialize(): array

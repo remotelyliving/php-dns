@@ -50,7 +50,13 @@ class DigTest extends BaseTestAbstract
             ->with('facebook.com.', 'A')
             ->willReturn([$this->record]);
 
-        $expectedRecord = new DNSRecord(DNSRecordType::createA(), $this->hostname, 123, IPAddress::createFromString('192.168.1.1'));
+        $expectedRecord = new DNSRecord(
+            DNSRecordType::createA(),
+            $this->hostname,
+            123,
+            IPAddress::createFromString('192.168.1.1')
+        );
+
         $actual = $this->resolver->getRecords((string) $this->hostname, DNSRecordType::TYPE_A)[0];
         $this->assertTrue($expectedRecord->equals($actual));
     }

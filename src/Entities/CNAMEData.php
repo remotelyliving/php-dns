@@ -28,18 +28,8 @@ final class CNAMEData extends DataAbstract implements \Stringable
         ];
     }
 
-    public function serialize(): string
+    public function __unserialize(array $unserialized): void
     {
-        return serialize($this->toArray());
-    }
-
-    /**
-     * @param string $serialized
-     */
-    public function unserialize($serialized): void
-    {
-        /** @var array{'hostname': string} $unserialized */
-        $unserialized = unserialize($serialized);
         $this->hostname = new Hostname($unserialized['hostname']);
     }
 }

@@ -78,17 +78,8 @@ final class SOAData extends DataAbstract implements \Stringable
         ];
     }
 
-    public function serialize(): string
+    public function __unserialize(array $unserialized): void
     {
-        return serialize($this->toArray());
-    }
-
-    /**
-     * @param string $serialized
-     */
-    public function unserialize($serialized): void
-    {
-        $unserialized = unserialize($serialized);
         $this->mname = new Hostname($unserialized['mname']);
         $this->rname = new Hostname($unserialized['rname']);
         $this->serial = $unserialized['serial'];

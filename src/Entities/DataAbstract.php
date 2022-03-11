@@ -16,6 +16,11 @@ abstract class DataAbstract implements Arrayable, Serializable, \Stringable
 
     abstract public function toArray(): array;
 
+    public function __serialize(): array
+    {
+        return $this->toArray();
+    }
+
     public function equals(DataAbstract $dataAbstract): bool
     {
         return (string)$this === (string)$dataAbstract;
@@ -81,6 +86,9 @@ abstract class DataAbstract implements Arrayable, Serializable, \Stringable
         return $this->toArray();
     }
 
+    protected function init(): void
+    {
+    }
     private static function parseDataToArray(string $data): array
     {
         return explode(' ', $data);
