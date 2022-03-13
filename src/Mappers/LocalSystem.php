@@ -9,6 +9,10 @@ use RemotelyLiving\PHPDNS\Entities\Interfaces\DNSRecordInterface;
 use function array_flip;
 use function sprintf;
 
+if (!defined('DNS_CAA')) {
+    define('DNS_CAA', 8192);
+}
+
 use const DNS_A;
 use const DNS_A6;
 use const DNS_AAAA;
