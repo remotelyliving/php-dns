@@ -85,7 +85,7 @@ abstract class ResolverAbstract implements ObservableResolver
     /**
      * @throws \RemotelyLiving\PHPDNS\Resolvers\Exceptions\QueryFailure
      */
-    public function getRecords(string $hostname, string $recordType = null): DNSRecordCollection
+    public function getRecords(string $hostname, string $recordType = null, bool $filterRecords = true): DNSRecordCollection
     {
         $recordType = DNSRecordType::createFromString($recordType ?? 'ANY');
         $hostname = Hostname::createFromString($hostname);
@@ -94,7 +94,7 @@ abstract class ResolverAbstract implements ObservableResolver
         $profile->startTransaction();
 
         try {
-            $result = ($recordType->equals(DNSRecordType::createANY()))
+            $result = ($recordType->equals(DNSRecordType::createANY()) || $filterRecords === false)
                 ? $this->doQuery($hostname, $recordType)
                 : $this->doQuery($hostname, $recordType)->filteredByType($recordType);
         } catch (QueryFailure $e) {
